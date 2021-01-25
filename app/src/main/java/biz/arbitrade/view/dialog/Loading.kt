@@ -10,6 +10,7 @@ class Loading(activity:Activity) {
 
     init {
         val view = activity.layoutInflater.inflate(R.layout.activity_main, null)
+        dialog.window?.setWindowAnimations(android.R.style.Animation_Dialog)
         dialog.setContentView(view)
         dialog.setCancelable(false)
     }
