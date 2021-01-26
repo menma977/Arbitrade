@@ -3,12 +3,15 @@ package biz.arbitrade.network
 import okhttp3.FormBody
 import okhttp3.Response
 import org.json.JSONObject
+import java.util.concurrent.Callable
 
-object DogeAPI {
+class DogeAPI(private val body: FormBody.Builder): Callable<JSONObject> {
+
     private val key = ""
 
-    fun call(body: FormBody.Builder){
-        http.makePost(Url.doge(), body, null)
+    override fun call(): JSONObject{
+        body.add("Key", key)
+        return http.makePost(Url.doge(), body, null)
     }
 
     private val http = object : Base(){

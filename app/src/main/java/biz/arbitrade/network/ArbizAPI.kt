@@ -29,13 +29,13 @@ class ArbizAPI(
         override fun responseHandler(response: Response, json: JSONObject): JSONObject {
             if (response.isSuccessful) {
                 return when {
-                    json.toString().contains("message") -> {
+                    json.has("message") && json.getInt("code") < 400 -> {
                         JSONObject()
                             .put("code", 200)
                             .put("data", json.getString("message"))
                     }
                     else -> {
-                        JSONObject().put("code", 200).put("data", json)
+                        json//JSONObject().put("code", 200).put("data", json)
                     }
                 }
             } else {
