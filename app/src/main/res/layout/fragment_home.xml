@@ -15,11 +15,12 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="-30sp"
+            android:layout_marginBottom="-30sp"
             android:contentDescription="@string/icon"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:srcCompat="@drawable/ic_arbitrade" />
     </LinearLayout>
 
     <ScrollView
@@ -60,7 +61,7 @@
                             android:layout_width="30sp"
                             android:layout_height="30sp"
                             android:contentDescription="@string/icon"
-                            tools:srcCompat="@tools:sample/avatars" />
+                            app:srcCompat="@drawable/ic_arbitrade_square" />
 
                         <TextView
                             android:id="@+id/textView4"
@@ -97,22 +98,12 @@
                             android:layout_width="30sp"
                             android:layout_height="30sp"
                             android:contentDescription="@string/icon"
+                            app:srcCompat="@drawable/ic_arbitrade_square"
                             tools:srcCompat="@tools:sample/avatars" />
                     </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp"
-                android:max="100"
-                android:progress="50"
-                android:progressDrawable="@drawable/progress_bar" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -130,10 +121,10 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:contentDescription="@string/icon"
-                        tools:srcCompat="@tools:sample/avatars" />
+                        app:srcCompat="@drawable/ic_arbitrade_square" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -151,10 +142,10 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:contentDescription="@string/icon"
-                        tools:srcCompat="@tools:sample/avatars" />
+                        app:srcCompat="@drawable/ic_arbitrade_square" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -172,10 +163,10 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:contentDescription="@string/icon"
-                        tools:srcCompat="@tools:sample/avatars" />
+                        app:srcCompat="@drawable/ic_arbitrade_square" />
 
                     <TextView
                         android:layout_width="match_parent"

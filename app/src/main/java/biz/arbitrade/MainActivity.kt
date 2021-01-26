@@ -3,7 +3,7 @@ package biz.arbitrade
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import biz.arbitrade.view.LoginActivity
+import biz.arbitrade.view.activity.LoginActivity
 
 class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
