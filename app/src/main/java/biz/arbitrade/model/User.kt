@@ -11,6 +11,10 @@ class User(context: Context) {
         private const val userData = "user"
     }
 
+    fun has(id: String): Boolean{
+        return sharedPreferences.contains(id)
+    }
+
     fun setInteger(id: String, value: Int) {
         sharedPreferencesEditor.putInt(id, value)
         sharedPreferencesEditor.commit()
