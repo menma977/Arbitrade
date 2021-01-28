@@ -35,7 +35,9 @@ class ArbizAPI(
                             .put("data", json.getString("message"))
                     }
                     else -> {
-                        json//JSONObject().put("code", 200).put("data", json)
+                        if(!json.has("code"))
+                            json.put("code", response.code)
+                        json
                     }
                 }
             } else {
