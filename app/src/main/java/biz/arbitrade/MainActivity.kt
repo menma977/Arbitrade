@@ -38,4 +38,12 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finishAffinity()
     }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 1) {
+            super.onBackPressed()
+        } else {
+            finishAffinity()
+        }
+    }
 }
