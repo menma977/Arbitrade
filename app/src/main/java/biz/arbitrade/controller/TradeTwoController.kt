@@ -2,10 +2,10 @@ package biz.arbitrade.controller
 
 import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.network.DogeAPI
-import okhttp3.FormBody
-import org.json.JSONObject
 import kotlin.math.abs
 import kotlin.random.Random
+import okhttp3.FormBody
+import org.json.JSONObject
 
 /**
  * 999doge bet controller
@@ -31,10 +31,17 @@ class TradeTwoController(private val winTarget: Float) {
         return DogeAPI(form).call()
     }
 
-    fun store(token:String, satoshi: Long, target: Long, low: Int, high: Int, data: JSONObject) : JSONObject{
+    fun store(
+            token: String,
+            satoshi: Long,
+            target: Long,
+            low: Int,
+            high: Int,
+            data: JSONObject
+    ): JSONObject {
         val body = FormBody.Builder()
         val res = data.getJSONObject("data")
-        //TODO: change accordingly
+        // TODO: change accordingly
         body.add("start_balance", res.getString("StartingBalance"))
         body.add("end_balance", res.getString("Balance"))
         body.add("target_balance", target.toString())
@@ -49,6 +56,7 @@ class TradeTwoController(private val winTarget: Float) {
 
     fun martiangle(bet: Long, profit: Long): Long {
         totalProfit += profit
-        return if (profit >= 0) (bet * (1 + martiangleWinningIncrement)).toLong() else abs(profit) * 2
+        return if (profit >= 0) (bet * (1 + martiangleWinningIncrement)).toLong()
+        else abs(profit) * 2
     }
 }

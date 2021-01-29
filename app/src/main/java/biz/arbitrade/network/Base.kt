@@ -6,7 +6,6 @@ import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 abstract class Base {
-
     abstract fun responseHandler(response: Response, json: JSONObject): JSONObject
 
     fun makePost(
