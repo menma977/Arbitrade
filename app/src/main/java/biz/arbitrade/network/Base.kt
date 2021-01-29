@@ -5,7 +5,7 @@ import okhttp3.*
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
-abstract class Base() {
+abstract class Base {
 
     abstract fun responseHandler(response: Response, json: JSONObject): JSONObject
 
@@ -24,7 +24,7 @@ abstract class Base() {
     ): JSONObject {
         var queryString = ""
         if (!queries.isNullOrEmpty())
-            queries!!.forEach { request ->
+            queries.forEach { request ->
                 queryString += "${request.key}=${request.value}&"
             }
         return makeRequest("$url?$queryString", "GET", null, headers)
@@ -45,7 +45,7 @@ abstract class Base() {
             request.url(url)
             request.method(method, body)
             if (!headers.isNullOrEmpty())
-                headers!!.forEach { header ->
+                headers.forEach { header ->
                     request.addHeader(header.key, header.value)
                 }
             request.addHeader("charset", "utf-8")

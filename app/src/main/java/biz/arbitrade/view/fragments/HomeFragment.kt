@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
         announcementGroup = view.findViewById(R.id.lnrLayoutAnnouncements)
 
         username.text = user.getString("username")
-        balance.text = user.getInteger("balance").toString()
+        balance.text = user.getLong("balance").toString()
 
         register.setOnClickListener {
             move("register")

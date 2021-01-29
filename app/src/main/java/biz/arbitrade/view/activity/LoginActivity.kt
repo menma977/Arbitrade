@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
                         if(resultDoge.getInt("code")>=400){
                             Toast.makeText(applicationContext, "Cannot fetch current balance at the moment, please wait...", Toast.LENGTH_LONG).show()
                         }
-                        controller.fillUser(application, result, (resultDoge?.optJSONObject("data")?.optInt("Balance") ?: 0))
+                        controller.fillUser(application, result, (resultDoge?.optJSONObject("data")?.optLong("Balance") ?: 0))
                         val intent = Intent(applicationContext, HomeActivity::class.java)
                         startActivity(intent)
                         finishAffinity()

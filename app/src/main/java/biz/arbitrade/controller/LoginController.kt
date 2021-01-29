@@ -28,7 +28,7 @@ class LoginController {
         }
     }
 
-    fun fillUser(context: Context, result: JSONObject, balance: Int): User {
+    fun fillUser(context: Context, result: JSONObject, balance: Long): User {
         Log.e("MINE", result.toString())
         val data = result.getJSONObject("user")
         val user = User(context)
@@ -46,7 +46,7 @@ class LoginController {
         user.setString("downLines", data.getJSONArray("downLines").toString())
         user.setString("sponsorId", data.getString("sponsorId"))
         user.setString("sponsor", data.getString("sponsor"))
-        user.setInteger("balance", balance)
+        user.setLong("balance", balance)
 
         return user;
     }

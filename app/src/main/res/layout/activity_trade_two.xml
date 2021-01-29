@@ -11,22 +11,26 @@
         android:id="@+id/imageView2"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:layout_margin="10dp"
         android:contentDescription="@string/icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arbitrade_square" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/colorPrimaryLight"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2">
+        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        tools:layout_editor_absoluteX="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="140dp"
+            android:background="@color/colorPrimaryLight"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="18sp">
@@ -34,8 +38,9 @@
             <org.eazegraph.lib.charts.ValueLineChart
                 android:id="@+id/cubiclinechart"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_light"
                 app:egCurveSmoothness="0.0"
                 app:egIndicatorLineColor="#FE6DA8"
                 app:egLegendHeight="40dp"
@@ -50,39 +55,55 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_warning"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="8sp">
 
-                <Button
-                    android:id="@+id/continueBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8sp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_success"
-                    android:text="@string/proceed" />
+                <TextView
+                    android:id="@+id/txtWarning"
+                    android:layout_width="match_parent"
+                    android:layout_height="18sp"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="@string/trade_warning"
+                    android:textAlignment="center" />
 
-                <Button
-                    android:id="@+id/stopBtn"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8sp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_danger"
-                    android:text="@string/stop" />
+                    android:background="@drawable/button_warning"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/continueBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8sp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_success"
+                        android:text="@string/proceed" />
+
+                    <Button
+                        android:id="@+id/stopBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8sp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_danger"
+                        android:text="@string/stop" />
+                </LinearLayout>
             </LinearLayout>
 
-            <ScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listHistory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </ScrollView>
+                android:layout_marginTop="18sp"
+                android:background="@color/Default"
+                android:nestedScrollingEnabled="true" />
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
