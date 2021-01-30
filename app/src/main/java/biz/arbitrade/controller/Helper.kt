@@ -14,6 +14,10 @@ object Helper {
     return BigDecimal(satoshi).divide(BigDecimal(10.0.pow(8))).toPlainString()
   }
 
+  fun fromDogeString(doge: String): Long {
+    return BigDecimal(doge).times(10.0.pow(8).toBigDecimal()).longValueExact()
+  }
+
   fun <T> subList(a: ArrayList<T>, from: Int, to: Int): ArrayList<T> {
     val ret = ArrayList<T>()
     for (i in from..to) {

@@ -17,6 +17,8 @@
     <string name="new_wallet_dax">New Wallet Dax</string>
     <string name="new_password">New Password</string>
     <string name="trade">Trade</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="withdraw_all">Withdraw All</string>
 
     <!-- LABEL -->
     <string name="username">Username</string>
