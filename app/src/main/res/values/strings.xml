@@ -33,6 +33,8 @@
     <string name="lose">Lose</string>
     <string name="pay_in">Pay In</string>
     <string name="result">Result</string>
+    <string name="amount">Amount</string>
+    <string name="description">Description</string>
     <string name="datetime">Date Time</string>
     <string name="trade_warning">To avoid asset loss please do not close this screen mid-trading</string>
     <string name="cannot_start_trading">Cannot start trading</string>
