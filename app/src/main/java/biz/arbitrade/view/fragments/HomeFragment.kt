@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import biz.arbitrade.R
+import biz.arbitrade.controller.Helper
 import biz.arbitrade.model.User
 import biz.arbitrade.view.activity.RegisterActivity
 import biz.arbitrade.view.activity.TradeOneActivity
@@ -43,7 +44,7 @@ class HomeFragment : Fragment() {
         announcementGroup = view.findViewById(R.id.lnrLayoutAnnouncements)
 
         username.text = user.getString("username")
-        balance.text = user.getLong("balance").toString()
+        balance.text = Helper.toDogeString(user.getLong("balance"))
 
         register.setOnClickListener {
             move("register")
