@@ -3,6 +3,7 @@ package biz.arbitrade
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import biz.arbitrade.controller.background.PusherReciever
 import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.network.JWTUtils
@@ -25,6 +26,10 @@ class MainActivity : AppCompatActivity() {
                 Timer().schedule(100) {
                     val response = ArbizAPI("my", "GET", user.getString("token"), null).call()
                     runOnUiThread {
+                        val intent = Intent(applicationContext, PusherReciever::class.java)
+                        if (applicationContext != null) {
+                            applicationContext.startService(intent)
+                        }
                         move(if(response.getInt("code")>300) "login" else "main")
                     }
                 }

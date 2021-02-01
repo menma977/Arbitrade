@@ -5,17 +5,23 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import biz.arbitrade.R
+import biz.arbitrade.model.User
+import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.view.fragments.HomeFragment
 import biz.arbitrade.view.fragments.SettingFragment
+import java.util.*
+import kotlin.concurrent.schedule
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var homeFragment: HomeFragment
     private lateinit var settingFragment: SettingFragment
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        user = User(this)
         homeFragment = HomeFragment()
         settingFragment = SettingFragment()
 
@@ -27,6 +33,21 @@ class HomeActivity : AppCompatActivity() {
         }
 
         addFragment(homeFragment)
+        checkNotification()
+    }
+
+    private fun checkNotification() {
+        Timer().schedule(100) {
+            val res = ArbizAPI("announcement", "get", null, null).call()
+            if(res.getInt("code") < 400){
+                if(!res.optString("message").isNullOrBlank()){
+                    user.setString("announcement", "")
+                }else{
+                    res.remove("code")
+                    user.setString("announcement", res.toString())
+                }
+            }
+        }
     }
 
     private fun addFragment(fragment: Fragment) {
