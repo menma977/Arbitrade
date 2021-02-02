@@ -17,9 +17,7 @@ import com.pusher.client.PusherOptions
 import com.pusher.client.channel.PusherEvent
 import org.json.JSONObject
 
-
-class PusherReciever : Service() {
-
+class PusherReceiver : Service() {
   private val AnnouncementNotification = 0x43
 
   override fun onBind(intent: Intent): IBinder {
@@ -28,12 +26,8 @@ class PusherReciever : Service() {
 
   override fun onCreate() {
     super.onCreate()
-    val options = PusherOptions()
-      .setHost("10.0.2.2")
-      .setWsPort(6001)
-      //.setCluster("mt1")
+    val options = PusherOptions().setHost("10.0.2.2").setWsPort(6001) //.setCluster("mt1")
       .setUseTLS(false)
-
     val pusher = Pusher("arib.biz.key", options)
     val announcementChannel = pusher.subscribe("arbi.biz.announcement")
 
@@ -44,8 +38,7 @@ class PusherReciever : Service() {
 
   @RequiresApi(Build.VERSION_CODES.O)
   private fun createChannel(id: String, name: String, description: String) {
-    val mNotificationManager = applicationContext
-      .getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    val mNotificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     val importance = NotificationManager.IMPORTANCE_DEFAULT
     val mChannel = NotificationChannel(id, name, importance)
     mChannel.description = description
@@ -63,10 +56,8 @@ class PusherReciever : Service() {
       if (isAppIsInBackground(this)) {
         val title = data.getString("title")
         val message = data.getString("message")
-        var mNotification = makeNotification(title, message)
-
-        var notificationManager: NotificationManager =
-          getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val mNotification = makeNotification(title, message)
+        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(AnnouncementNotification, mNotification)
       } else {
         intent.action = "announcement"
@@ -82,26 +73,13 @@ class PusherReciever : Service() {
   private fun makeNotification(title: String, message: String): Notification {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       createChannel("arbi.announce", title, message)
-      Notification.Builder(this, "arbi.announce")
-        .setAutoCancel(true)
-        .setContentTitle(title)
-        .setSmallIcon(R.drawable.ic_arbitrade_square)
-        .setStyle(
-          Notification.BigTextStyle()
-            .bigText(message)
-        )
-        .setContentText(message).build()
+      Notification.Builder(this, "arbi.announce").setAutoCancel(true).setContentTitle(title).setSmallIcon(R.drawable.ic_arbitrade_square).setStyle(
+          Notification.BigTextStyle().bigText(message)
+        ).setContentText(message).build()
     } else {
-      Notification.Builder(this)
-        .setAutoCancel(true)
-        .setPriority(Notification.PRIORITY_DEFAULT)
-        .setSmallIcon(R.drawable.ic_arbitrade_square)
-        .setContentTitle(title)
-        .setStyle(
-          Notification.BigTextStyle()
-            .bigText(message)
-        )
-        .setContentText(message).build()
+      Notification.Builder(this).setAutoCancel(true).setPriority(Notification.PRIORITY_DEFAULT).setSmallIcon(R.drawable.ic_arbitrade_square).setContentTitle(title).setStyle(
+          Notification.BigTextStyle().bigText(message)
+        ).setContentText(message).build()
     }
   }
 

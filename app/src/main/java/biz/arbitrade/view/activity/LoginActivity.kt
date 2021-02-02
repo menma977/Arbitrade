@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import biz.arbitrade.R
 import biz.arbitrade.controller.LoginController
-import biz.arbitrade.controller.background.PusherReciever
+import biz.arbitrade.controller.background.PusherReceiver
 import biz.arbitrade.network.DogeAPI
 import biz.arbitrade.view.dialog.Loading
 import java.util.*
@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
             }
             controller.fillUser(
                 application, result, (resultDoge.optJSONObject("data")?.optLong("Balance") ?: 0))
-            val mIntent = Intent(applicationContext, PusherReciever::class.java)
+            val mIntent = Intent(applicationContext, PusherReceiver::class.java)
             if (applicationContext != null) {
               applicationContext.startService(mIntent)
             }
