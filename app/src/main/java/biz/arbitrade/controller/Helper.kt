@@ -1,5 +1,7 @@
 package biz.arbitrade.controller
 
+import android.app.ActivityManager
+import android.content.Context
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -56,5 +58,21 @@ object Helper {
         "-"
       }
     }
+  }
+
+  fun isAppIsInBackground(context: Context): Boolean {
+    var isInBackground = true
+    val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    val runningProcesses = am.runningAppProcesses
+    for (processInfo in runningProcesses) {
+      if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+        for (activeProcess in processInfo.pkgList) {
+          if (activeProcess == context.packageName) {
+            isInBackground = false
+          }
+        }
+      }
+    }
+    return isInBackground
   }
 }
