@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import biz.arbitrade.MainActivity
@@ -18,7 +17,7 @@ import com.pusher.client.channel.PusherEvent
 import org.json.JSONObject
 
 class PusherReceiver : Service() {
-  private val AnnouncementNotification = 0x43
+  private val announcementNotification = 0x43
 
   override fun onBind(intent: Intent): IBinder {
     TODO("Return the communication channel to the service.")
@@ -58,7 +57,7 @@ class PusherReceiver : Service() {
         val message = data.getString("message")
         val mNotification = makeNotification(title, message)
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(AnnouncementNotification, mNotification)
+        notificationManager.notify(announcementNotification, mNotification)
       } else {
         intent.action = "announcement"
         LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
@@ -73,13 +72,11 @@ class PusherReceiver : Service() {
   private fun makeNotification(title: String, message: String): Notification {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       createChannel("arbi.announce", title, message)
-      Notification.Builder(this, "arbi.announce").setAutoCancel(true).setContentTitle(title).setSmallIcon(R.drawable.ic_arbitrade_square).setStyle(
-          Notification.BigTextStyle().bigText(message)
-        ).setContentText(message).build()
+      Notification.Builder(this, "arbi.announce").setAutoCancel(true).setContentTitle(title).setSmallIcon(R.drawable.ic_arbitrade_square).setStyle(Notification.BigTextStyle().bigText(message))
+        .setContentText(message).build()
     } else {
-      Notification.Builder(this).setAutoCancel(true).setPriority(Notification.PRIORITY_DEFAULT).setSmallIcon(R.drawable.ic_arbitrade_square).setContentTitle(title).setStyle(
-          Notification.BigTextStyle().bigText(message)
-        ).setContentText(message).build()
+      Notification.Builder(this, "arbi.announce").setAutoCancel(true).setSmallIcon(R.drawable.ic_arbitrade_square).setContentTitle(title).setStyle(Notification.BigTextStyle().bigText(message))
+        .setContentText(message).build()
     }
   }
 
@@ -90,7 +87,7 @@ class PusherReceiver : Service() {
     for (processInfo in runningProcesses) {
       if (processInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
         for (activeProcess in processInfo.pkgList) {
-          if (activeProcess == context.getPackageName()) {
+          if (activeProcess == context.packageName) {
             isInBackground = false
           }
         }
