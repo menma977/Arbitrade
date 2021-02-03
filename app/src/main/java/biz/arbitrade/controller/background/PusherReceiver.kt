@@ -15,8 +15,7 @@ class PusherReceiver : Service() {
 
   override fun onCreate() {
     super.onCreate()
-    val options = PusherOptions().setHost(Url.pusher.url).setWsPort(Url.pusher.port)
-      .setUseTLS(Url.pusher.secured) //.setCluster("mt1")
+    val options = PusherOptions().setHost(Url.Pusher.url).setWsPort(Url.Pusher.port).setUseTLS(Url.Pusher.secured) //.setCluster("mt1")
     val pusher = Pusher("arib.biz.key", options)
     val announcementChannel = pusher.subscribe("arbi.biz.announcement")
 

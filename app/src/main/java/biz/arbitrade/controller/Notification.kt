@@ -5,18 +5,14 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import biz.arbitrade.R
 
 object Notification {
-
   object Id {
     const val announcement = 0x43
   }
 
-  @RequiresApi(Build.VERSION_CODES.O)
-  private fun createChannel(context: Context ,id: String, name: String, description: String) {
+  private fun createChannel(context: Context, id: String, name: String, description: String) {
     val mNotificationManager = context.getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
     val importance = NotificationManager.IMPORTANCE_DEFAULT
     val mChannel = NotificationChannel(id, name, importance)
@@ -26,10 +22,20 @@ object Notification {
     mNotificationManager.createNotificationChannel(mChannel)
   }
 
-  fun make(context: Context, channelId: String,title: String, message: String): Notification {
+  fun make(context: Context, channelId: String, title: String, message: String, isPermanent: Boolean = false): Notification {
     createChannel(context, channelId, title, message)
-    return Notification.Builder(context, channelId).setAutoCancel(true).setContentTitle(title).setSmallIcon(
-      R.drawable.ic_arbitrade_square).setStyle(Notification.BigTextStyle().bigText(message))
-      .setContentText(message).build()
+    val notification = Notification.Builder(context, channelId)
+    notification.setAutoCancel(true)
+    notification.setContentTitle(title)
+    notification.setSmallIcon(R.drawable.ic_arbitrade_square)
+    notification.style = Notification.BigTextStyle().bigText(message)
+    notification.setContentText(message)
+
+    return if (isPermanent) {
+      notification.setOngoing(true).build()
+    } else {
+      notification.build()
+    } //    return Notification.Builder(context, channelId).setAutoCancel(true).setContentTitle(title).setSmallIcon(R.drawable.ic_arbitrade_square).setStyle(Notification.BigTextStyle().bigText(message))
+    //      .setContentText(message).setOngoing(true).build()
   }
 }
