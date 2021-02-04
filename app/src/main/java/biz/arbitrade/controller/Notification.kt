@@ -35,7 +35,6 @@ object Notification {
       notification.setOngoing(true).build()
     } else {
       notification.build()
-    } //    return Notification.Builder(context, channelId).setAutoCancel(true).setContentTitle(title).setSmallIcon(R.drawable.ic_arbitrade_square).setStyle(Notification.BigTextStyle().bigText(message))
-    //      .setContentText(message).setOngoing(true).build()
+    }
   }
 }
