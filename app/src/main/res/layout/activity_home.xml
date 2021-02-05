@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,112 +8,125 @@
     android:background="@color/colorPrimaryLight"
     tools:context=".view.activity.HomeActivity">
 
-    <FrameLayout
-        android:id="@+id/contentFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+  <FrameLayout
+      android:id="@+id/contentFragment"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+  <LinearLayout
+      android:id="@+id/linearLayout"
+      android:layout_width="match_parent"
+      android:layout_height="90sp"
+      android:background="@drawable/nav_footer"
+      android:baselineAligned="false"
+      android:orientation="horizontal"
+      android:padding="5dp"
+      android:paddingStart="30sp"
+      android:paddingEnd="30sp"
+      android:weightSum="3"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      android:gravity="center">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="70sp"
-        android:background="@drawable/nav_footer"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:paddingStart="30sp"
-        android:paddingEnd="30sp"
-        android:weightSum="3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        android:id="@+id/btnToHome"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@drawable/ic_button"
+        android:elevation="5dp"
+        android:layout_margin="5dp">
 
-        <LinearLayout
-            android:id="@+id/btnToHome"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+      <ImageView
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:contentDescription="@string/icon"
+          android:scaleType="fitCenter"
+          app:srcCompat="@drawable/ic_baseline_dashboard"
+          app:tint="@color/textSecondary"/>
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="@string/icon"
-                android:scaleType="fitCenter"
-                app:srcCompat="@android:drawable/btn_star_big_on" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/home"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/textPrimary"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btnToNetwork"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="@string/icon"
-                android:scaleType="fitCenter"
-                app:srcCompat="@android:drawable/btn_star_big_on" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/network"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/textPrimary"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btnToSetting"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="@string/icon"
-                android:scaleType="fitCenter"
-                app:srcCompat="@android:drawable/btn_star_big_on" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/setting"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/textPrimary"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/home"
+          android:textAlignment="center"
+          android:textAllCaps="true"
+          android:textColor="@color/textSecondary"
+          android:textSize="12sp"
+          android:textStyle="bold"/>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btnToNetwork"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@drawable/ic_button"
+        android:elevation="5dp"
+        android:layout_margin="5dp">
+
+      <ImageView
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:contentDescription="@string/icon"
+          android:scaleType="fitCenter"
+          app:srcCompat="@drawable/ic_baseline_share"
+          app:tint="@color/textSecondary"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/network"
+          android:textAlignment="center"
+          android:textAllCaps="true"
+          android:textColor="@color/textSecondary"
+          android:textSize="12sp"
+          android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btnToSetting"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@drawable/ic_button"
+        android:elevation="5dp"
+        android:layout_margin="5dp">
+
+      <ImageView
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:contentDescription="@string/icon"
+          android:scaleType="fitCenter"
+          app:srcCompat="@drawable/ic_baseline_tune"
+          app:tint="@color/textSecondary"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/setting"
+          android:textAlignment="center"
+          android:textAllCaps="true"
+          android:textColor="@color/textSecondary"
+          android:textSize="12sp"
+          android:textStyle="bold"/>
+
+    </LinearLayout>
+
+  </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
