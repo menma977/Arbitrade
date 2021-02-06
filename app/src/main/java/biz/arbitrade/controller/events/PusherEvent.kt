@@ -18,20 +18,17 @@ abstract class PusherEvent(
 
   fun bind() {
     return if (isPrivateChannel) {
-      Log.d("pusher", "$eventName $isPrivateChannel")
-      Log.d("pusher", channel.name)
       channel.bind(eventName, object : PrivateChannelEventListener {
         override fun onEvent(event: PusherEvent) {
-          Log.d("pusher", "Event Appear")
           handle(context, JSONObject(event.data))
         }
 
         override fun onSubscriptionSucceeded(channelName: String?) {
-          Log.d("pusher", "private sub $eventName success")
+          Log.d("pusher", "PersonalReceiver subscribe to $channelName success")
         }
 
         override fun onAuthenticationFailure(message: String?, e: Exception?) {
-          Log.d("pusher", "private sub $eventName fail")
+          Log.d("pusher", "PersonalReceiver subscribe to $message fail $e")
         }
       })
     }else

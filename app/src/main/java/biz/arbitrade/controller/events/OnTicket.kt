@@ -15,13 +15,7 @@ import org.json.JSONObject
 class OnTicket(context: Context, channel: Channel) : PusherEvent(context, channel, true) {
   override val eventName: String = "App\\Events\\TicketEvent"
 
-  init {
-    Log.d("MIME", "OnTicket Initialized")
-  }
-
   override fun handle(context: Context, result: JSONObject) {
-    Log.i("MIME $eventName", result.toString())
-
     val title = result.getString("username")
     val message = result.getString("ticket")
     val mNotification = Notification.make(context, "arbi.announce", title, message)

@@ -16,7 +16,6 @@ class OnAnnounce(context: Context, channel: Channel) : PusherEvent(context, chan
   override val eventName: String = "App\\Events\\Announcement"
 
   override fun handle(context: Context, result: JSONObject) {
-    Log.i("MIME $eventName", result.toString())
     val user = User(context)
     val intent = Intent(context, MainActivity::class.java)
     if (result.has("title") && !result.optString("title").isNullOrBlank()) {

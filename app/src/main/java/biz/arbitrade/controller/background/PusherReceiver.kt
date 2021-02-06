@@ -5,18 +5,14 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import biz.arbitrade.controller.events.OnAnnounce
-import biz.arbitrade.controller.events.OnTicket
-import biz.arbitrade.controller.events.PusherEvent
 import biz.arbitrade.model.User
 import biz.arbitrade.network.Url
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
-import com.pusher.client.channel.PrivateChannelEventListener
 import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
 import com.pusher.client.util.HttpAuthorizer
-import org.json.JSONObject
 
 class PusherReceiver : Service() {
   override fun onBind(intent: Intent): IBinder {
@@ -32,22 +28,24 @@ class PusherReceiver : Service() {
     header["Content-Type"] = "application/x-www-form-urlencoded"
     val authorize = HttpAuthorizer(Url.Pusher.auth())
     authorize.setHeaders(header)
-    val options = PusherOptions().setHost(Url.Pusher.url).setWsPort(Url.Pusher.port).setUseTLS(Url.Pusher.secured).setAuthorizer(authorize) //.setCluster("mt1")
+    val options =
+      PusherOptions().setHost(Url.Pusher.url).setWsPort(Url.Pusher.port).setWssPort(Url.Pusher.port)
+        .setUseTLS(Url.Pusher.secured).setAuthorizer(authorize)
     val pusher = Pusher("arib.biz.key", options)
+
+
+    val announcementChannel = pusher.subscribe("arbi.biz.announcement")
+    OnAnnounce(this@PusherReceiver, announcementChannel).bind()
+
     pusher.connect(object : ConnectionEventListener {
       override fun onConnectionStateChange(change: ConnectionStateChange) {
-        println(
-          "State changed to " + change.currentState + " from " + change.previousState
-        )
         if (change.currentState == ConnectionState.CONNECTED) {
-          val announcementChannel = pusher.subscribe("arbi.biz.announcement")
-
-          OnAnnounce(this@PusherReceiver, announcementChannel).bind()
+          Log.d("pusher", "PersonalReceiver Connected")
         }
       }
 
       override fun onError(message: String?, code: String?, e: Exception?) {
-        println("Pusher Receiver There was a problem connecting!")
+        Log.e("pusher", "PersonalReceiver connection fail: $message ; $e code $code")
       }
     })
   }
