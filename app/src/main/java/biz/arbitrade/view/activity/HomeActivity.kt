@@ -31,6 +31,11 @@ class HomeActivity : AppCompatActivity() {
         findViewById<LinearLayout>(R.id.btnToSetting).setOnClickListener {
             addFragment(settingFragment)
         }
+        findViewById<LinearLayout>(R.id.btnToNetwork).setOnClickListener {
+            Timer().schedule(100) {
+                ArbizAPI("test", "get", user.getString("token"), null).call()
+            }
+        }
 
         addFragment(homeFragment)
         checkNotification()

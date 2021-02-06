@@ -17,6 +17,11 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service
+            android:name=".controller.background.PersonalReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity android:name=".view.activity.DepositHistoryActivity" />
         <activity android:name=".view.activity.WithdrawHistoryActivity" />
         <activity android:name=".view.activity.DepositWithdrawHistoryActivity" />

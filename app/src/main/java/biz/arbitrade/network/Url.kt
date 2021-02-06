@@ -2,7 +2,12 @@ package biz.arbitrade.network
 
 object Url {
   fun web(target: String?): String {
-    return "http://192.168.77.223/api/${if (!target.isNullOrEmpty()) target.replace(".", "/") else ""}"
+    return "http://10.0.2.2:8000/api/${
+      if (!target.isNullOrEmpty()) target.replace(
+        ".",
+        "/"
+      ) else ""
+    }"
   }
 
   fun doge(): String {
@@ -10,8 +15,13 @@ object Url {
   }
 
   object Pusher {
-    const val url = "192.168.77.223"
+    const val url = "10.0.2.2"
+    const val authEndpoint = "broadcasting.auth"
     const val port = 6001
     const val secured = false
+
+    fun auth(): String {
+      return web(authEndpoint)
+    }
   }
 }

@@ -12,11 +12,11 @@ import biz.arbitrade.model.User
 import com.pusher.client.channel.Channel
 import org.json.JSONObject
 
-class OnAnnounce(context: Context, channel: Channel) : PusherEvent(context, channel) {
+class OnAnnounce(context: Context, channel: Channel) : PusherEvent(context, channel, false) {
   override val eventName: String = "App\\Events\\Announcement"
 
   override fun handle(context: Context, result: JSONObject) {
-    Log.i("MIME", result.toString())
+    Log.i("MIME $eventName", result.toString())
     val user = User(context)
     val intent = Intent(context, MainActivity::class.java)
     if (result.has("title") && !result.optString("title").isNullOrBlank()) {
