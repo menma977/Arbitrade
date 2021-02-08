@@ -33,6 +33,9 @@ class LoginActivity : AppCompatActivity() {
     textUsername = findViewById(R.id.editTextUsername)
     textPassword = findViewById(R.id.editTextPassword)
 
+    textUsername.setText("admin")
+    textPassword.setText("admin")
+
     btnLogin.setOnClickListener {
       if (controller.validate(textUsername, textPassword).isNotBlank()) {
         Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT).show()
@@ -41,36 +44,31 @@ class LoginActivity : AppCompatActivity() {
       loading.openDialog()
       Timer().schedule(1000) {
         val result = controller.doLogin(textUsername.text.toString(), textPassword.text.toString())
-        val resultDoge: JSONObject =
-            when {
-              result.has("user") -> {
-                val body = FormBody.Builder()
-                body.add("a", "GetBalance")
-                body.add("s", result.getJSONObject("user").getString("cookie"))
-                body.add("Currency", "doge")
-                DogeAPI(body).call()
-              }
-              else -> {
-                JSONObject("{code: 400}")
-              }
-            }
+        val resultDoge: JSONObject = when {
+          result.has("user") -> {
+            val body = FormBody.Builder()
+            body.add("a", "GetBalance")
+            body.add("s", result.getJSONObject("user").getString("cookie"))
+            body.add("Currency", "doge")
+            DogeAPI(body).call()
+          }
+          else -> {
+            JSONObject("{code: 400}")
+          }
+        }
+        println(resultDoge.toString())
         runOnUiThread {
           if (result.getInt("code") >= 400) {
-            val msg =
-                if (result.getString("data").contains("failed to connect"))
-                    "Cannot Connect to Server please check your connection"
-                else result.getString("data")
+            val msg = if (result.getString("data").contains("failed to connect")) "Cannot Connect to Server please check your connection"
+            else result.getString("data")
             Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
           } else {
             if (resultDoge.getInt("code") >= 400) {
               Toast.makeText(
-                      applicationContext,
-                      "Cannot fetch current balance at the moment, please wait...",
-                      Toast.LENGTH_LONG)
-                  .show()
+                applicationContext, "Cannot fetch current balance at the moment, please wait...", Toast.LENGTH_LONG
+              ).show()
             }
-            controller.fillUser(
-                application, result, (resultDoge.optJSONObject("data")?.optLong("Balance") ?: 0))
+            controller.fillUser(application, result, (resultDoge.optJSONObject("data")?.optLong("Balance") ?: 0))
             val mIntent = Intent(applicationContext, PusherReceiver::class.java)
             if (applicationContext != null) {
               applicationContext.startService(mIntent)

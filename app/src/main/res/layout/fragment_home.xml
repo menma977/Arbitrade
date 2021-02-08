@@ -76,7 +76,8 @@
                   android:layout_width="30sp"
                   android:layout_height="30sp"
                   android:contentDescription="@string/icon"
-                  app:srcCompat="@drawable/ic_arbitrade_square"/>
+                  app:srcCompat="@drawable/ic_baseline_person"
+                  app:tint="@color/colorPrimary"/>
 
               <TextView
                   android:id="@+id/textViewUsername"
@@ -118,13 +119,6 @@
                   android:text="@string/doge"
                   android:textAllCaps="true"
                   android:textSize="24sp"/>
-
-              <ImageView
-                  android:id="@+id/imageView4"
-                  android:layout_width="30sp"
-                  android:layout_height="30sp"
-                  android:contentDescription="@string/icon"
-                  app:srcCompat="@drawable/ic_arbitrade_square"/>
 
             </LinearLayout>
           </LinearLayout>
@@ -173,13 +167,16 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:contentDescription="@string/icon"
-                app:srcCompat="@drawable/ic_arbitrade_square"/>
+                app:srcCompat="@drawable/ic_baseline_person_add"
+                app:tint="@color/textSecondary"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textColor="@color/textSecondary"/>
+
           </LinearLayout>
 
           <LinearLayout
@@ -196,13 +193,16 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:contentDescription="@string/icon"
-                app:srcCompat="@drawable/ic_arbitrade_square"/>
+                app:srcCompat="@drawable/ic_baseline_adb"
+                app:tint="@color/textSecondary"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/trade_one"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textColor="@color/textSecondary"/>
+
           </LinearLayout>
 
           <LinearLayout
@@ -219,13 +219,16 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:contentDescription="@string/icon"
-                app:srcCompat="@drawable/ic_arbitrade_square"/>
+                app:srcCompat="@drawable/ic_baseline_adb"
+                app:tint="@color/textSecondary"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/trade_two"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textColor="@color/textSecondary"/>
+
           </LinearLayout>
         </LinearLayout>
       </LinearLayout>

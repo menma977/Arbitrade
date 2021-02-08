@@ -2,11 +2,8 @@ package biz.arbitrade
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import biz.arbitrade.controller.background.PersonalReceiver
 import biz.arbitrade.controller.background.PusherReceiver
-import biz.arbitrade.controller.events.OnTicket
 import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.network.JWTUtils
@@ -20,7 +17,6 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     val user = User(this)
-
     if (user.has("token")) {
       val expiredAt = JWTUtils.decode(user.getString("token")).getJSONObject("body").getDouble("exp")
       if (System.currentTimeMillis() / 1000f - expiredAt < 0) {
@@ -30,11 +26,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, PusherReceiver::class.java)
             if (applicationContext != null) {
               startService(intent)
-            }
-            val intent1 = Intent(applicationContext, PersonalReceiver::class.java)
-            Log.d("MIME", "PersonalReceiver intent1")
-            if (applicationContext != null) {
-              Log.d("MIME", "PersonalReceiver intent1 start") //startService(intent1)
             }
             move(if (response.getInt("code") > 300) "login" else "main")
           }

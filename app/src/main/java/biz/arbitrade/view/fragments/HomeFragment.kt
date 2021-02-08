@@ -32,8 +32,7 @@ class HomeFragment : Fragment() {
   private lateinit var user: User
 
   override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?,
-    savedInstanceState: Bundle?
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
     val view = inflater.inflate(R.layout.fragment_home, container, false)
 
@@ -63,23 +62,20 @@ class HomeFragment : Fragment() {
 
     if (user.getString("announcement").isNotBlank()) {
       val announce = JSONObject(user.getString("announcement"))
-      createAnnouncement(1, announce.getString("message"))
+      createAnnouncement(announce.getString("message"))
     }
 
     return view
   }
 
-  private fun createAnnouncement(type: Int, message: String) {
-    val v = this.layoutInflater.inflate(R.layout.part_announcement, null)
-    //v.imageAnnouncementIcon.setImageResource()
+  private fun createAnnouncement(message: String) {
+    val v = this.layoutInflater.inflate(R.layout.part_announcement, null) //v.imageAnnouncementIcon.setImageResource()
     v.textAnnouncementMessage.text = message
     announcementGroup.addView(v)
   }
 
   private fun move(
-    to: String,
-    finish: Boolean = false,
-    finishAffinity: Boolean = false
+    to: String, finish: Boolean = false, finishAffinity: Boolean = false
   ) {
     val intent = Intent(
       activity, when (to) {
@@ -96,11 +92,9 @@ class HomeFragment : Fragment() {
     }
   }
 
-
   override fun onStart() {
     super.onStart()
-    LocalBroadcastManager.getInstance(activity!!)
-      .registerReceiver(broadcastReceiverAnnouncement, IntentFilter("announcement"))
+    LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiverAnnouncement, IntentFilter("announcement"))
   }
 
   override fun onDestroy() {
@@ -123,7 +117,7 @@ class HomeFragment : Fragment() {
       announcementGroup.removeAllViewsInLayout()
       if (user.getString("announcement").isNotBlank()) {
         val announce = JSONObject(user.getString("announcement"))
-        createAnnouncement(1, announce.getString("message"))
+        createAnnouncement(announce.getString("message"))
       }
       announcementGroup.invalidate()
       announcementGroup.requestLayout()
