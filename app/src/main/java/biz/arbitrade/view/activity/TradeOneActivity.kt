@@ -1,17 +1,25 @@
 package biz.arbitrade.view.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import biz.arbitrade.R
 import biz.arbitrade.controller.TradeOneController
 import biz.arbitrade.model.Bet
 import biz.arbitrade.model.User
 import kotlinx.android.synthetic.main.activity_trade_one.*
+import kotlinx.android.synthetic.main.activity_trade_one.txtWarning
+import kotlinx.android.synthetic.main.activity_trade_two.*
 import java.util.*
 import kotlin.concurrent.schedule
 import kotlin.concurrent.scheduleAtFixedRate
@@ -41,6 +49,12 @@ class TradeOneActivity : AppCompatActivity() {
     txtWarning.isSelected = true
 
     user.setLong("balance", abs(Long.MAX_VALUE))
+
+    if(user.getString("hasTradedFake") == "true"){
+      Toast.makeText(this@TradeOneActivity, "You have traded today", Toast.LENGTH_SHORT).show()
+      finish()
+    }
+
     val lastBet = Bet.getCalendar(bet.getLong("last_f_trade"))
     val now = Calendar.getInstance()
     if (bet.has("last_f_trade") && lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.MONTH) == now.get(Calendar.MONTH)) {
@@ -98,5 +112,34 @@ class TradeOneActivity : AppCompatActivity() {
   private fun statusChange(text: Int, color: Int) {
     status.setText(text)
     status.setTextColor(ContextCompat.getColor(this, color))
+  }
+
+  private var broadcastReceiverTrade: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      if(user.getString("hasTradedFake") == "true"){
+        Toast.makeText(this@TradeOneActivity, "You have traded today", Toast.LENGTH_SHORT).show()
+        finish()
+      }
+    }
+  }
+
+  override fun onStart() {
+    super.onStart()
+    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
+  }
+
+  override fun onPause() {
+    super.onPause()
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverTrade)
+  }
+
+  override fun onStop() {
+    super.onStop()
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverTrade)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverTrade)
   }
 }

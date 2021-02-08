@@ -1,10 +1,15 @@
 package biz.arbitrade.view.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import biz.arbitrade.R
@@ -29,6 +34,8 @@ class TradeTwoActivity : AppCompatActivity() {
   private lateinit var chart: ValueLineChart
   private lateinit var history: RecyclerView
   private lateinit var controller: TradeTwoController
+  private var bet: Long = 0
+  private var betCounter: Int = 0
   private var betHistory = ArrayList<BetHistory>()
   private var counter = 1
   private val betDelay: Long = 250
@@ -37,6 +44,7 @@ class TradeTwoActivity : AppCompatActivity() {
   private val dogeWinChance = .1f
   private val betLow = 0
   private val betHigh = (100000 * dogeWinChance).toInt()
+  private val loseTarget = .1f
   private var winTarget = .1f
   private lateinit var initialTask: TimerTask
 
@@ -44,7 +52,7 @@ class TradeTwoActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_trade_two)
 
-    controller = TradeTwoController(winTarget)
+    controller = TradeTwoController()
     user = User(this)
     bets = Bet(this)
 
@@ -61,39 +69,56 @@ class TradeTwoActivity : AppCompatActivity() {
 
     chart.addSeries(series)
     chart.startAnimation()
-    var target = (user.getLong("balance") * winTarget).toLong()
+    var target = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
+    var lose = user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
     var betCounter = 0
     var bet = (target * .1).toLong()
     var doContinue = false
 
-    continueBtn.setOnClickListener {
-      adapter.add(
-        BetHistory(
-          (Random.nextDouble() * Random.nextLong()).toLong(), (Random.nextDouble() * Random.nextLong()).toLong(), System.currentTimeMillis()
-        )
-      )
-    }
-
     if (bets.has("last_bet")) {
       val lastBet = Bet.getCalendar(bets.getLong("last_bet"))
       val now = Calendar.getInstance()
-      if (lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.MONTH) == now.get(Calendar.MONTH)) {
+      if (lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.MONTH) == now.get(
+          Calendar.MONTH
+        )
+      ) {
         target = bets.getLong("target")
+        lose = bets.getLong("lose")
         betCounter = bets.getInteger("bet_count")
         doContinue = true
       }
     }
     if (doContinue) {
       bets.setLong("target", target)
+      bets.setLong("lose", lose)
       bets.setLong("profit", controller.getTotalProfit())
       bets.setInteger("bet_count", betCounter)
       bets.setLong("last_bet", System.currentTimeMillis())
     }
 
+    startTask(bet, series)
+    if(user.getString("hasTradedReal") == "true"){
+      Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
+      continueBtn.isEnabled = false
+      stopBtn.isEnabled = false
+    }else{
+      continueBtn.setOnClickListener {
+        startTask(bet, series)
+      }
+      stopBtn.setOnClickListener {
+        initialTask.cancel()
+      }
+    }
+  }
+
+  private fun startTask(target: Long, series: ValueLineSeries){
     initialTask = Timer().scheduleAtFixedRate(betDelay, betPeriod) {
+      if(user.getString("hasTradedReal") == "true") {
+        this.cancel()
+        return@scheduleAtFixedRate
+      }
       val response = controller.bet(bet, betLow, betHigh)
       if (response.getInt("code") < 400) {
-        controller.store(user.getString("token"), bet, target, betLow, betHigh, response)
         betHistory.add(
           BetHistory(
             bet, response.getInt("PayOut") - bet, System.currentTimeMillis()
@@ -105,6 +130,10 @@ class TradeTwoActivity : AppCompatActivity() {
         bets.setInteger("bet_count", betCounter + 1)
         bets.setLong("last_bet", System.currentTimeMillis())
 
+        val curBalance =
+          user.getLong("balance") + (response.getLong("PayIn") - response.getLong("PayOut"))
+        user.setLong("balance", curBalance)
+
         runOnUiThread {
           series.addPoint(
             ValueLinePoint(
@@ -114,7 +143,9 @@ class TradeTwoActivity : AppCompatActivity() {
           if (series.series.size > chartFreq) series.series.removeAt(0)
           chart.addSeries(series)
         }
-        if (++betCounter >= 30) this.cancel()
+        val isDone = (++betCounter >= 30 || curBalance <= loseTarget || curBalance >= winTarget)
+        controller.store(user.getString("t  oken"), bet, target, betLow, betHigh, isDone, response)
+        if (isDone) this.cancel()
       } else {
         runOnUiThread {
           Toast.makeText(
@@ -125,11 +156,36 @@ class TradeTwoActivity : AppCompatActivity() {
         }
       }
     }
+  }
 
+  private var broadcastReceiverTrade: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      if(user.getString("hasTradedReal") == "true"){
+        Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
+        continueBtn.isEnabled = false
+        stopBtn.isEnabled = false
+      }
+    }
+  }
+
+  override fun onStart() {
+    super.onStart()
+    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
+  }
+
+  override fun onPause() {
+    super.onPause()
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverTrade)
+  }
+
+  override fun onStop() {
+    super.onStop()
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverTrade)
   }
 
   override fun onDestroy() {
     super.onDestroy()
     initialTask.cancel()
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverTrade)
   }
 }
