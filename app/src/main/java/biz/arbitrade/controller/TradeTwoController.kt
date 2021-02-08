@@ -54,7 +54,7 @@ class TradeTwoController() {
       if (satoshi < (res.getLong("Payout") - satoshi)) "lose" else "win"
     )
     body.add("is_finish", finish.toString())
-    return ArbizAPI("martiangle.store", "POST", token, body).call()
+    return ArbizAPI("marti.angel", "POST", token, body).call()
   }
 
   fun martingale(bet: Long, profit: Long): Long {

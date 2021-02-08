@@ -10,7 +10,7 @@ class TradeOneController {
         return if (user.getLong("balance") > 0) {
             val body = FormBody.Builder()
             body.add("balance", user.getLong("balance").toString())
-            ArbizAPI("trade", "POST", user.getString("token"), body).call()
+            ArbizAPI("fake", "GET", user.getString("token"), body).call()
         } else JSONObject("{code:400,message:'Insufficient balance'}")
     }
 }
