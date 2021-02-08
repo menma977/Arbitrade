@@ -13,7 +13,6 @@ import kotlin.math.pow
 
 object Helper {
   fun toDogeString(satoshi: Long): String {
-    println(satoshi)
     return BigDecimal(satoshi).divide(BigDecimal(10.0.pow(8))).toPlainString()
   }
 

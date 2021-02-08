@@ -37,7 +37,7 @@ class LoginController {
     user.setString("token", data.getString("token"))
     user.setString("cookie", data.getString("cookie"))
     user.setString("walletDax", data.getString("walletDax"))
-    user.setInteger("totalPin", data.getInt("totalPin"))
+    user.setLong("totalPin", data.getLong("totalPin"))
     user.setInteger("pinSpent", data.getInt("pinSpent"))
     user.setInteger("totalDownLine", data.getInt("totalDownLine"))
     user.setString("downLines", data.getJSONArray("downLines").toString())
