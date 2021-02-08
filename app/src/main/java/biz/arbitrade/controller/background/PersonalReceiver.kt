@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import biz.arbitrade.controller.events.OnTicket
+import biz.arbitrade.controller.events.OnTrade
 import biz.arbitrade.model.User
 import biz.arbitrade.network.Url
 import com.pusher.client.Pusher
@@ -45,6 +46,7 @@ class PersonalReceiver : Service() {
     })
 
     OnTicket(application, personalChannel).bind()
+    OnTrade(application, personalChannel).bind()
 
     privatePusher.connect(object : ConnectionEventListener {
       override fun onConnectionStateChange(change: ConnectionStateChange) {
