@@ -16,10 +16,10 @@ class OnTicket(context: Context, channel: Channel) : PusherEvent(context, channe
   override val eventName: String = "App\\Events\\TicketEvent"
 
   override fun handle(context: Context, result: JSONObject) {
-    val title = result.getString("username")
-    val message = result.getString("ticket")
-    val mNotification = Notification.make(context, "arbi.announce", title, message)
-    val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.notify(Notification.Id.announcement, mNotification)
+    val user = User(context)
+    val intent = Intent(context, MainActivity::class.java)
+    user.setLong("totalPin", 0)
+    intent.action = "ticket"
+    LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
   }
 }

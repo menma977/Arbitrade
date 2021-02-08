@@ -19,6 +19,10 @@ import biz.arbitrade.model.User
 import biz.arbitrade.view.activity.RegisterActivity
 import biz.arbitrade.view.activity.TradeOneActivity
 import biz.arbitrade.view.activity.TradeTwoActivity
+import biz.arbitrade.view.dialog.WithdrawDialog
+import com.google.zxing.BarcodeFormat
+import com.journeyapps.barcodescanner.BarcodeEncoder
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.part_announcement.view.*
 import org.json.JSONObject
 
@@ -26,6 +30,7 @@ class HomeFragment : Fragment() {
   private lateinit var username: TextView
   private lateinit var balance: TextView
   private lateinit var register: LinearLayout
+  private lateinit var withdraw: LinearLayout
   private lateinit var tradeOne: LinearLayout
   private lateinit var tradeTwo: LinearLayout
   private lateinit var announcementGroup: LinearLayout
@@ -43,12 +48,19 @@ class HomeFragment : Fragment() {
     username = view.findViewById(R.id.textViewUsername)
     balance = view.findViewById(R.id.textViewBalance)
     register = view.findViewById(R.id.lnrLayoutRegister)
+    withdraw = view.findViewById(R.id.lnrLayoutWithdraw)
     tradeOne = view.findViewById(R.id.lnrLayoutTradeOne)
     tradeTwo = view.findViewById(R.id.lnrLayoutTradeTwo)
     announcementGroup = view.findViewById(R.id.lnrLayoutAnnouncements)
+    txtTotalPin.text = Helper.toDogeString(user.getLong("totalPin"))
+    txtWallet.text = user.getString("walletDax")
 
     username.text = user.getString("username")
     balance.text = Helper.toDogeString(user.getLong("balance"))
+
+    val barcodeEncoder = BarcodeEncoder()
+    val bitmap = barcodeEncoder.encodeBitmap("your wallet", BarcodeFormat.QR_CODE, 500, 500)
+    imgQr.setImageBitmap(bitmap)
 
     register.setOnClickListener {
       move("register")
@@ -58,6 +70,9 @@ class HomeFragment : Fragment() {
     }
     tradeTwo.setOnClickListener {
       move("trade_two")
+    }
+    withdraw.setOnClickListener {
+      WithdrawDialog(this@HomeFragment.requireActivity(), user.getString("token"))
     }
 
     if (user.getString("announcement").isNotBlank()) {
@@ -95,21 +110,31 @@ class HomeFragment : Fragment() {
   override fun onStart() {
     super.onStart()
     LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiverAnnouncement, IntentFilter("announcement"))
+    LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiverDoge, IntentFilter("web.doge"))
   }
 
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverAnnouncement)
+    LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverDoge)
   }
 
   override fun onStop() {
     super.onStop()
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverAnnouncement)
+    LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverDoge)
   }
 
   override fun onPause() {
     super.onPause()
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverAnnouncement)
+    LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverDoge)
+  }
+
+  private var broadcastReceiverDoge: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      balance.text = Helper.toDogeString(user.getLong("balance"))
+    }
   }
 
   private var broadcastReceiverAnnouncement: BroadcastReceiver = object : BroadcastReceiver() {
