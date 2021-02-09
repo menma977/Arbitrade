@@ -121,7 +121,7 @@
                       android:layout_width="30sp"
                       android:layout_height="30sp"
                       android:contentDescription="@string/icon"
-                      app:srcCompat="@drawable/baseline_confirmation_number_black_24"
+                      app:srcCompat="@drawable/baseline_confirmation_number_24"
                       app:tint="@color/colorPrimary" />
 
                   <TextView
