@@ -66,7 +66,8 @@ class HomeFragment : Fragment() {
     username.text = user.getString("username")
     balance.text = Helper.toDogeString(user.getLong("balance"))
     val barcodeEncoder = BarcodeEncoder()
-    val bitmap = barcodeEncoder.encodeBitmap("your wallet", BarcodeFormat.QR_CODE, 500, 500)
+    val wallet = if (user.getString("wallet").isBlank()) "placeholder" else user.getString("wallet")
+    val bitmap = barcodeEncoder.encodeBitmap(wallet, BarcodeFormat.QR_CODE, 500, 500)
     imgQr.setImageBitmap(bitmap)
 
     register.setOnClickListener {
