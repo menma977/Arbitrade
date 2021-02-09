@@ -57,7 +57,7 @@ class TradeOneActivity : AppCompatActivity() {
 
     val lastBet = Bet.getCalendar(bet.getLong("last_f_trade"))
     val now = Calendar.getInstance()
-    if (bet.has("last_f_trade") && lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.MONTH) == now.get(Calendar.MONTH)) {
+    if (bet.has("last_f_trade") && lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.YEAR) == now.get(Calendar.YEAR)) {
       if (bet.has("last_f_trade_result")) {
         statusChange(
           if (bet.getBoolean("last_f_trade_result")) R.string.win else R.string.lose, if (bet.getBoolean("last_f_trade_result")) R.color.Info else R.color.Danger
