@@ -14,6 +14,7 @@ import kotlin.random.Random
 class TradeTwoController() {
   private val martingaleWinningIncrement = .1
   private var totalProfit: Long = 0
+  var initialBet:Long = 0
 
   fun getTotalProfit(): Long {
     return totalProfit
@@ -58,8 +59,11 @@ class TradeTwoController() {
   }
 
   fun martingale(bet: Long, profit: Long): Long {
+    if(bet <= 0 || initialBet <= 0){
+      throw error("Bet cannot be 0 or less")
+    }
     totalProfit += profit
-    return if (profit >= 0) (bet * (1 + martingaleWinningIncrement)).toLong()
+    return if (profit >= 0) initialBet//(bet * (1 + martingaleWinningIncrement)).toLong()
     else abs(profit) * 2
   }
 }

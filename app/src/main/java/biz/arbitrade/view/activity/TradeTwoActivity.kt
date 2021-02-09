@@ -75,6 +75,8 @@ class TradeTwoActivity : AppCompatActivity() {
     var bet = (target * .1).toLong()
     var doContinue = false
 
+    controller.initialBet = bet
+
     if (bets.has("last_bet")) {
       val lastBet = Bet.getCalendar(bets.getLong("last_bet"))
       val now = Calendar.getInstance()
