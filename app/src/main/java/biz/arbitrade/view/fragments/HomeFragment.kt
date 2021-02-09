@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -29,6 +30,9 @@ import org.json.JSONObject
 class HomeFragment : Fragment() {
   private lateinit var username: TextView
   private lateinit var balance: TextView
+  private lateinit var txtTotalPin: TextView
+  private lateinit var txtWallet: TextView
+  private lateinit var imgQr: ImageView
   private lateinit var register: LinearLayout
   private lateinit var withdraw: LinearLayout
   private lateinit var tradeOne: LinearLayout
@@ -47,17 +51,20 @@ class HomeFragment : Fragment() {
 
     username = view.findViewById(R.id.textViewUsername)
     balance = view.findViewById(R.id.textViewBalance)
+    txtTotalPin = view.findViewById(R.id.txtTotalPin)
+    txtWallet = view.findViewById(R.id.txtWallet)
+    imgQr = view.findViewById(R.id.imgQr)
     register = view.findViewById(R.id.lnrLayoutRegister)
     withdraw = view.findViewById(R.id.lnrLayoutWithdraw)
     tradeOne = view.findViewById(R.id.lnrLayoutTradeOne)
     tradeTwo = view.findViewById(R.id.lnrLayoutTradeTwo)
     announcementGroup = view.findViewById(R.id.lnrLayoutAnnouncements)
-    txtTotalPin.text = Helper.toDogeString(user.getLong("totalPin"))
+
+    txtTotalPin.text = Helper.formatTicket(user.getLong("totalPin")).toPlainString()
     txtWallet.text = user.getString("walletDax")
 
     username.text = user.getString("username")
     balance.text = Helper.toDogeString(user.getLong("balance"))
-
     val barcodeEncoder = BarcodeEncoder()
     val bitmap = barcodeEncoder.encodeBitmap("your wallet", BarcodeFormat.QR_CODE, 500, 500)
     imgQr.setImageBitmap(bitmap)
@@ -136,7 +143,6 @@ class HomeFragment : Fragment() {
       balance.text = Helper.toDogeString(user.getLong("balance"))
     }
   }
-
   private var broadcastReceiverAnnouncement: BroadcastReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
       announcementGroup.removeAllViewsInLayout()

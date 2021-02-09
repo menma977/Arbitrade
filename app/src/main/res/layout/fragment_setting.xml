@@ -219,9 +219,24 @@
               android:text="@string/change"
               android:textColor="@color/White"
               android:textStyle="bold"/>
+
         </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_primary"
+            android:text="@string/logout"
+            android:textColor="@color/White"
+            android:textStyle="bold"/>
+
       </LinearLayout>
+
     </LinearLayout>
+
   </ScrollView>
 
 </FrameLayout>
