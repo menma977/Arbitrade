@@ -3,6 +3,7 @@ package biz.arbitrade.controller
 import android.app.ActivityManager
 import android.content.Context
 import java.math.BigDecimal
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -12,12 +13,18 @@ import kotlin.collections.ArrayList
 import kotlin.math.pow
 
 object Helper {
+  private val decimalFormat = DecimalFormat("#.########")
+
   fun toDogeString(satoshi: Long): String {
     return BigDecimal(satoshi).divide(BigDecimal(10.0.pow(8))).toPlainString()
   }
 
   fun fromDogeString(doge: String): Long {
     return BigDecimal(doge).times(10.0.pow(8).toBigDecimal()).longValueExact()
+  }
+
+  fun formatTicket(ticket: Long) : BigDecimal {
+    return decimalFormat.format(ticket.toBigDecimal().setScale(8, BigDecimal.ROUND_HALF_DOWN)).replace(",", ".").toBigDecimal()
   }
 
   fun <T> subList(a: ArrayList<T>, from: Int, to: Int): ArrayList<T> {
