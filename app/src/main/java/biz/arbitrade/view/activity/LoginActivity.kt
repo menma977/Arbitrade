@@ -11,10 +11,10 @@ import biz.arbitrade.controller.LoginController
 import biz.arbitrade.controller.background.PusherReceiver
 import biz.arbitrade.network.DogeAPI
 import biz.arbitrade.view.dialog.Loading
-import java.util.*
-import kotlin.concurrent.schedule
 import okhttp3.FormBody
 import org.json.JSONObject
+import java.util.*
+import kotlin.concurrent.schedule
 
 class LoginActivity : AppCompatActivity() {
   private val controller = LoginController()
@@ -59,16 +59,27 @@ class LoginActivity : AppCompatActivity() {
         println(resultDoge.toString())
         runOnUiThread {
           if (result.getInt("code") >= 400) {
-            val msg = if (result.getString("data").contains("failed to connect")) "Cannot Connect to Server please check your connection"
+            val msg = if (result.getString("data")
+                .contains("failed to connect")
+            ) "Cannot Connect to Server please check your connection"
             else result.getString("data")
             Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
           } else {
             if (resultDoge.getInt("code") >= 400) {
               Toast.makeText(
-                applicationContext, "Cannot fetch current balance at the moment, please wait...", Toast.LENGTH_LONG
+                applicationContext,
+                "Cannot fetch current balance at the moment, please wait...",
+                Toast.LENGTH_LONG
               ).show()
             }
-            controller.fillUser(application, result, (resultDoge.optJSONObject("data")?.optLong("Balance") ?: 0))
+            controller.fillUser(
+              application,
+              result,
+              (resultDoge.optJSONObject("data")?.optLong("Balance") ?: 0),
+              JSONObject(
+                intent.getStringExtra("info") ?: "{wallet_bank: \"\"}"
+              )
+            )
             val mIntent = Intent(applicationContext, PusherReceiver::class.java)
             if (applicationContext != null) {
               applicationContext.startService(mIntent)

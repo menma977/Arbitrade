@@ -25,7 +25,7 @@ class LoginController {
     }
   }
 
-  fun fillUser(context: Context, result: JSONObject, balance: Long): User {
+  fun fillUser(context: Context, result: JSONObject, balance: Long, info: JSONObject): User {
     Log.e("MINE", result.toString())
     val data = result.getJSONObject("user")
     val user = User(context)
@@ -44,6 +44,7 @@ class LoginController {
     user.setString("sponsorId", data.getString("sponsorId"))
     user.setString("sponsor", data.getString("sponsor"))
     user.setLong("balance", balance)
+    user.setString("bankWallet", info.getString("wallet_bank"))
 
     return user
   }

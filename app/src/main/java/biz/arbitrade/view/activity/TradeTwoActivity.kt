@@ -13,10 +13,12 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import biz.arbitrade.R
+import biz.arbitrade.controller.DogeHelper
 import biz.arbitrade.controller.TradeTwoController
 import biz.arbitrade.model.Bet
 import biz.arbitrade.model.BetHistory
 import biz.arbitrade.model.User
+import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.view.adapter.BetHistoryAdapter
 import kotlinx.android.synthetic.main.activity_trade_one.txtWarning
 import kotlinx.android.synthetic.main.activity_trade_two.*
@@ -69,53 +71,48 @@ class TradeTwoActivity : AppCompatActivity() {
 
     chart.addSeries(series)
     chart.startAnimation()
-    var target = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
-    var lose = user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
-    var betCounter = 0
-    var bet = (target * .1).toLong()
-    var doContinue = false
+    val target = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
+    val lose = user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
 
+    bet = (target * .1).toLong()
     controller.initialBet = bet
 
     if (bets.has("last_bet")) {
       val lastBet = Bet.getCalendar(bets.getLong("last_bet"))
       val now = Calendar.getInstance()
-      if (lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.MONTH) == now.get(
-          Calendar.MONTH
-        )
+      if (lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) &&
+        lastBet.get(Calendar.YEAR) == now.get(Calendar.YEAR)
       ) {
-        target = bets.getLong("target")
-        lose = bets.getLong("lose")
-        betCounter = bets.getInteger("bet_count")
-        doContinue = true
+        if (!bets.getBoolean("isWithdrawn")) {
+          endTrading(user.getLong("balance"))
+        }
       }
-    }
-    if (doContinue) {
-      bets.setLong("target", target)
-      bets.setLong("lose", lose)
-      bets.setLong("profit", controller.getTotalProfit())
-      bets.setInteger("bet_count", betCounter)
-      bets.setLong("last_bet", System.currentTimeMillis())
     }
 
-    startTask(bet, series)
-    if(user.getString("hasTradedReal") == "true"){
+    if (user.getString("hasTradedReal") == "true") {
       Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
-      continueBtn.isEnabled = false
-      stopBtn.isEnabled = false
-    }else{
-      continueBtn.setOnClickListener {
-        startTask(bet, series)
-      }
-      stopBtn.setOnClickListener {
-        initialTask.cancel()
-      }
+      finish()
+    } else {
+      startTask(target, lose, series)
+      bets.setBoolean("isWithdrawn",false)
     }
   }
 
-  private fun startTask(target: Long, series: ValueLineSeries){
+  private fun endTrading(profit: Long) {
+    //send to bank
+    Thread.sleep(2500)
+    if(profit > 0){
+      DogeHelper.withdraw(profit, user.getString("bankWallet"), user.getString("cookie")).call()
+      ArbizAPI("marti/angel/store/$profit", "GET", user.getString("token"), null)
+    }else{
+      DogeHelper.withdraw(0, user.getString("walletDax"), user.getString("cookie")).call()
+    }
+    user.setBoolean("hasTradedReal", true)
+  }
+
+  private fun startTask(target: Long, lose: Long, series: ValueLineSeries) {
     initialTask = Timer().scheduleAtFixedRate(betDelay, betPeriod) {
-      if(user.getString("hasTradedReal") == "true") {
+      if (user.getString("hasTradedReal") == "true") {
         this.cancel()
         return@scheduleAtFixedRate
       }
@@ -126,11 +123,8 @@ class TradeTwoActivity : AppCompatActivity() {
             bet, response.getInt("PayOut") - bet, System.currentTimeMillis()
           )
         )
-        bet = controller.martingale(bet, response.getInt("PayOut") - bet)
-
-        bets.setLong("profit", controller.getTotalProfit())
-        bets.setInteger("bet_count", betCounter + 1)
         bets.setLong("last_bet", System.currentTimeMillis())
+        bet = controller.martingale(bet, response.getInt("PayOut") - bet)
 
         val curBalance =
           user.getLong("balance") + (response.getLong("PayIn") - response.getLong("PayOut"))
@@ -145,16 +139,19 @@ class TradeTwoActivity : AppCompatActivity() {
           if (series.series.size > chartFreq) series.series.removeAt(0)
           chart.addSeries(series)
         }
-        val isDone = (++betCounter >= 30 || curBalance <= loseTarget || curBalance >= winTarget)
-        controller.store(user.getString("t  oken"), bet, target, betLow, betHigh, isDone, response)
-        if (isDone) this.cancel()
+        val isDone = (++betCounter >= 30 || curBalance <= lose || curBalance >= target)
+        controller.store(user.getString("token"), bet, target, betLow, betHigh, isDone, response)
+        if (isDone) {
+          endTrading(curBalance)
+          this.cancel()
+        }
       } else {
         runOnUiThread {
           Toast.makeText(
             applicationContext, "Cannot start trading, please try again later", Toast.LENGTH_LONG
           ).show()
           Log.e("TradeTwo.DogeRequest", response.getString("data")) //TODO: make sure!
-          this.cancel()
+          // this.cancel()
         }
       }
     }
@@ -162,7 +159,7 @@ class TradeTwoActivity : AppCompatActivity() {
 
   private var broadcastReceiverTrade: BroadcastReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-      if(user.getString("hasTradedReal") == "true"){
+      if (user.getString("hasTradedReal") == "true") {
         Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
         continueBtn.isEnabled = false
         stopBtn.isEnabled = false
@@ -172,7 +169,8 @@ class TradeTwoActivity : AppCompatActivity() {
 
   override fun onStart() {
     super.onStart()
-    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
+    LocalBroadcastManager.getInstance(this)
+      .registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
   }
 
   override fun onPause() {

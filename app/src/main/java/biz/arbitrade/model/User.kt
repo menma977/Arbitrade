@@ -25,6 +25,10 @@ class User(context: Context) {
         sharedPreferencesEditor.commit()
     }
 
+    fun setFloat(id: String, value: Float) {
+        sharedPreferencesEditor.putFloat(id, value)
+        sharedPreferencesEditor.commit()
+    }
 
     fun setString(id: String, value: String) {
         sharedPreferencesEditor.putString(id, value)
@@ -38,6 +42,10 @@ class User(context: Context) {
 
     fun getInteger(id: String): Int {
         return sharedPreferences.getInt(id, 0)
+    }
+
+    fun getFloat(id:String): Float{
+        return sharedPreferences.getFloat("id", 0f)
     }
 
     fun getString(id: String): String {
