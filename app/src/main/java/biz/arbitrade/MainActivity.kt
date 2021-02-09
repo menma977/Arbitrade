@@ -2,6 +2,8 @@ package biz.arbitrade
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import biz.arbitrade.controller.background.PusherReceiver
 import biz.arbitrade.model.User
@@ -22,10 +24,18 @@ class MainActivity : AppCompatActivity() {
     val user = User(this)
     Timer().schedule(100) {
       val info = ArbizAPI("info", "GET", null, null).call()
-      if(info.getInt("maintenance") != 0){
+      if(info.optString("data").matches(Regex("^(failed to connect)"))){
+        runOnUiThread {
+          move("login")
+          Toast.makeText(this@MainActivity, "Cannot connect to server", Toast.LENGTH_SHORT).show()
+        }
+        return@schedule
+      }
+      if(info.optInt("maintenance") != 0){
         moveError(InfoOnlyActivity.MAINTENANCE)
         return@schedule
-      }else if(info.getInt("version") != version){
+      }
+      if(info.getInt("version") != version){
         moveError(InfoOnlyActivity.MISMATCH_VERSION)
         return@schedule
       }
@@ -33,20 +43,20 @@ class MainActivity : AppCompatActivity() {
         val expiredAt =
           JWTUtils.decode(user.getString("token")).getJSONObject("body").getDouble("exp")
         if (System.currentTimeMillis() / 1000f - expiredAt < 0) {
-          val response = ArbizAPI("my", "GET", user.getString("token"), null).call()
+          val response = ArbizAPI("user.profile", "GET", user.getString("token"), null).call()
           runOnUiThread {
             val intent = Intent(applicationContext, PusherReceiver::class.java)
             if (applicationContext != null) {
               startService(intent)
             }
-            move(if (response.getInt("code") > 300) "login" else "main")
+            move(if (response.getInt("code" ) > 300) "login" else "main")
           }
         } else runOnUiThread { move("login") }
       } else runOnUiThread { move("login") }
     }
   }
 
-  fun move(to: String) {
+  private fun move(to: String) {
     val cls = if (to == "login") LoginActivity::class.java else HomeActivity::class.java
     val intent = Intent(applicationContext, cls)
     startActivity(intent)
