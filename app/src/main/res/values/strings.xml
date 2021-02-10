@@ -47,9 +47,11 @@
     <string name="version_mismatch">Your app is outdated, please update the app before continuing</string>
     <string name="unknown_error">Unknown error occurred, please try again later</string>
     <string name="info_reset_password">* enter the mail you are using</string>
+    <string name="info_otp">the code sent to your email</string>
     <string name="cannot_start_trading">Cannot start trading</string>
     <string name="target_win">Target</string>
     <string name="target_lose">Lose At</string>
+    <string name="otp">Confirmation Code</string>
 
     <!-- OTHER -->
     <string name="icon">icon</string>
@@ -57,5 +59,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="zero">0</string>
     <string name="colon">:</string>
-  <string name="logout">Logout</string>
+    <string name="logout">Logout</string>
 </resources>

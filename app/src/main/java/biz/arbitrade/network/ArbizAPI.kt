@@ -27,8 +27,9 @@ class ArbizAPI(private var command: String, private var method: String, private 
       Log.d("MINE", response.message)
       if (response.isSuccessful) {
         return when {
-          json.has("message") && json.optInt("code") < 400 -> {
-            JSONObject().put("code", 200).put("data", json.getString("message"))
+          json.has("message") && json.optInt("code") < 400 && json.length() < 2 -> {
+            JSONObject().put("code", 200)
+              .put("data", json.getString("message"))
           }
           else -> {
             if (!json.has("code")) json.put("code", response.code)

@@ -5,17 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import biz.arbitrade.R
 import biz.arbitrade.controller.LoginController
 import biz.arbitrade.controller.background.PusherReceiver
+import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.network.DogeAPI
 import biz.arbitrade.view.dialog.Loading
 import okhttp3.FormBody
 import org.json.JSONObject
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 
 class LoginActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
   private lateinit var btnLogin: Button
   private lateinit var textUsername: EditText
   private lateinit var textPassword: EditText
+  private lateinit var textForgetPassword: TextView
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -34,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
     btnLogin = findViewById(R.id.buttonLogin)
     textUsername = findViewById(R.id.editTextUsername)
     textPassword = findViewById(R.id.editTextPassword)
+    textForgetPassword = findViewById(R.id.textViewForgotPassword)
 
     textUsername.setText("admin")
     textPassword.setText("admin")
@@ -66,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
             else result.getString("data")
             Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
           } else {
-            Log.d("MINE",resultDoge.toString())
+            Log.d("MINE", resultDoge.toString())
             if (resultDoge.getInt("code") >= 400) {
               Toast.makeText(
                 applicationContext,
@@ -93,6 +96,11 @@ class LoginActivity : AppCompatActivity() {
           loading.closeDialog()
         }
       }
+    }
+
+    textForgetPassword.setOnClickListener {
+      intent = Intent(this@LoginActivity, RequestResetPasswordActivity::class.java)
+      startActivity(intent)
     }
   }
 }
