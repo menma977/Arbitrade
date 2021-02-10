@@ -12,11 +12,13 @@ import android.widget.Toast
 import biz.arbitrade.MainActivity
 import biz.arbitrade.R
 import biz.arbitrade.controller.SettingController
+import biz.arbitrade.model.Bet
 import biz.arbitrade.model.User
 import biz.arbitrade.view.activity.HomeActivity
 
 class SettingFragment : Fragment() {
   private lateinit var user: User
+  private lateinit var bets: Bet
   private lateinit var controller: SettingController
   private lateinit var parentActivity: HomeActivity
   private lateinit var textName: EditText
@@ -34,6 +36,7 @@ class SettingFragment : Fragment() {
     parentActivity = activity as HomeActivity
 
     user = User(parentActivity.applicationContext)
+    bets = Bet(parentActivity.applicationContext)
     controller = SettingController(user)
 
     textName = view.findViewById(R.id.editTextName)
@@ -79,6 +82,7 @@ class SettingFragment : Fragment() {
       val intent = Intent(parentActivity, MainActivity::class.java)
       startActivity(intent)
       user.clear()
+      bets.clear()
       parentActivity.finishAffinity()
     }
     return view

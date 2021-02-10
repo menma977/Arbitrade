@@ -2,6 +2,7 @@ package biz.arbitrade
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import biz.arbitrade.controller.LoginController
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
           body.add("a", "GetBalance")
           body.add("s", response.getString("cookie"))
           body.add("Currency", "doge")
-          val dogeResponse = DogeAPI(body).call()
+          val dogeResponse = DogeAPI(body).call().getJSONObject("data")
           val balance = if(dogeResponse.optLong("Balance") > 0)
             dogeResponse.getLong("Balance") else user.getLong("balance")
           runOnUiThread {

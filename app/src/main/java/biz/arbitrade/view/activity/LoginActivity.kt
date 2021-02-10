@@ -49,11 +49,11 @@ class LoginActivity : AppCompatActivity() {
         val resultDoge: JSONObject = when {
           result.has("cookie") -> {
             val body = FormBody.Builder()
-            body.add("a", "Get  Balance")
+            body.add("a", "GetBalance")
             body.add("s", result.getString("cookie"))
             body.add("Currency", "doge")
             DogeAPI(body).call()
-          } 
+          }
           else -> {
             JSONObject("{code: 400}")
           }

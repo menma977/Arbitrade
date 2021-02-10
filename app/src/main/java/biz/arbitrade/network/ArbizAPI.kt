@@ -1,6 +1,7 @@
 package biz.arbitrade.network
 
 import android.annotation.SuppressLint
+import android.util.Log
 import okhttp3.FormBody
 import okhttp3.Response
 import org.json.JSONObject
@@ -21,9 +22,12 @@ class ArbizAPI(private var command: String, private var method: String, private 
 
   private val http = object : Base() {
     override fun responseHandler(response: Response, json: JSONObject): JSONObject {
+      Log.d("MINE", response.code.toString())
+      Log.d("MINE", json.toString())
+      Log.d("MINE", response.message)
       if (response.isSuccessful) {
         return when {
-          json.has("message") && json.getInt("code") < 400 -> {
+          json.has("message") && json.optInt("code") < 400 -> {
             JSONObject().put("code", 200).put("data", json.getString("message"))
           }
           else -> {
