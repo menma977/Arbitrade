@@ -27,14 +27,15 @@ class LoginController {
 
   fun fillUser(context: Context, result: JSONObject, balance: Long, info: JSONObject): User {
     Log.e("MINE", result.toString())
-    val data = result.getJSONObject("user")
+    val data = result
     val user = User(context)
 
     user.setString("username", data.getString("username"))
     user.setString("email", data.getString("email"))
     user.setString("hasTradedReal", data.getString("hasTradedReal"))
     user.setString("hasTradedFake", data.getString("hasTradedFake"))
-    user.setString("token", data.getString("token"))
+    if(!user.has("token"))
+      user.setString("token", data.getString("token"))
     user.setString("cookie", data.getString("cookie"))
     user.setString("walletDax", data.getString("walletDax"))
     user.setLong("totalPin", data.getLong("totalPin"))
