@@ -2,6 +2,7 @@ package biz.arbitrade.view.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -46,18 +47,17 @@ class LoginActivity : AppCompatActivity() {
       Timer().schedule(1000) {
         val result = controller.doLogin(textUsername.text.toString(), textPassword.text.toString())
         val resultDoge: JSONObject = when {
-          result.has("user") -> {
+          result.has("cookie") -> {
             val body = FormBody.Builder()
-            body.add("a", "GetBalance")
-            body.add("s", result.getJSONObject("user").getString("cookie"))
+            body.add("a", "Get  Balance")
+            body.add("s", result.getString("cookie"))
             body.add("Currency", "doge")
             DogeAPI(body).call()
-          }
+          } 
           else -> {
-            result
+            JSONObject("{code: 400}")
           }
         }
-        println(resultDoge.toString())
         runOnUiThread {
           if (result.getInt("code") >= 400) {
             val msg = if (result.getString("data")
@@ -66,6 +66,7 @@ class LoginActivity : AppCompatActivity() {
             else result.getString("data")
             Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
           } else {
+            Log.d("MINE",resultDoge.toString())
             if (resultDoge.getInt("code") >= 400) {
               Toast.makeText(
                 applicationContext,
