@@ -25,25 +25,29 @@ class LoginController {
     }
   }
 
-  fun fillUser(context: Context, result: JSONObject, balance: Long): User {
+  fun fillUser(context: Context, result: JSONObject, balance: Long, info: JSONObject): User {
     Log.e("MINE", result.toString())
-    val data = result.getJSONObject("user")
+    val result = if (result.has("user")) result.getJSONObject("user") else result
     val user = User(context)
 
-    user.setString("username", data.getString("username"))
-    user.setString("email", data.getString("email"))
-    user.setString("hasTradedReal", data.getString("hasTradedReal"))
-    user.setString("hasTradedFake", data.getString("hasTradedFake"))
-    user.setString("token", data.getString("token"))
-    user.setString("cookie", data.getString("cookie"))
-    user.setString("walletDax", data.getString("walletDax"))
-    user.setInteger("totalPin", data.getInt("totalPin"))
-    user.setInteger("pinSpent", data.getInt("pinSpent"))
-    user.setInteger("totalDownLine", data.getInt("totalDownLine"))
-    user.setString("downLines", data.getJSONArray("downLines").toString())
-    user.setString("sponsorId", data.getString("sponsorId"))
-    user.setString("sponsor", data.getString("sponsor"))
+    user.setString("username", result.getString("username"))
+    user.setString("email", result.getString("email"))
+    user.setString("hasTradedReal", result.getString("hasTradedReal"))
+    user.setString("hasTradedFake", result.getString("hasTradedFake"))
+    if (!user.has("token")) user.setString("token", result.getString("token"))
+    user.setString("cookie", result.getString("cookie"))
+    user.setString("walletDax", result.getString("walletDax"))
+    user.setLong("totalPin", result.getLong("totalPin"))
+    user.setInteger("pinSpent", result.getInt("pinSpent"))
+    user.setInteger("totalDownLine", result.getInt("totalDownLine"))
+    user.setString("downLines", result.getJSONArray("downLines").toString())
+    user.setString("sponsorId", result.getString("sponsorId"))
+    user.setString("sponsor", result.getString("sponsor"))
     user.setLong("balance", balance)
+    user.setString("bankWallet", info.getString("wallet_bank"))
+    user.setFloat("itShare", info.getDouble("it").toFloat())
+    user.setFloat("buyWallShare", info.getDouble("buy_wall").toFloat())
+    user.setFloat("sponsorShare", info.getDouble("sponsor").toFloat())
 
     return user
   }

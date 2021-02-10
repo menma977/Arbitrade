@@ -1,60 +1,90 @@
 package biz.arbitrade.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import biz.arbitrade.MainActivity
 import biz.arbitrade.R
+import biz.arbitrade.controller.SettingController
+import biz.arbitrade.model.Bet
+import biz.arbitrade.model.User
+import biz.arbitrade.view.activity.HomeActivity
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+  private lateinit var user: User
+  private lateinit var bets: Bet
+  private lateinit var controller: SettingController
+  private lateinit var parentActivity: HomeActivity
+  private lateinit var textName: EditText
+  private lateinit var textWallet: EditText
+  private lateinit var textPassword: EditText
+  private lateinit var textPasswordConfirm: EditText
+  private lateinit var buttonLogout: Button
+  private lateinit var buttonChangeName: Button
+  private lateinit var buttonChangeWallet: Button
+  private lateinit var buttonChangePassword: Button
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    val view = inflater.inflate(R.layout.fragment_setting, container, false)
+
+    parentActivity = activity as HomeActivity
+
+    user = User(parentActivity.applicationContext)
+    bets = Bet(parentActivity.applicationContext)
+    controller = SettingController(user)
+
+    textName = view.findViewById(R.id.editTextName)
+    textWallet = view.findViewById(R.id.editTextWalletDax)
+    textPassword = view.findViewById(R.id.editTextPassword)
+    textPasswordConfirm = view.findViewById(R.id.editTextConfirmPassword)
+    buttonChangeName = view.findViewById(R.id.buttonChangeName)
+    buttonChangeWallet = view.findViewById(R.id.buttonChangeWallet)
+    buttonChangePassword = view.findViewById(R.id.buttonChangePassword)
+    buttonLogout = view.findViewById(R.id.buttonLogout)
+
+    buttonChangeName.setOnClickListener {
+      Toast.makeText(this@SettingFragment.context,
+        if(controller.changeName(textName.text.toString()))
+          "Name changed to ${textName.text}"
+        else
+          "Changing name failed",
+        Toast.LENGTH_SHORT
+      ).show()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false)
+    buttonChangeWallet.setOnClickListener {
+      Toast.makeText(this@SettingFragment.context,
+        if(controller.changeDaxWallet(textWallet.text.toString()))
+          "Wallet changed"
+        else
+          "Changing name failed",
+        Toast.LENGTH_SHORT
+      ).show()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    buttonChangePassword.setOnClickListener {
+      Toast.makeText(this@SettingFragment.context,
+        if(controller.changePassword(textPassword.text.toString(), textPasswordConfirm.text.toString()))
+          "Password changed"
+        else
+          "Changing password failed",
+        Toast.LENGTH_SHORT
+      ).show()
     }
+
+    buttonLogout.setOnClickListener {
+      val intent = Intent(parentActivity, MainActivity::class.java)
+      startActivity(intent)
+      user.clear()
+      bets.clear()
+      parentActivity.finishAffinity()
+    }
+    return view
+  }
 }

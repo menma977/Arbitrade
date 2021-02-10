@@ -7,7 +7,7 @@ import okhttp3.Response
 import org.json.JSONObject
 
 class DogeAPI(private val body: FormBody.Builder) : Callable<JSONObject> {
-  private val key = ""
+  private val key = "12650d1e50194d789bf03d22f90ecebe"
 
   override fun call(): JSONObject {
     body.add("Key", key)
