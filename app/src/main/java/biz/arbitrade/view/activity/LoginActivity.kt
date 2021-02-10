@@ -14,6 +14,7 @@ import biz.arbitrade.view.dialog.Loading
 import okhttp3.FormBody
 import org.json.JSONObject
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 
 class LoginActivity : AppCompatActivity() {
@@ -53,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
             DogeAPI(body).call()
           }
           else -> {
-            JSONObject("{code: 400}")
+            result
           }
         }
         println(resultDoge.toString())
