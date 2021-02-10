@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_trade_two.*
 import java.util.*
 import kotlin.concurrent.schedule
 import kotlin.concurrent.scheduleAtFixedRate
-import kotlin.math.abs
 import kotlin.random.Random
 
 class TradeOneActivity : AppCompatActivity() {
