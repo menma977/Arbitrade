@@ -48,8 +48,6 @@ class TradeOneActivity : AppCompatActivity() {
     status = findViewById(R.id.txtStatus)
     txtWarning.isSelected = true
 
-    user.setLong("balance", abs(Long.MAX_VALUE))
-
     if(user.getString("hasTradedFake") == "true"){
       Toast.makeText(this@TradeOneActivity, "You have traded today", Toast.LENGTH_SHORT).show()
       finish()
@@ -72,6 +70,7 @@ class TradeOneActivity : AppCompatActivity() {
       progressBar.progress = 0
       Timer().schedule(100) {
         val response = controller.trade(user)
+        Log.d("MINE", response.toString())
         if (response.getInt("code") < 400) {
           onTrading = true
           Timer().scheduleAtFixedRate(
