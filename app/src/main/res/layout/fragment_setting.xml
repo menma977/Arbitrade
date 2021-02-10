@@ -81,6 +81,7 @@
           </LinearLayout>
 
           <EditText
+              android:id="@+id/editTextName"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="12sp"
@@ -89,7 +90,7 @@
               android:hint="@string/new_name"
               android:inputType="textPersonName"
               android:padding="10dp"
-              android:textAlignment="center"/>
+              android:textAlignment="center" />
 
           <Button
               android:id="@+id/buttonChangeName"
@@ -137,6 +138,7 @@
           </LinearLayout>
 
           <EditText
+              android:id="@+id/editTextWalletDax"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="12sp"
@@ -145,7 +147,7 @@
               android:hint="@string/new_wallet_dax"
               android:inputType="textPersonName"
               android:padding="10dp"
-              android:textAlignment="center"/>
+              android:textAlignment="center" />
 
           <Button
               android:id="@+id/buttonChangeWallet"
@@ -191,6 +193,7 @@
           </LinearLayout>
 
           <EditText
+              android:id="@+id/editTextPassword"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="12sp"
@@ -199,9 +202,10 @@
               android:hint="@string/new_password"
               android:inputType="textPersonName"
               android:padding="10dp"
-              android:textAlignment="center"/>
+              android:textAlignment="center" />
 
           <EditText
+              android:id="@+id/editTextConfirmPassword"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="12sp"
@@ -210,7 +214,7 @@
               android:hint="@string/confirm_password"
               android:inputType="textPersonName"
               android:padding="10dp"
-              android:textAlignment="center"/>
+              android:textAlignment="center" />
 
           <Button
               android:id="@+id/buttonChangePassword"
