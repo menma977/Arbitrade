@@ -36,19 +36,13 @@
             android:padding="18sp">
 
             <org.eazegraph.lib.charts.ValueLineChart
-                android:id="@+id/cubiclinechart"
+                android:id="@+id/cubicLineChart"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_light"
-                app:egCurveSmoothness="0.0"
-                app:egIndicatorLineColor="#FE6DA8"
-                app:egLegendHeight="40dp"
-                app:egShowStandardValue="true"
+                android:layout_height="300dp"
                 app:egUseCubic="true"
-                app:egUseOverlapFill="true">
-
-            </org.eazegraph.lib.charts.ValueLineChart>
+                app:egUseOverlapFill="true"
+                app:egCurveSmoothness="0.4"
+                app:egLegendHeight="40dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,6 +51,186 @@
                 android:background="@drawable/button_warning"
                 android:orientation="vertical"
                 android:padding="8sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/starting_balance" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3sp"
+                        android:layout_marginEnd="3sp"
+                        android:text="@string/colon" />
+
+                    <TextView
+                        android:id="@+id/starting_balance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3sp"
+                        android:text="@string/doge" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/remaining_balance" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3sp"
+                        android:layout_marginEnd="3sp"
+                        android:text="@string/colon" />
+
+                    <TextView
+                        android:id="@+id/remaining_balance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3sp"
+                        android:text="@string/doge" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/target_win" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3sp"
+                        android:layout_marginEnd="3sp"
+                        android:text="@string/colon" />
+
+                    <TextView
+                        android:id="@+id/target_win"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3sp"
+                        android:text="@string/doge" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/target_lose" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3sp"
+                        android:layout_marginEnd="3sp"
+                        android:text="@string/colon" />
+
+                    <TextView
+                        android:id="@+id/target_lose"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3sp"
+                        android:text="@string/doge" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_warning"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ProgressBar
+                            android:id="@+id/spinner"
+                            style="?android:attr/progressBarStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:indeterminateDrawable="@drawable/progress_circular"
+                            android:padding="18sp"
+                            android:progressDrawable="@drawable/progress_circular"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/txtStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="marquee"
+                            android:text="@string/trade"
+                            android:textAlignment="center"
+                            android:textColor="@color/Danger"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/continueBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8sp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_success"
+                        android:text="@string/proceed"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/stopBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8sp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_danger"
+                        android:text="@string/stop"
+                        android:visibility="gone" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/txtWarning"
@@ -69,30 +243,6 @@
                     android:text="@string/trade_warning"
                     android:textAlignment="center" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_warning"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/continueBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8sp"
-                        android:layout_weight="1"
-                        android:background="@drawable/button_success"
-                        android:text="@string/proceed" />
-
-                    <Button
-                        android:id="@+id/stopBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8sp"
-                        android:layout_weight="1"
-                        android:background="@drawable/button_danger"
-                        android:text="@string/stop" />
-                </LinearLayout>
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -101,7 +251,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="18sp"
                 android:background="@color/Default"
-                android:nestedScrollingEnabled="true" />
+                android:nestedScrollingEnabled="true"
+                android:visibility="gone" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

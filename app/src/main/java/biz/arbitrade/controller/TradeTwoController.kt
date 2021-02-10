@@ -20,9 +20,10 @@ class TradeTwoController() {
     return totalProfit
   }
 
-  fun bet(satoshi: Long, low: Int, high: Int): JSONObject {
+  fun bet(satoshi: Long, low: Int, high: Int, cookie: String): JSONObject {
     val form = FormBody.Builder()
     form.add("a", "PlaceBet")
+    form.add("s", cookie)
     form.add("PayIn", "$satoshi")
     form.add("Low", "$low")
     form.add("High", "$high")
@@ -39,23 +40,23 @@ class TradeTwoController() {
     low: Int,
     high: Int,
     finish: Boolean,
+    profit: Long,
     data: JSONObject
   ): JSONObject {
     val body = FormBody.Builder()
-    val res = data.getJSONObject("data") // TODO: change accordingly
-    body.add("start_balance", res.getString("StartingBalance"))
-    body.add("end_balance", res.getString("Balance"))
+    body.add("start_balance", data.getString("StartingBalance"))
+    body.add("end_balance", (data.getLong("StartingBalance") + profit).toString())
     body.add("target_balance", target.toString())
     body.add("pay_in", satoshi.toString())
-    body.add("pay_out", "${res.getLong("Payout") - satoshi}")
+    body.add("pay_out", "${data.getLong("PayOut")}")
     body.add("low", low.toString())
     body.add("high", high.toString())
     body.add(
       "status",
-      if (satoshi < (res.getLong("Payout") - satoshi)) "lose" else "win"
+      if (satoshi < (data.getLong("PayOut") - satoshi)) "lose" else "win"
     )
     body.add("is_finish", finish.toString())
-    return ArbizAPI("marti.angel", "POST", token, body).call()
+    return ArbizAPI("bot.marti.angel", "POST", token, body).call()
   }
 
   fun martingale(bet: Long, profit: Long): Long {
@@ -64,6 +65,6 @@ class TradeTwoController() {
     }
     totalProfit += profit
     return if (profit >= 0) initialBet//(bet * (1 + martingaleWinningIncrement)).toLong()
-    else abs(profit) * 2
+    else abs(bet) * 2
   }
 }

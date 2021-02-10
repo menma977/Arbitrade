@@ -19,6 +19,8 @@
     <string name="trade">Trade</string>
     <string name="withdraw">Withdraw</string>
     <string name="withdraw_all">Withdraw All</string>
+    <string name="submit">Submit</string>
+    <string name="reset_password">Reset Password</string>
 
     <!-- LABEL -->
     <string name="username">Username</string>
@@ -29,6 +31,8 @@
     <string name="wallet">Wallet</string>
     <string name="wallet_dax">Wallet Dax</string>
     <string name="doge">Doge</string>
+    <string name="starting_balance">Starting Balance</string>
+    <string name="remaining_balance">Remaining Balance</string>
     <string name="user_setting">User Settings</string>
     <string name="already_play">You already play today</string>
     <string name="win">Win</string>
@@ -42,12 +46,16 @@
     <string name="under_maintenance">Service under maintenance please try again later</string>
     <string name="version_mismatch">Your app is outdated, please update the app before continuing</string>
     <string name="unknown_error">Unknown error occurred, please try again later</string>
+    <string name="info_reset_password">* enter the mail you are using</string>
     <string name="cannot_start_trading">Cannot start trading</string>
+    <string name="target_win">Target</string>
+    <string name="target_lose">Lose At</string>
 
     <!-- OTHER -->
     <string name="icon">icon</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="zero">0</string>
+    <string name="colon">:</string>
   <string name="logout">Logout</string>
 </resources>

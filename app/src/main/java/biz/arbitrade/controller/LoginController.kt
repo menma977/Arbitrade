@@ -45,6 +45,9 @@ class LoginController {
     user.setString("sponsor", result.getString("sponsor"))
     user.setLong("balance", balance)
     user.setString("bankWallet", info.getString("wallet_bank"))
+    user.setFloat("itShare", info.getDouble("it").toFloat())
+    user.setFloat("buyWallShare", info.getDouble("buy_wall").toFloat())
+    user.setFloat("sponsorShare", info.getDouble("sponsor").toFloat())
 
     return user
   }

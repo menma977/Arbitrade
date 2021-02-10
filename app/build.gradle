@@ -36,7 +36,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.github.blackfizz:eazegraph:1.2.3@aar'
+    implementation 'com.github.blackfizz:eazegraph:1.2.5l@aar'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.pusher:pusher-java-client:2.2.1'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
