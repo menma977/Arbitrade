@@ -50,30 +50,21 @@ class SettingFragment : Fragment() {
 
     buttonChangeName.setOnClickListener {
       Toast.makeText(this@SettingFragment.context,
-        if(controller.changeName(textName.text.toString()))
-          "Name changed to ${textName.text}"
-        else
-          "Changing name failed",
+        controller.changeName(textName.text.toString()),
         Toast.LENGTH_SHORT
       ).show()
     }
 
     buttonChangeWallet.setOnClickListener {
       Toast.makeText(this@SettingFragment.context,
-        if(controller.changeDaxWallet(textWallet.text.toString()))
-          "Wallet changed"
-        else
-          "Changing name failed",
+        controller.changeDaxWallet(textWallet.text.toString()),
         Toast.LENGTH_SHORT
       ).show()
     }
 
     buttonChangePassword.setOnClickListener {
       Toast.makeText(this@SettingFragment.context,
-        if(controller.changePassword(textPassword.text.toString(), textPasswordConfirm.text.toString()))
-          "Password changed"
-        else
-          "Changing password failed",
+        controller.changePassword(textPassword.text.toString(), textPasswordConfirm.text.toString()),
         Toast.LENGTH_SHORT
       ).show()
     }
