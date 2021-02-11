@@ -19,7 +19,6 @@ import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.view.fragments.HomeFragment
 import biz.arbitrade.view.fragments.SettingFragment
 import com.pusher.client.channel.PusherEvent
-import org.json.JSONObject
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -52,15 +51,13 @@ class HomeActivity : AppCompatActivity() {
     addFragment(homeFragment)
     checkNotification()
 
-    Timer().schedule(100) {
-      intentPersonalReceiver = Intent(applicationContext, PersonalReceiver::class.java)
-      intentDogeRefresher = Intent(applicationContext, DogeRefresher::class.java)
-      intentMtReceiver = Intent(applicationContext, PusherEvent::class.java)
-      if (applicationContext != null) {
-        startService(intentPersonalReceiver)
-        startService(intentDogeRefresher)
-        startService(intentMtReceiver)
-      }
+    intentPersonalReceiver = Intent(applicationContext, PersonalReceiver::class.java)
+    intentDogeRefresher = Intent(applicationContext, DogeRefresher::class.java)
+    intentMtReceiver = Intent(applicationContext, PusherEvent::class.java)
+    if (applicationContext != null) {
+      startService(intentPersonalReceiver)
+      startService(intentDogeRefresher)
+      startService(intentMtReceiver)
     }
   }
 
@@ -85,10 +82,10 @@ class HomeActivity : AppCompatActivity() {
 
     if (!fragmentPopped && fragmentManager.findFragmentByTag(backStateName) == null) {
       fragmentManager
-          .beginTransaction()
-          .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-          .replace(R.id.contentFragment, fragment, backStateName) // .addToBackStack(backStateName)
-          .commit()
+        .beginTransaction()
+        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+        .replace(R.id.contentFragment, fragment, backStateName) // .addToBackStack(backStateName)
+        .commit()
     }
   }
 
@@ -97,7 +94,8 @@ class HomeActivity : AppCompatActivity() {
     startService(intentPersonalReceiver)
     startService(intentDogeRefresher)
     startService(intentMtReceiver)
-    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiverMaintenance, IntentFilter("on_maintenance"))
+    LocalBroadcastManager.getInstance(this)
+      .registerReceiver(broadcastReceiverMaintenance, IntentFilter("on_maintenance"))
   }
 
   override fun onPause() {

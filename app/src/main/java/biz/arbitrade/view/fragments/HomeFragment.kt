@@ -44,8 +44,6 @@ class HomeFragment : Fragment() {
   private lateinit var announcementGroup: LinearLayout
   private lateinit var user: User
 
-  private lateinit var dogeService: Intent
-
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
