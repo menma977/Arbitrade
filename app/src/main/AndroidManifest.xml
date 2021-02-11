@@ -47,6 +47,12 @@
             android:name=".view.activity.SendTicketActivity" >
         </activity>
         <activity
+            android:name=".view.activity.RequestResetPasswordActivity" >
+        </activity>
+        <activity
+            android:name=".view.activity.ResetPasswordActivity" >
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
