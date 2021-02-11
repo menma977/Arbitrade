@@ -33,34 +33,43 @@ class PersonalReceiver : Service() {
     Log.d("pusher", "TOKEN : ${user.getString("token")}")
     val authorize = HttpAuthorizer(Url.Pusher.auth())
     authorize.setHeaders(header)
-    val options = PusherOptions().setHost(Url.Pusher.url).setWsPort(Url.Pusher.port).setWssPort(Url.Pusher.port).setUseTLS(Url.Pusher.secured).setAuthorizer(authorize)
+    val options =
+        PusherOptions()
+            .setHost(Url.Pusher.url)
+            .setWsPort(Url.Pusher.port)
+            .setWssPort(Url.Pusher.port)
+            .setUseTLS(Url.Pusher.secured)
+            .setAuthorizer(authorize)
     val privatePusher = Pusher("arbi.biz.key", options)
-    val personalChannel = privatePusher.subscribePrivate("private-arbi.biz.${user.getString("username")}", object : PrivateChannelEventListener {
-      override fun onEvent(event: PusherEvent) {}
+    val personalChannel =
+        privatePusher.subscribePrivate(
+            "private-arbi.biz." + user.getString("username"),
+            object : PrivateChannelEventListener {
+              override fun onEvent(event: PusherEvent) {}
 
-      override fun onSubscriptionSucceeded(channelName: String?) {
-        Log.d("pusher", "PersonalReceiver subscribe to $channelName success")
-      }
+              override fun onSubscriptionSucceeded(channelName: String?) {
+                Log.d("pusher", "PersonalReceiver subscribe to $channelName success")
+              }
 
-      override fun onAuthenticationFailure(message: String?, e: Exception?) {
-        Log.e("pusher", "PersonalReceiver subscribe to $message fail $e")
-      }
-    })
+              override fun onAuthenticationFailure(message: String?, e: Exception?) {
+                Log.e("pusher", "PersonalReceiver subscribe to $message fail $e")
+              }
+            })
 
     OnTicket(application, personalChannel).bind()
     OnTrade(application, personalChannel).bind()
 
-    privatePusher.connect(object : ConnectionEventListener {
-      override fun onConnectionStateChange(change: ConnectionStateChange) {
-        if (change.currentState == ConnectionState.CONNECTED) {
-          Log.d("pusher", "PersonalReceiver Connected")
-        }
-      }
+    privatePusher.connect(
+        object : ConnectionEventListener {
+          override fun onConnectionStateChange(change: ConnectionStateChange) {
+            if (change.currentState == ConnectionState.CONNECTED) {
+              Log.d("pusher", "PersonalReceiver Connected")
+            }
+          }
 
-      override fun onError(message: String?, code: String?, e: Exception?) {
-        Log.e("pusher", "PersonalReceiver connection fail: $message ; $e code $code")
-      }
-    })
+          override fun onError(message: String?, code: String?, e: Exception?) {
+            Log.e("pusher", "PersonalReceiver connection fail: $message ; $e code $code")
+          }
+        })
   }
-
 }
