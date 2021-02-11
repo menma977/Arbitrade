@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
     tradeTwo = view.findViewById(R.id.lnrLayoutTradeTwo)
     announcementGroup = view.findViewById(R.id.lnrLayoutAnnouncements)
 
-    txtTotalPin.text = Helper.formatTicket(user.getLong("totalPin")).toPlainString()
+    txtTotalPin.text = Helper.toDogeString(user.getLong("totalPin"))
     txtWallet.text = user.getString("walletDax")
 
     username.text = user.getString("username")
