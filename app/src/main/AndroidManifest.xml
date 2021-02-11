@@ -44,8 +44,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.activity.InfoOnlyActivity" />
         <activity
-            android:name=".view.activity.SendTicketActivity"
-            android:label="@string/title_activity_send_ticket" >
+            android:name=".view.activity.SendTicketActivity" >
         </activity>
         <activity
             android:name=".MainActivity"

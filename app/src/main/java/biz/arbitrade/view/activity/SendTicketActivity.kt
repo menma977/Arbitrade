@@ -1,5 +1,6 @@
 package biz.arbitrade.view.activity
 
+import android.Manifest
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ class SendTicketActivity : AppCompatActivity() {
   private lateinit var txtWallet: EditText
   private lateinit var txtAmount: EditText
   private lateinit var scannerEngine: ZXingScannerView
+  private var isStart = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -26,19 +28,20 @@ class SendTicketActivity : AppCompatActivity() {
 
     user = User(this)
 
-    scannerEngine = ZXingScannerView(this)
-
     btnScan = findViewById(R.id.btnScan)
     btnSend = findViewById(R.id.btnSend)
     frameScanner = findViewById(R.id.frameLayoutScanner)
     txtWallet = findViewById(R.id.editTextWallet)
     txtAmount = findViewById(R.id.editTextTicket)
-    scannerEngine.startCamera()
-
-    btnSend.setOnClickListener { send() }
 
     initScannerView()
-    scannerEngine.startCamera()
+    btnScan.setOnClickListener {
+      if (isStart) {
+        scannerEngine.startCamera()
+        isStart = false
+      }
+    }
+    btnSend.setOnClickListener { send() }
   }
 
   private fun send() {

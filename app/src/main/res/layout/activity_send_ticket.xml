@@ -100,8 +100,7 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/button_warning"
                         android:padding="10dp"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/baseline_account_balance_wallet_24" />
+                        app:srcCompat="@drawable/ic_photo_camera_24px" />
                 </LinearLayout>
 
                 <Button

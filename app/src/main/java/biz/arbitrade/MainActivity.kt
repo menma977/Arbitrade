@@ -1,9 +1,12 @@
 package biz.arbitrade
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import biz.arbitrade.controller.LoginController
 import biz.arbitrade.controller.background.PusherReceiver
 import biz.arbitrade.model.User
@@ -24,6 +27,8 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+    if(PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA))
+      requestPermissions(arrayOf(Manifest.permission.CAMERA), 100)
     val user = User(this)
     Timer().schedule(100) {
       val info = ArbizAPI("info", "GET", null, null).call()
