@@ -65,9 +65,18 @@ class MainActivity : AppCompatActivity() {
               if (response.getInt("code") < 400) controller.fillUser(this@MainActivity, response, balance, info)
               move(if (response.getInt("code") >= 400) "login" else "main", info)
             }
-          } else runOnUiThread { move("login", info) }
-        } else runOnUiThread { move("login", info) }
-      } else runOnUiThread { move("login", info) }
+          } else runOnUiThread {
+            user.clear()
+            move("login", info)
+          }
+        } else runOnUiThread {
+          user.clear()
+          move("login", info)
+        }
+      } else runOnUiThread {
+        user.clear()
+        move("login", info)
+      }
     }
   }
 
