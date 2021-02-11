@@ -48,7 +48,7 @@ class HomeActivity : AppCompatActivity() {
     findViewById<LinearLayout>(R.id.btnToNetwork).setOnClickListener {
       Timer().schedule(100) {
         val response = ArbizAPI("test", "get", user.getString("token"), null).call()
-        if(response.optString("data") == "Unauthenticated."){
+        if (response.optString("data") == "Unauthenticated.") {
           Helper.logoutAll(this@HomeActivity)
         }
       }
@@ -102,6 +102,10 @@ class HomeActivity : AppCompatActivity() {
     startService(intentMtReceiver)
     LocalBroadcastManager.getInstance(this)
       .registerReceiver(broadcastReceiverMaintenance, IntentFilter("on_maintenance"))
+    LocalBroadcastManager.getInstance(this)
+      .registerReceiver(broadcastReceiverLogout, IntentFilter("logout"))
+    if (user.getBoolean("logout"))
+      Helper.logoutAll(this@HomeActivity)
   }
 
   override fun onPause() {
@@ -110,6 +114,7 @@ class HomeActivity : AppCompatActivity() {
     stopService(intentDogeRefresher)
     stopService(intentMtReceiver)
     LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverMaintenance)
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverLogout)
   }
 
   override fun onDestroy() {
@@ -118,6 +123,7 @@ class HomeActivity : AppCompatActivity() {
     stopService(intentDogeRefresher)
     stopService(intentMtReceiver)
     LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverMaintenance)
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverLogout)
   }
 
   private var broadcastReceiverMaintenance: BroadcastReceiver = object : BroadcastReceiver() {
@@ -127,6 +133,12 @@ class HomeActivity : AppCompatActivity() {
       bets.clear()
       startActivity(mIntent)
       finishAffinity()
+    }
+  }
+
+  private var broadcastReceiverLogout: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+      Helper.logoutAll(this@HomeActivity)
     }
   }
 }

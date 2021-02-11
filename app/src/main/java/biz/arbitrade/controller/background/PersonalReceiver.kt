@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import biz.arbitrade.controller.events.OnLogout
 import biz.arbitrade.controller.events.OnTicket
 import biz.arbitrade.controller.events.OnTrade
 import biz.arbitrade.model.User
@@ -58,6 +59,7 @@ class PersonalReceiver : Service() {
 
     OnTicket(application, personalChannel).bind()
     OnTrade(application, personalChannel).bind()
+    OnLogout(application, personalChannel).bind()
 
     privatePusher.connect(
         object : ConnectionEventListener {
