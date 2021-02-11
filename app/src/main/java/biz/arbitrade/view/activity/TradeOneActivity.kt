@@ -20,7 +20,6 @@ import biz.arbitrade.model.User
 import kotlinx.android.synthetic.main.activity_trade_one.*
 import kotlinx.android.synthetic.main.activity_trade_one.txtWarning
 import kotlinx.android.synthetic.main.activity_trade_two.*
-import org.json.JSONObject
 import java.util.*
 import kotlin.concurrent.schedule
 import kotlin.concurrent.scheduleAtFixedRate
@@ -50,11 +49,11 @@ class TradeOneActivity : AppCompatActivity() {
     txtWarning.isSelected = true
 
     Log.d("MINE", user.getString("hasTradedFake"))
-    if(user.getString("hasTradedFake") == "true"){
+    if (user.getString("hasTradedFake") == "true") {
       Toast.makeText(this@TradeOneActivity, "You have traded today", Toast.LENGTH_SHORT).show()
       finish()
       return
-    }else{
+    } else {
       val lastBet = Bet.getCalendar(bet.getLong("last_f_trade"))
       val now = Calendar.getInstance()
       if (bet.has("last_f_trade") && lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.YEAR) == now.get(Calendar.YEAR)) {
@@ -94,14 +93,14 @@ class TradeOneActivity : AppCompatActivity() {
               }
             }
           } else {
-            Log.e(
-              "TradeOne.ArbiAPI", response.optString("message") ?: response.optString("data")
-            )
+            val message = response.optString("message") ?: response.optString("data")
+            Log.e("TradeOne.ArbiAPI", message)
             runOnUiThread {
               spinner.visibility = View.GONE
               status.visibility = View.VISIBLE
               statusChange(R.string.cannot_start_trading, R.color.Danger)
               onTrading = false
+              Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
             }
           }
         }
@@ -120,7 +119,7 @@ class TradeOneActivity : AppCompatActivity() {
 
   private var broadcastReceiverTrade: BroadcastReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-      if(user.getString("hasTradedFake") == "true"){
+      if (user.getString("hasTradedFake") == "true") {
         Toast.makeText(this@TradeOneActivity, "You have traded today-", Toast.LENGTH_SHORT).show()
         finish()
       }

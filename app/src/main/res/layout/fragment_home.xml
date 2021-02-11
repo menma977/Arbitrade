@@ -311,7 +311,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:contentDescription="@string/icon"
-                app:srcCompat="@drawable/ic_baseline_adb"
+                app:srcCompat="@drawable/ic_baseline_account_balance"
                 app:tint="@color/textSecondary"/>
 
             <TextView
