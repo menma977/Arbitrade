@@ -19,6 +19,7 @@ import biz.arbitrade.controller.Helper
 import biz.arbitrade.controller.background.DogeRefresher
 import biz.arbitrade.model.User
 import biz.arbitrade.view.activity.RegisterActivity
+import biz.arbitrade.view.activity.SendTicketActivity
 import biz.arbitrade.view.activity.TradeOneActivity
 import biz.arbitrade.view.activity.TradeTwoActivity
 import biz.arbitrade.view.dialog.DepositDialog
@@ -37,6 +38,7 @@ class HomeFragment : Fragment() {
   private lateinit var imgQr: ImageView
   private lateinit var register: LinearLayout
   private lateinit var withdraw: LinearLayout
+  private lateinit var sendTicket: LinearLayout
   private lateinit var tradeOne: LinearLayout
   private lateinit var tradeTwo: LinearLayout
   private lateinit var announcementGroup: LinearLayout
@@ -60,6 +62,7 @@ class HomeFragment : Fragment() {
     imgQr = view.findViewById(R.id.imgQr)
     register = view.findViewById(R.id.lnrLayoutRegister)
     withdraw = view.findViewById(R.id.lnrLayoutWithdraw)
+    sendTicket = view.findViewById(R.id.lnrLayoutSendTicket)
     tradeOne = view.findViewById(R.id.lnrLayoutTradeOne)
     tradeTwo = view.findViewById(R.id.lnrLayoutTradeTwo)
     announcementGroup = view.findViewById(R.id.lnrLayoutAnnouncements)
@@ -80,6 +83,9 @@ class HomeFragment : Fragment() {
 
     register.setOnClickListener {
       move("register")
+    }
+    sendTicket.setOnClickListener {
+      move("send_ticket")
     }
     tradeOne.setOnClickListener {
       move("trade_one")
@@ -111,6 +117,7 @@ class HomeFragment : Fragment() {
     val intent = Intent(
       activity, when (to) {
         "register" -> RegisterActivity::class.java
+        "send_ticket" -> SendTicketActivity::class.java
         "trade_one" -> TradeOneActivity::class.java
         "trade_two" -> TradeTwoActivity::class.java
         else -> null

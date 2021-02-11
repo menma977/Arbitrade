@@ -20,7 +20,9 @@
     <string name="withdraw">Withdraw</string>
     <string name="withdraw_all">Withdraw All</string>
     <string name="submit">Submit</string>
+    <string name="send">Send</string>
     <string name="reset_password">Reset Password</string>
+    <string name="send_ticket">Send Ticket</string>
 
     <!-- LABEL -->
     <string name="username">Username</string>
