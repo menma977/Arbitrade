@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import biz.arbitrade.controller.events.OnAnnounce
+import biz.arbitrade.controller.events.OnBot
 import biz.arbitrade.controller.events.OnMaintenance
 import biz.arbitrade.model.User
 import biz.arbitrade.network.Url
@@ -32,8 +33,11 @@ class PusherReceiver : Service() {
     val options = PusherOptions().setHost(Url.Pusher.url).setWsPort(Url.Pusher.port).setWssPort(Url.Pusher.port).setUseTLS(Url.Pusher.secured).setAuthorizer(authorize)
     val pusher = Pusher("arbi.biz.key", options)
     val announcementChannel = pusher.subscribe("arbi.biz.announcement")
+    val botChannel = pusher.subscribe("arbi.biz.bot")
+    val maintenanceChannel = pusher.subscribe("arbi.biz.maintenance")
     OnAnnounce(this@PusherReceiver, announcementChannel).bind()
-    OnMaintenance(this@PusherReceiver, announcementChannel).bind()
+    OnMaintenance(this@PusherReceiver, maintenanceChannel).bind()
+    OnBot(this@PusherReceiver, botChannel).bind()
 
     pusher.connect(object : ConnectionEventListener {
       override fun onConnectionStateChange(change: ConnectionStateChange) {
