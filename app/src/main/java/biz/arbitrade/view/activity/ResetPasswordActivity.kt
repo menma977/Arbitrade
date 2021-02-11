@@ -48,18 +48,12 @@ class ResetPasswordActivity : AppCompatActivity() {
         if (request.getInt("code") < 400) {
           runOnUiThread {
             Toast.makeText(
-              this@ResetPasswordActivity,
-              request.getString(
-                if (request.optString("data").isNotBlank())
-                  "data"
-                else
-                  "message"
-              ),
-              Toast.LENGTH_SHORT
-            )
-              .show()
-            val intent =
-              Intent(this@ResetPasswordActivity, LoginActivity::class.java)
+              this@ResetPasswordActivity, request.getString(
+                if (request.optString("data").isNotBlank()) "data"
+                else "message"
+              ), Toast.LENGTH_SHORT
+            ).show()
+            val intent = Intent(this@ResetPasswordActivity, LoginActivity::class.java)
             startActivity(intent)
             finish()
           }
@@ -67,19 +61,14 @@ class ResetPasswordActivity : AppCompatActivity() {
           runOnUiThread {
             Log.e("Login", request.toString())
             Toast.makeText(
-              this@ResetPasswordActivity,
-              request.getString("message") ?: "Cannot connect to server",
-              Toast.LENGTH_SHORT
-            )
-              .show()
+              this@ResetPasswordActivity, request.getString("data") ?: "Cannot connect to server", Toast.LENGTH_SHORT
+            ).show()
           }
         }
       }
     } else {
       Toast.makeText(
-        this@ResetPasswordActivity,
-        "Confirmation code didn't match",
-        Toast.LENGTH_SHORT
+        this@ResetPasswordActivity, "Confirmation code didn't match", Toast.LENGTH_SHORT
       )
     }
   }

@@ -24,6 +24,8 @@ class RequestResetPasswordActivity : AppCompatActivity() {
     email = findViewById(R.id.editTextEmail)
     submit = findViewById(R.id.buttonSend)
 
+    email.setText("admin@arbi.biz")
+
     submit.setOnClickListener { run() }
   }
 
@@ -37,11 +39,8 @@ class RequestResetPasswordActivity : AppCompatActivity() {
         val code = request.getInt("uniqueCode")
         runOnUiThread {
           Toast.makeText(
-            this@RequestResetPasswordActivity,
-            request.getString("message"),
-            Toast.LENGTH_SHORT
-          )
-            .show()
+            this@RequestResetPasswordActivity, request.getString("message"), Toast.LENGTH_SHORT
+          ).show()
           Log.d("PASSWORD", code.toString())
           val intent = Intent(this@RequestResetPasswordActivity, ResetPasswordActivity::class.java)
           intent.putExtra("code", code)
@@ -53,11 +52,8 @@ class RequestResetPasswordActivity : AppCompatActivity() {
         runOnUiThread {
           Log.e("Login", request.toString())
           Toast.makeText(
-            this@RequestResetPasswordActivity,
-            request.getString("message") ?: "Cannot connect to server",
-            Toast.LENGTH_SHORT
-          )
-            .show()
+            this@RequestResetPasswordActivity, request.getString("data") ?: "Cannot connect to server", Toast.LENGTH_SHORT
+          ).show()
         }
       }
     }
