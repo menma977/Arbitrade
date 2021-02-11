@@ -29,7 +29,7 @@ class PusherReceiver : Service() {
     val authorize = HttpAuthorizer(Url.Pusher.auth())
     authorize.setHeaders(header)
     val options = PusherOptions().setHost(Url.Pusher.url).setWsPort(Url.Pusher.port).setWssPort(Url.Pusher.port).setUseTLS(Url.Pusher.secured).setAuthorizer(authorize)
-    val pusher = Pusher("arib.biz.key", options)
+    val pusher = Pusher("arbi.biz.key", options)
     val announcementChannel = pusher.subscribe("arbi.biz.announcement")
     OnAnnounce(this@PusherReceiver, announcementChannel).bind()
 

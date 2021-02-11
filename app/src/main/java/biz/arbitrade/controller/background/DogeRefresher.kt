@@ -12,7 +12,6 @@ import java.util.*
 import kotlin.concurrent.schedule
 
 class DogeRefresher : Service() {
-
   private lateinit var json: JSONObject
   private lateinit var user: User
   private var startBackgroundService: Boolean = false
@@ -28,7 +27,7 @@ class DogeRefresher : Service() {
     Timer().schedule(100) {
       while (true) {
         val delta = System.currentTimeMillis() - time
-        if (delta >= 10000) {
+        if (delta >= 5000) {
           time = System.currentTimeMillis()
           val privateIntent = Intent()
           if (startBackgroundService) {
@@ -37,8 +36,7 @@ class DogeRefresher : Service() {
             body.add("s", user.getString("cookie"))
             body.add("Currency", "doge")
             json = DogeAPI(body).call()
-            if (json.getInt("code") == 200)
-              user.setLong("balance", json.getJSONObject("data").getLong("Balance"))
+            if (json.getInt("code") == 200) user.setLong("balance", json.getJSONObject("data").getLong("Balance"))
             privateIntent.action = "web.doge"
             LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(privateIntent)
           } else {
