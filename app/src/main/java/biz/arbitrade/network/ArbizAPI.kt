@@ -26,15 +26,8 @@ class ArbizAPI(private var command: String, private var method: String, private 
       Log.d("MINE", json.toString())
       Log.d("MINE", response.message)
       if (response.isSuccessful) {
-        return when {
-          json.has("message") && json.optInt("code") < 400 -> {
-            JSONObject().put("code", 200).put("data", json.getString("message"))
-          }
-          else -> {
-            if (!json.has("code")) json.put("code", response.code)
-            json
-          }
-        }
+        if (!json.has("code")) json.put("code", response.code)
+        return json
       } else {
         return when {
           json.toString().contains("Unauthenticated.") -> {
@@ -46,7 +39,7 @@ class ArbizAPI(private var command: String, private var method: String, private 
             )
           }
           json.toString().contains("message") -> {
-            JSONObject().put("code", 500).put("data", json.getString("message"))
+            JSONObject().put("code", 500).put("message", json.getString("message"))
           }
           else -> {
             JSONObject().put("code", 500).put("data", json)

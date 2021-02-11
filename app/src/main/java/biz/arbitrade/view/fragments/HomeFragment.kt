@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import biz.arbitrade.R
 import biz.arbitrade.controller.Helper
+import biz.arbitrade.controller.background.DogeRefresher
 import biz.arbitrade.model.User
 import biz.arbitrade.view.activity.RegisterActivity
 import biz.arbitrade.view.activity.TradeOneActivity
@@ -39,6 +40,8 @@ class HomeFragment : Fragment() {
   private lateinit var tradeTwo: LinearLayout
   private lateinit var announcementGroup: LinearLayout
   private lateinit var user: User
+
+  private lateinit var dogeService: Intent
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

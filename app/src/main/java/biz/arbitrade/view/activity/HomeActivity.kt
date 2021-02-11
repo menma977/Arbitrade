@@ -30,20 +30,19 @@ class HomeActivity : AppCompatActivity() {
     homeFragment = HomeFragment()
     settingFragment = SettingFragment()
 
-    findViewById<LinearLayout>(R.id.btnToHome).setOnClickListener {
-      addFragment(homeFragment)
-    }
+    findViewById<LinearLayout>(R.id.btnToHome).setOnClickListener { addFragment(homeFragment) }
     findViewById<LinearLayout>(R.id.btnToSetting).setOnClickListener {
       addFragment(settingFragment)
     }
     findViewById<LinearLayout>(R.id.btnToNetwork).setOnClickListener {
-      Timer().schedule(100) {
-        ArbizAPI("test", "get", user.getString("token"), null).call()
-      }
+      Timer().schedule(100) { ArbizAPI("test", "get", user.getString("token"), null).call() }
     }
+
+    dogeService = Intent(this, DogeRefresher::class.java)
 
     addFragment(homeFragment)
     checkNotification()
+    startService(dogeService)
 
     Timer().schedule(100) {
       intentPersonalReceiver = Intent(applicationContext, PersonalReceiver::class.java)
@@ -75,9 +74,11 @@ class HomeActivity : AppCompatActivity() {
     val fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0)
 
     if (!fragmentPopped && fragmentManager.findFragmentByTag(backStateName) == null) {
-      fragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-        .replace(R.id.contentFragment, fragment, backStateName) //.addToBackStack(backStateName)
-        .commit()
+      fragmentManager
+          .beginTransaction()
+          .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+          .replace(R.id.contentFragment, fragment, backStateName) // .addToBackStack(backStateName)
+          .commit()
     }
   }
 

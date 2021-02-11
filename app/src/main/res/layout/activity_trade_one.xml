@@ -1,94 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:keepScreenOn="true"
-    tools:context=".view.activity.TradeOneActivity">
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/colorPrimary" android:keepScreenOn="true" tools:context=".view.activity.TradeOneActivity">
 
-  <ImageView
-      android:id="@+id/imageView2"
-      android:layout_width="120dp"
-      android:layout_height="120dp"
-      android:contentDescription="@string/icon"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_arbitrade_square"/>
+    <ImageView android:id="@+id/imageView2" android:layout_width="120dp" android:layout_height="120dp" android:contentDescription="@string/icon" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:srcCompat="@drawable/ic_arbitrade_square"/>
 
-  <LinearLayout
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryLight"
-      android:gravity="center"
-      android:orientation="vertical"
-      android:padding="18sp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="1.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/imageView2"
-      app:layout_constraintVertical_bias="0.0">
+    <LinearLayout android:layout_width="0dp" android:layout_height="0dp" android:background="@color/colorPrimaryLight" android:gravity="center" android:orientation="vertical" android:padding="18sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="1.0" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/imageView2" app:layout_constraintVertical_bias="0.0">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_light"
-        android:orientation="vertical"
-        android:padding="18sp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/edit_text_light" android:orientation="vertical" android:padding="18sp">
 
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="80dp"
-          android:gravity="center"
-          android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="80dp" android:gravity="center" android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/spinner"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminateDrawable="@drawable/progress_circular"
-            android:padding="18sp"
-            android:progressDrawable="@drawable/progress_circular"
-            android:visibility="gone"/>
+                <ProgressBar android:id="@+id/spinner" style="?android:attr/progressBarStyle" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/edit_text_light" android:orientation="vertical" android:padding="18sp">
 
-        <TextView
-            android:id="@+id/txtStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:text="@string/trade"
-            android:textAlignment="center"
-            android:textColor="@color/Danger"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:visibility="gone"/>
-      </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal">
 
-      <ProgressBar
-          android:id="@+id/progressBar"
-          style="?android:attr/progressBarStyleHorizontal"
-          android:layout_width="match_parent"
-          android:layout_height="34sp"
-          android:max="100"
-          android:progress="50"
-          android:progressDrawable="@drawable/progress_bar"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="match_parent" android:text="@string/min_trading" />
 
-      <TextView
-          android:id="@+id/txtWarning"
-          android:layout_width="match_parent"
-          android:layout_height="18sp"
-          android:ellipsize="marquee"
-          android:marqueeRepeatLimit="marquee_forever"
-          android:scrollHorizontally="true"
-          android:singleLine="true"
-          android:text="@string/trade_warning"
-          android:textAlignment="center"/>
-    </LinearLayout>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="3sp" android:layout_marginEnd="3sp" android:text="@string/colon" />
 
-  </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView android:id="@+id/min_trading" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textStyle="bold" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="3sp" android:text="@string/doge" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="match_parent" android:text="@string/max_trading" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="3sp" android:layout_marginEnd="3sp" android:text="@string/colon" />
+
+                        <TextView android:id="@+id/max_trading" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textStyle="bold" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="3sp" android:text="@string/doge" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="80dp" android:gravity="center" android:orientation="vertical">
+
+                        <ProgressBar android:id="@+id/spinner" style="?android:attr/progressBarStyle" android:layout_width="match_parent" android:layout_height="wrap_content" android:indeterminateDrawable="@drawable/progress_circular" android:padding="18sp" android:progressDrawable="@drawable/progress_circular" android:visibility="gone" />
+
+                        <TextView android:id="@+id/txtStatus" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="marquee" android:text="@string/trade" android:textAlignment="center" android:textColor="@color/Danger" android:textSize="30sp" android:textStyle="bold" android:visibility="gone"/>
+                    </LinearLayout>
+
+                    <ProgressBar android:id="@+id/progressBar" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="34sp" android:max="100" android:progress="50" android:progressDrawable="@drawable/progress_bar"/>
+
+                    <TextView android:id="@+id/txtWarning" android:layout_width="match_parent" android:layout_height="18sp" android:ellipsize="marquee" android:marqueeRepeatLimit="marquee_forever" android:scrollHorizontally="true" android:singleLine="true" android:text="@string/trade_warning" android:textAlignment="center"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>

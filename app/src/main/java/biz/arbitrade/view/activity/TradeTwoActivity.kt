@@ -236,7 +236,7 @@ class TradeTwoActivity : AppCompatActivity() {
           Toast.makeText(
             applicationContext, "Cannot start trading, please try again later", Toast.LENGTH_LONG
           ).show()
-          Log.e("TradeTwo.DogeRequest", rawResponse.getString("data")) //TODO: make sure!
+          Log.e("TradeTwo.DogeRequest", rawResponse.getString("message")) //TODO: make sure!
           // this.cancel()
         }
       }

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import biz.arbitrade.R
+import biz.arbitrade.controller.Helper
 import biz.arbitrade.controller.TradeOneController
 import biz.arbitrade.model.Bet
 import biz.arbitrade.model.User
@@ -33,6 +34,8 @@ class TradeOneActivity : AppCompatActivity() {
   private lateinit var spinner: ProgressBar
   private lateinit var loading: ProgressBar
   private lateinit var status: TextView
+  private lateinit var minTrading: TextView
+  private lateinit var maxTrading: TextView
   private var onTrading = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +49,12 @@ class TradeOneActivity : AppCompatActivity() {
     spinner = findViewById(R.id.spinner)
     loading = findViewById(R.id.progressBar)
     status = findViewById(R.id.txtStatus)
+    minTrading = findViewById(R.id.min_trading)
+    maxTrading = findViewById(R.id.max_trading)
     txtWarning.isSelected = true
+
+    minTrading.text = Helper.toDogeString(user.getLong("minBot"))
+    maxTrading.text = Helper.toDogeString(user.getLong("maxBot"))
 
     Log.d("MINE", user.getString("hasTradedFake"))
     if (user.getString("hasTradedFake") == "true") {
@@ -56,10 +64,14 @@ class TradeOneActivity : AppCompatActivity() {
     } else {
       val lastBet = Bet.getCalendar(bet.getLong("last_f_trade"))
       val now = Calendar.getInstance()
-      if (bet.has("last_f_trade") && lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.YEAR) == now.get(Calendar.YEAR)) {
+      if (bet.has("last_f_trade") && lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(
+          Calendar.YEAR
+        ) == now.get(Calendar.YEAR)
+      ) {
         if (bet.has("last_f_trade_result")) {
           statusChange(
-            if (bet.getBoolean("last_f_trade_result")) R.string.win else R.string.lose, if (bet.getBoolean("last_f_trade_result")) R.color.Info else R.color.Danger
+            if (bet.getBoolean("last_f_trade_result")) R.string.win else R.string.lose,
+            if (bet.getBoolean("last_f_trade_result")) R.color.Info else R.color.Danger
           )
         } else statusChange(R.string.already_play, R.color.Danger)
         spinner.visibility = View.GONE
@@ -85,7 +97,8 @@ class TradeOneActivity : AppCompatActivity() {
                   status.visibility = View.VISIBLE
                   Log.d("MINE", response.toString())
                   statusChange(
-                    if (response.getString("data") == "WIN") R.string.win else R.string.lose, if (response.getString("data") == "WIN") R.color.Info else R.color.Danger
+                    if (response.getString("message") == "WIN") R.string.win else R.string.lose,
+                    if (response.getString("message") == "WIN") R.color.Info else R.color.Danger
                   )
                   onTrading = false
                   cancel()
@@ -101,7 +114,11 @@ class TradeOneActivity : AppCompatActivity() {
             runOnUiThread {
               spinner.visibility = View.GONE
               status.visibility = View.VISIBLE
-              statusChange(R.string.cannot_start_trading, R.color.Danger)
+              statusChange(
+                R.string.cannot_start_trading,
+                R.color.Danger,
+                response.optString("message")
+              )
               onTrading = false
               Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
             }
@@ -115,8 +132,11 @@ class TradeOneActivity : AppCompatActivity() {
     if (!onTrading) super.onBackPressed()
   }
 
-  private fun statusChange(text: Int, color: Int) {
-    status.setText(text)
+  private fun statusChange(text: Int, color: Int, msg: String = "") {
+    if (msg.isEmpty())
+      status.setText(text)
+    else
+      status.text = msg
     status.setTextColor(ContextCompat.getColor(this, color))
   }
 
@@ -131,7 +151,8 @@ class TradeOneActivity : AppCompatActivity() {
 
   override fun onStart() {
     super.onStart()
-    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
+    LocalBroadcastManager.getInstance(this)
+      .registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
   }
 
   override fun onPause() {
