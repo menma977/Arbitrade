@@ -133,30 +133,39 @@ class HomeFragment : Fragment() {
   override fun onStart() {
     super.onStart()
     LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiverAnnouncement, IntentFilter("announcement"))
+    LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiverTicket, IntentFilter("ticket"))
     LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiverDoge, IntentFilter("web.doge"))
   }
 
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverAnnouncement)
+    LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverTicket)
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverDoge)
   }
 
   override fun onStop() {
     super.onStop()
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverAnnouncement)
+    LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverTicket)
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverDoge)
   }
 
   override fun onPause() {
     super.onPause()
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverAnnouncement)
+    LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverTicket)
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverDoge)
   }
 
   private var broadcastReceiverDoge: BroadcastReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
       balance.text = Helper.toDogeString(user.getLong("balance"))
+    }
+  }
+  private var broadcastReceiverTicket: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      txtTotalPin.text = Helper.toDogeString(user.getLong("totalPin"))
     }
   }
   private var broadcastReceiverAnnouncement: BroadcastReceiver = object : BroadcastReceiver() {
