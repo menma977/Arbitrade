@@ -81,6 +81,12 @@ class HomeActivity : AppCompatActivity() {
     }
   }
 
+  override fun onStart() {
+    super.onStart()
+    startService(intentPersonalReceiver)
+    startService(intentDogeRefresher)
+  }
+
   override fun onPause() {
     super.onPause()
     stopService(intentPersonalReceiver)

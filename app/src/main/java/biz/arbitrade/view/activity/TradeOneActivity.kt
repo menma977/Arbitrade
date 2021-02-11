@@ -93,7 +93,10 @@ class TradeOneActivity : AppCompatActivity() {
               }
             }
           } else {
-            val message = response.optString("message") ?: response.optString("data")
+            val message = response.optString("data")
+            println("==============================")
+            println(message)
+            println("==============================")
             Log.e("TradeOne.ArbiAPI", message)
             runOnUiThread {
               spinner.visibility = View.GONE
