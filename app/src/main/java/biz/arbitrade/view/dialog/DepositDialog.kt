@@ -8,6 +8,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import biz.arbitrade.R
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -39,5 +40,6 @@ class DepositDialog(activity: Activity, wallet: String) {
     val clipboard = dialog.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText(text, text)
     clipboard.setPrimaryClip(clip)
+    Toast.makeText(dialog.context, "copied", Toast.LENGTH_SHORT).show()
   }
 }
