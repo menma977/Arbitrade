@@ -64,13 +64,11 @@ class TradeOneActivity : AppCompatActivity() {
     } else {
       val lastBet = Bet.getCalendar(bet.getLong("last_f_trade"))
       val now = Calendar.getInstance()
-      if (bet.has("last_f_trade") &&
-          lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) &&
-          lastBet.get(Calendar.YEAR) == now.get(Calendar.YEAR)) {
+      if (bet.has("last_f_trade") && lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.YEAR) == now.get(Calendar.YEAR)) {
         if (bet.has("last_f_trade_result")) {
           statusChange(
-              if (bet.getBoolean("last_f_trade_result")) R.string.win else R.string.lose,
-              if (bet.getBoolean("last_f_trade_result")) R.color.Info else R.color.Danger)
+            if (bet.getBoolean("last_f_trade_result")) R.string.win else R.string.lose, if (bet.getBoolean("last_f_trade_result")) R.color.Info else R.color.Danger
+          )
         } else statusChange(R.string.already_play, R.color.Danger)
         spinner.visibility = View.GONE
         status.visibility = View.VISIBLE
@@ -92,7 +90,8 @@ class TradeOneActivity : AppCompatActivity() {
       if (response.getInt("code") < 400) {
         onTrading = true
         Timer().scheduleAtFixedRate(
-                abs(Random.nextLong() % 750), abs((Random.nextLong() % 50) + 25)) {
+          abs(Random.nextLong() % 750), abs((Random.nextLong() % 50) + 25)
+        ) {
           runOnUiThread {
             progressBar.progress++
             if (progressBar.progress == progressBar.max) {
@@ -100,8 +99,8 @@ class TradeOneActivity : AppCompatActivity() {
               status.visibility = View.VISIBLE
               Log.d("MINE", response.toString())
               statusChange(
-                  if (response.getString("message") == "WIN") R.string.win else R.string.lose,
-                  if (response.getString("message") == "WIN") R.color.Info else R.color.Danger)
+                if (response.getString("message") == "WIN") R.string.win else R.string.lose, if (response.getString("message") == "WIN") R.color.Info else R.color.Danger
+              )
               onTrading = false
               cancel()
             }
@@ -133,21 +132,18 @@ class TradeOneActivity : AppCompatActivity() {
     status.setTextColor(ContextCompat.getColor(this, color))
   }
 
-  private var broadcastReceiverTrade: BroadcastReceiver =
-      object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-          if (user.getString("hasTradedFake") == "true") {
-            Toast.makeText(this@TradeOneActivity, "You have traded today-", Toast.LENGTH_SHORT)
-                .show()
-            finish()
-          }
-        }
+  private var broadcastReceiverTrade: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      if (user.getString("hasTradedFake") == "true") {
+        Toast.makeText(this@TradeOneActivity, "You have traded today-", Toast.LENGTH_SHORT).show()
+        finish()
       }
+    }
+  }
 
   override fun onStart() {
     super.onStart()
-    LocalBroadcastManager.getInstance(this)
-        .registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
+    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
   }
 
   override fun onPause() {
