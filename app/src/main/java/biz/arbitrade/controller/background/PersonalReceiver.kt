@@ -35,7 +35,7 @@ class PersonalReceiver : Service() {
     authorize.setHeaders(header)
     val options = PusherOptions().setHost(Url.Pusher.url).setWsPort(Url.Pusher.port).setWssPort(Url.Pusher.port).setUseTLS(Url.Pusher.secured).setAuthorizer(authorize)
     val privatePusher = Pusher("arbi.biz.key", options)
-    val personalChannel = privatePusher.subscribePrivate("private-arbi.biz.admin", object : PrivateChannelEventListener {
+    val personalChannel = privatePusher.subscribePrivate("private-arbi.biz.${user.getString("username")}", object : PrivateChannelEventListener {
       override fun onEvent(event: PusherEvent) {}
 
       override fun onSubscriptionSucceeded(channelName: String?) {
