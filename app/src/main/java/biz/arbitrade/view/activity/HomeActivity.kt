@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import biz.arbitrade.R
+import biz.arbitrade.controller.background.DogeRefresher
 import biz.arbitrade.controller.background.PersonalReceiver
 import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
@@ -18,6 +19,7 @@ class HomeActivity : AppCompatActivity() {
   private lateinit var homeFragment: HomeFragment
   private lateinit var settingFragment: SettingFragment
   private lateinit var user: User
+  private lateinit var dogeService: Intent
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -39,8 +41,11 @@ class HomeActivity : AppCompatActivity() {
       }
     }
 
+    dogeService = Intent(this, DogeRefresher::class.java)
+
     addFragment(homeFragment)
     checkNotification()
+    startService(dogeService)
 
     Timer().schedule(100) {
       val intent = Intent(applicationContext, PersonalReceiver::class.java)
@@ -74,5 +79,20 @@ class HomeActivity : AppCompatActivity() {
         .replace(R.id.contentFragment, fragment, backStateName) //.addToBackStack(backStateName)
         .commit()
     }
+  }
+
+  override fun onPause() {
+    super.onPause()
+    stopService(dogeService)
+  }
+
+  override fun onResume() {
+    super.onResume()
+    startService(dogeService)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    startService(dogeService)
   }
 }

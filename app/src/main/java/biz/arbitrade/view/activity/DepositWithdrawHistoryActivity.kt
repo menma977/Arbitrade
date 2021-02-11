@@ -72,7 +72,7 @@ class DepositWithdrawHistoryActivity() :
       var deposits = JSONArray("[]")
       var transfers = JSONArray("[]")
       if (res.getInt("code") >= 400) {
-        Log.e("Error", res.getString("data"))
+        Log.e("Error", res.getString("message"))
       } else {
         res = res.getJSONObject("data")
         deposits = res.getJSONArray("Deposits")
@@ -117,7 +117,7 @@ class DepositWithdrawHistoryActivity() :
       var withdrawals = JSONArray("[]")
       var transfers = JSONArray("[]")
       if (res.getInt("code") >= 400) {
-        Log.e("Error", res.getString("data"))
+        Log.e("Error", res.getString("message"))
       } else {
         Log.e("MINE", res.toString())
         res = res.getJSONObject("data")

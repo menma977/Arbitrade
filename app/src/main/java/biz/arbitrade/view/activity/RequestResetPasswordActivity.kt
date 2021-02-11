@@ -54,7 +54,7 @@ class RequestResetPasswordActivity : AppCompatActivity() {
           Log.e("Login", request.toString())
           Toast.makeText(
             this@RequestResetPasswordActivity,
-            request.getString("data") ?: "Cannot connect to server",
+            request.getString("message") ?: "Cannot connect to server",
             Toast.LENGTH_SHORT
           )
             .show()

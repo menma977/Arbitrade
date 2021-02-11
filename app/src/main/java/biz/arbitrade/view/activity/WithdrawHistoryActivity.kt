@@ -66,7 +66,7 @@ class WithdrawHistoryActivity() :
       var withdrawals = JSONArray("[]")
       var transfers = JSONArray("[]")
       if (res.getInt("code") >= 400) {
-        Log.e("Error", res.getString("data"))
+        Log.e("Error", res.getString("message"))
       } else {
         res = res.getJSONObject("data")
         withdrawals = res.getJSONArray("Withdrawals")
