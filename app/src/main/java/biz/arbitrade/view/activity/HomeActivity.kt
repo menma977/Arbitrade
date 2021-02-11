@@ -38,11 +38,13 @@ class HomeActivity : AppCompatActivity() {
       Timer().schedule(100) { ArbizAPI("test", "get", user.getString("token"), null).call() }
     }
 
-    dogeService = Intent(this, DogeRefresher::class.java)
+    intentPersonalReceiver = Intent(this, PersonalReceiver::class.java)
+    intentDogeRefresher = Intent(this, DogeRefresher::class.java)
 
     addFragment(homeFragment)
     checkNotification()
-    startService(dogeService)
+    startService(intentPersonalReceiver)
+    startService(intentDogeRefresher)
 
     Timer().schedule(100) {
       intentPersonalReceiver = Intent(applicationContext, PersonalReceiver::class.java)

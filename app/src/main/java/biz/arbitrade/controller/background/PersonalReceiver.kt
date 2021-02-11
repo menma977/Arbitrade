@@ -28,6 +28,8 @@ class PersonalReceiver : Service() {
     val user = User(this)
     val header = HashMap<String, String>()
     header["Authorization"] = "Bearer ${user.getString("token")}"
+    header["X-Requested-With"] = "XMLHttpRequest"
+    header["Accept"] = "application/json"
     Log.d("pusher", "TOKEN : ${user.getString("token")}")
     val authorize = HttpAuthorizer(Url.Pusher.auth())
     authorize.setHeaders(header)
