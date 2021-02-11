@@ -9,7 +9,7 @@ import org.json.JSONObject
 class RegisterController {
   fun doRegister(user: User, newUser: RegisterForm): JSONObject {
     val validation = newUser.validate()
-    if (validation.isNotBlank()) return JSONObject("{code: 400, message: $validation}")
+    if (validation.isNotBlank()) return JSONObject("{code: 400, message: '$validation'}")
     val body = FormBody.Builder()
     body.add("name", newUser.name)
     body.add("username", newUser.username)
