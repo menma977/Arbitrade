@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import biz.arbitrade.MainActivity
 import biz.arbitrade.R
 import biz.arbitrade.controller.Helper
 import biz.arbitrade.controller.TradeOneController
@@ -118,6 +119,13 @@ class TradeOneActivity : AppCompatActivity() {
           statusChange(R.string.cannot_start_trading, R.color.Danger, response.optString("message"))
           onTrading = false
           Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+        }
+        if(response.optString("data") == "Unauthenticated."){
+          runOnUiThread {
+            val mIntent = Intent(applicationContext, MainActivity::class.java)
+            applicationContext.startActivity(mIntent)
+            finishAffinity()
+          }
         }
       }
     }

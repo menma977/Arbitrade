@@ -200,7 +200,7 @@
               android:background="@drawable/edit_text_light"
               android:ems="10"
               android:hint="@string/new_password"
-              android:inputType="textPersonName"
+              android:inputType="textPassword"
               android:padding="10dp"
               android:textAlignment="center" />
 
@@ -212,7 +212,7 @@
               android:background="@drawable/edit_text_light"
               android:ems="10"
               android:hint="@string/confirm_password"
-              android:inputType="textPersonName"
+              android:inputType="textPassword"
               android:padding="10dp"
               android:textAlignment="center" />
 

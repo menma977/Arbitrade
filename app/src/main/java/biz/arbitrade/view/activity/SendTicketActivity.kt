@@ -1,10 +1,10 @@
 package biz.arbitrade.view.activity
 
-import android.Manifest
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import biz.arbitrade.R
+import biz.arbitrade.controller.Helper
 import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
 import me.dm7.barcodescanner.zxing.ZXingScannerView
@@ -58,6 +58,10 @@ class SendTicketActivity : AppCompatActivity() {
           val response = ArbizAPI("pin.store", "post", user.getString("token"), body).call()
           if (response.getInt("code") < 400) {
             Toast.makeText(this@SendTicketActivity, response.getString("message"), Toast.LENGTH_SHORT).show()
+          }else{
+            if(response.optString("data") == "Unauthenticated."){
+              Helper.logoutAll(this@SendTicketActivity)
+            }
           }
         }
     }

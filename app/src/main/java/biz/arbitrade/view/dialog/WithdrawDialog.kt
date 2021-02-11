@@ -3,10 +3,12 @@ package biz.arbitrade.view.dialog;
 import android.R.style.Theme_Translucent_NoTitleBar
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import biz.arbitrade.MainActivity
 import biz.arbitrade.R
 import biz.arbitrade.controller.Helper
 import biz.arbitrade.network.ArbizAPI
@@ -47,8 +49,18 @@ class WithdrawDialog(private val activity: Activity, private val token: String) 
         ArbizAPI(if (satoshi > 0) "withdraw" else "withdraw.all", "post", token, body).call()
       if(response.getInt("code") < 400){
         Toast.makeText(activity, "Successfully processing Withdrawal to queue", Toast.LENGTH_SHORT).show()
-      }else
-        Toast.makeText(activity, response.optString("data") ?: "Failed to withdraw", Toast.LENGTH_SHORT).show()
+      }else {
+        Toast.makeText(
+          activity,
+          response.optString("data") ?: "Failed to withdraw",
+          Toast.LENGTH_SHORT
+        ).show()
+        if(response.optString("data") == "Unauthenticated."){
+          dialog.ownerActivity?.runOnUiThread {
+            Helper.logoutAll(dialog.ownerActivity)
+          }
+        }
+      }
     }
   }
 }

@@ -1,7 +1,12 @@
 package biz.arbitrade.controller
 
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
+import biz.arbitrade.MainActivity
+import biz.arbitrade.model.Bet
+import biz.arbitrade.model.User
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -23,8 +28,9 @@ object Helper {
     return BigDecimal(doge).times(10.0.pow(8).toBigDecimal()).longValueExact()
   }
 
-  fun formatTicket(ticket: Long) : BigDecimal {
-    return decimalFormat.format(ticket.toBigDecimal().setScale(8, BigDecimal.ROUND_HALF_DOWN)).replace(",", ".").toBigDecimal()
+  fun formatTicket(ticket: Long): BigDecimal {
+    return decimalFormat.format(ticket.toBigDecimal().setScale(8, BigDecimal.ROUND_HALF_DOWN))
+      .replace(",", ".").toBigDecimal()
   }
 
   fun <T> subList(a: ArrayList<T>, from: Int, to: Int): ArrayList<T> {
@@ -37,9 +43,10 @@ object Helper {
 
   fun getMillis(date: String): Long {
     return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-      LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")).toEpochSecond(
-        ZoneOffset.UTC
-      ) * 1000
+      LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS"))
+        .toEpochSecond(
+          ZoneOffset.UTC
+        ) * 1000
     } else {
       try {
         val d = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS", Locale.ROOT).parse(date)
@@ -52,7 +59,8 @@ object Helper {
 
   fun getDate(date: String): String {
     return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-      LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))
+      LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))
     } else {
       val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT)
       val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.ROOT)
@@ -61,6 +69,16 @@ object Helper {
       } catch (e: Exception) {
         "-"
       }
+    }
+  }
+
+  fun logoutAll(activity: Activity?) {
+    activity?.runOnUiThread {
+      User(activity).clear()
+      Bet(activity).clear()
+      val mIntent = Intent(activity, MainActivity::class.java)
+      activity.startActivity(mIntent)
+      activity.finishAffinity()
     }
   }
 

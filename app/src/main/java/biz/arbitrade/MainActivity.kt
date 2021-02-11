@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import biz.arbitrade.controller.LoginController
 import biz.arbitrade.controller.background.PusherReceiver
+import biz.arbitrade.model.Bet
 import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.network.DogeAPI
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     if(PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA))
       requestPermissions(arrayOf(Manifest.permission.CAMERA), 100)
     val user = User(this)
+    val bet = Bet(this)
     Timer().schedule(100) {
       val info = ArbizAPI("info", "GET", null, null).call()
       if (info.optString("data").matches(Regex("^(failed to connect)"))) {
@@ -72,14 +74,17 @@ class MainActivity : AppCompatActivity() {
             }
           } else runOnUiThread {
             user.clear()
+            bet.clear()
             move("login", info)
           }
         } else runOnUiThread {
           user.clear()
+          bet.clear()
           move("login", info)
         }
       } else runOnUiThread {
         user.clear()
+        bet.clear()
         move("login", info)
       }
     }

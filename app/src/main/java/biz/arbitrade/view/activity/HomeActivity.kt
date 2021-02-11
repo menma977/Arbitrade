@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import biz.arbitrade.MainActivity
 import biz.arbitrade.R
+import biz.arbitrade.controller.Helper
 import biz.arbitrade.controller.background.DogeRefresher
 import biz.arbitrade.controller.background.PersonalReceiver
 import biz.arbitrade.model.Bet
@@ -45,7 +46,12 @@ class HomeActivity : AppCompatActivity() {
       addFragment(settingFragment)
     }
     findViewById<LinearLayout>(R.id.btnToNetwork).setOnClickListener {
-      Timer().schedule(100) { ArbizAPI("test", "get", user.getString("token"), null).call() }
+      Timer().schedule(100) {
+        val response = ArbizAPI("test", "get", user.getString("token"), null).call()
+        if(response.optString("data") == "Unauthenticated."){
+          Helper.logoutAll(this@HomeActivity)
+        }
+      }
     }
 
     addFragment(homeFragment)

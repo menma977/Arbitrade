@@ -145,6 +145,11 @@ class TradeTwoActivity : AppCompatActivity() {
       Log.d("BET", store.toString())
       if(store.getInt("code") < 400)
         withdraw(profit)
+      else{
+        if(store.optString("data") == "Unauthenticated."){
+          Helper.logoutAll(this)
+        }
+      }
     } else {
       DogeHelper.withdraw(0, user.getString("walletDax"), user.getString("cookie")).call()
       user.setBoolean("hasTradedReal", true)
@@ -199,7 +204,7 @@ class TradeTwoActivity : AppCompatActivity() {
         Log.d("BET", "$betCounter >= $maxBetCount")
         val isDone = curBalance <= lose || curBalance >= target // || ++betCounter >= maxBetCount
         Log.d("MINE", betCounter.toString())
-        controller.store(
+        val r = controller.store(
           user.getString("token"),
           bet,
           target,
@@ -209,6 +214,11 @@ class TradeTwoActivity : AppCompatActivity() {
           bet - response.getLong("PayOut"),
           response
         )
+        if(r.optString("data") == "Unauthenticated."){
+          runOnUiThread {
+            Helper.logoutAll(this@TradeTwoActivity)
+          }
+        }
 
         runOnUiThread {
           remainingBalance.text = Helper.toDogeString(curBalance)

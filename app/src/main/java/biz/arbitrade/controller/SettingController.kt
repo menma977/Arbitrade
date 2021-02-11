@@ -16,7 +16,7 @@ class SettingController(private val user: User) {
     return when{
       result.optString("message").isNotBlank() -> result.optString("message")
       result.optString("data").isNotBlank() -> result.optString("data")
-      else -> "Changing wallet dax failed"
+      else -> "Changing name failed"
     }
   }
 
@@ -38,7 +38,7 @@ class SettingController(private val user: User) {
     val body = FormBody.Builder()
     body.add("password", password)
     body.add("confirmation_password", passwordConfirm)
-    val result = ArbizAPI("user/update/wallet", "POST", user.getString("token"), body).call()
+    val result = ArbizAPI("user/update/password", "POST", user.getString("token"), body).call()
     return when{
       result.optString("message").isNotBlank() -> result.optString("message")
       result.optString("data").isNotBlank() -> result.optString("data")

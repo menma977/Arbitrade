@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import biz.arbitrade.R
+import biz.arbitrade.controller.Helper
 import biz.arbitrade.controller.RegisterController
 import biz.arbitrade.model.RegisterForm
 import biz.arbitrade.model.User
@@ -66,6 +67,8 @@ class RegisterActivity : AppCompatActivity() {
               },
               Toast.LENGTH_LONG
             ).show()
+            if(response.optString("data") == "Unauthenticated.")
+              Helper.logoutAll(this@RegisterActivity)
           } else {
             Toast.makeText(
               applicationContext,
