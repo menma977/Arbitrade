@@ -7,7 +7,7 @@ import com.pusher.client.channel.Channel
 import org.json.JSONObject
 
 class OnMaintenance(context: Context, channel: Channel) : PusherEvent(context, channel, true) {
-  override val eventName: String = "App\\Events\\TicketEvent"
+  override val eventName: String = "App\\Events\\Maintenance"
 
   override fun handle(context: Context, result: JSONObject) {
     val intent = Intent("on_maintenance")

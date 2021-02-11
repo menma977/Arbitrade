@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import biz.arbitrade.controller.events.OnAnnounce
+import biz.arbitrade.controller.events.OnMaintenance
 import biz.arbitrade.model.User
 import biz.arbitrade.network.Url
 import com.pusher.client.Pusher
@@ -32,6 +33,7 @@ class PusherReceiver : Service() {
     val pusher = Pusher("arbi.biz.key", options)
     val announcementChannel = pusher.subscribe("arbi.biz.announcement")
     OnAnnounce(this@PusherReceiver, announcementChannel).bind()
+    OnMaintenance(this@PusherReceiver, announcementChannel).bind()
 
     pusher.connect(object : ConnectionEventListener {
       override fun onConnectionStateChange(change: ConnectionStateChange) {

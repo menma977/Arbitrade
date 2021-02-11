@@ -1,17 +1,25 @@
 package biz.arbitrade.view.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import biz.arbitrade.MainActivity
 import biz.arbitrade.R
 import biz.arbitrade.controller.background.DogeRefresher
 import biz.arbitrade.controller.background.PersonalReceiver
+import biz.arbitrade.model.Bet
 import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.view.fragments.HomeFragment
 import biz.arbitrade.view.fragments.SettingFragment
+import com.pusher.client.channel.PusherEvent
+import org.json.JSONObject
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -19,7 +27,9 @@ class HomeActivity : AppCompatActivity() {
   private lateinit var homeFragment: HomeFragment
   private lateinit var settingFragment: SettingFragment
   private lateinit var user: User
+  private lateinit var bets: Bet
   private lateinit var intentPersonalReceiver: Intent
+  private lateinit var intentMtReceiver: Intent
   private lateinit var intentDogeRefresher: Intent
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +37,7 @@ class HomeActivity : AppCompatActivity() {
     setContentView(R.layout.activity_home)
 
     user = User(this)
+    bets = Bet(this)
     homeFragment = HomeFragment()
     settingFragment = SettingFragment()
 
@@ -38,20 +49,17 @@ class HomeActivity : AppCompatActivity() {
       Timer().schedule(100) { ArbizAPI("test", "get", user.getString("token"), null).call() }
     }
 
-    intentPersonalReceiver = Intent(this, PersonalReceiver::class.java)
-    intentDogeRefresher = Intent(this, DogeRefresher::class.java)
-
     addFragment(homeFragment)
     checkNotification()
-    startService(intentPersonalReceiver)
-    startService(intentDogeRefresher)
 
     Timer().schedule(100) {
       intentPersonalReceiver = Intent(applicationContext, PersonalReceiver::class.java)
       intentDogeRefresher = Intent(applicationContext, DogeRefresher::class.java)
+      intentMtReceiver = Intent(applicationContext, PusherEvent::class.java)
       if (applicationContext != null) {
         startService(intentPersonalReceiver)
         startService(intentDogeRefresher)
+        startService(intentMtReceiver)
       }
     }
   }
@@ -88,17 +96,33 @@ class HomeActivity : AppCompatActivity() {
     super.onStart()
     startService(intentPersonalReceiver)
     startService(intentDogeRefresher)
+    startService(intentMtReceiver)
+    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiverMaintenance, IntentFilter("on_maintenance"))
   }
 
   override fun onPause() {
     super.onPause()
     stopService(intentPersonalReceiver)
     stopService(intentDogeRefresher)
+    stopService(intentMtReceiver)
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverMaintenance)
   }
 
   override fun onDestroy() {
     super.onDestroy()
     stopService(intentPersonalReceiver)
     stopService(intentDogeRefresher)
+    stopService(intentMtReceiver)
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverMaintenance)
+  }
+
+  private var broadcastReceiverMaintenance: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+      val mIntent = Intent(applicationContext, MainActivity::class.java)
+      user.clear()
+      bets.clear()
+      startActivity(mIntent)
+      finishAffinity()
+    }
   }
 }
