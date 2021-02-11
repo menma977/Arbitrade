@@ -21,6 +21,7 @@ import biz.arbitrade.model.User
 import biz.arbitrade.view.activity.RegisterActivity
 import biz.arbitrade.view.activity.TradeOneActivity
 import biz.arbitrade.view.activity.TradeTwoActivity
+import biz.arbitrade.view.dialog.DepositDialog
 import biz.arbitrade.view.dialog.WithdrawDialog
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -72,6 +73,10 @@ class HomeFragment : Fragment() {
     val wallet = if (user.getString("wallet").isBlank()) "placeholder" else user.getString("wallet")
     val bitmap = barcodeEncoder.encodeBitmap(wallet, BarcodeFormat.QR_CODE, 500, 500)
     imgQr.setImageBitmap(bitmap)
+
+    imgQr.setOnClickListener {
+      DepositDialog(this@HomeFragment.requireActivity(), user.getString("wallet"))
+    }
 
     register.setOnClickListener {
       move("register")
