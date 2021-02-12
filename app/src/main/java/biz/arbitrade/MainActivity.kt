@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -19,6 +20,7 @@ import biz.arbitrade.view.activity.InfoOnlyActivity
 import biz.arbitrade.view.activity.LoginActivity
 import okhttp3.FormBody
 import org.json.JSONObject
+import java.lang.Exception
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -31,44 +33,53 @@ class MainActivity : AppCompatActivity() {
     val user = User(this)
     val bet = Bet(this)
     Timer().schedule(100) {
-      val info = ArbizAPI("info", "GET", null, null).call()
-      if (info.optString("data").matches(Regex("^(failed to connect)"))) {
-        runOnUiThread {
-          move("login", info)
-          Toast.makeText(this@MainActivity, "Cannot connect to server", Toast.LENGTH_SHORT).show()
+      try{
+        val info = ArbizAPI("info", "GET", null, null).call()
+        if (info.optString("data").matches(Regex("^(failed to connect)"))) {
+          runOnUiThread {
+            move("login", info)
+            Toast.makeText(this@MainActivity, "Cannot connect to server", Toast.LENGTH_SHORT).show()
+          }
+          return@schedule
         }
-        return@schedule
-      }
-      if (info.optInt("maintenance") != 0) {
-        moveError(InfoOnlyActivity.MAINTENANCE)
-        return@schedule
-      }
-      if (info.getInt("version") != version) {
-        moveError(InfoOnlyActivity.MISMATCH_VERSION)
-        return@schedule
-      }
-      if (user.has("token")) {
-        val expiredAt = JWTUtils.decode(user.getString("token")).getJSONObject("body").getDouble("exp")
-        println("TOKEN : ${user.getString("token")}")
-        println(expiredAt)
-        if (System.currentTimeMillis() / 1000f - expiredAt < 0) {
-          val response = ArbizAPI("user.profile", "GET", user.getString("token"), null).call()
-          println(response)
-          if (response.getInt("code") == 200) {
-            val body = FormBody.Builder()
-            body.add("a", "GetBalance")
-            body.add("s", response.getString("cookie"))
-            body.add("Currency", "doge")
-            val dogeResponse = DogeAPI(body).call().getJSONObject("data")
-            val balance = if (dogeResponse.optLong("Balance") > 0) dogeResponse.getLong("Balance") else user.getLong("balance")
-            runOnUiThread {
-              val intent = Intent(applicationContext, PusherReceiver::class.java)
-              if (applicationContext != null) {
-                startService(intent)
+        if (info.optInt("maintenance") != 0) {
+          moveError(InfoOnlyActivity.MAINTENANCE)
+          return@schedule
+        }
+        if (info.getInt("version") != version) {
+          moveError(InfoOnlyActivity.MISMATCH_VERSION)
+          return@schedule
+        }
+        if (user.has("token")) {
+          val expiredAt = JWTUtils.decode(user.getString("token")).getJSONObject("body").getDouble("exp")
+          println("TOKEN : ${user.getString("token")}")
+          println(expiredAt)
+          if (System.currentTimeMillis() / 1000f - expiredAt < 0) {
+            val response = ArbizAPI("user.profile", "GET", user.getString("token"), null).call()
+            println(response)
+            if (response.getInt("code") == 200) {
+              val body = FormBody.Builder()
+              body.add("a", "GetBalance")
+              body.add("s", response.getString("cookie"))
+              body.add("Currency", "doge")
+              val responseDoge = DogeAPI(body).call()
+              val dogeResponse = responseDoge.getJSONObject("data")
+              var balance = user.getLong("balance")
+              if(responseDoge.toString().contains("Balance"))
+                balance = if (dogeResponse.optLong("Balance") > 0) dogeResponse.getLong("Balance") else user.getLong("balance")
+              runOnUiThread {
+                val intent = Intent(applicationContext, PusherReceiver::class.java)
+                if (applicationContext != null) {
+                  startService(intent)
+                }
+                val controller = LoginController()
+                if (response.getInt("code") < 400) controller.fillUser(this@MainActivity, response, balance, info)
+                move(if (response.getInt("code") >= 400) "login" else "main", info)
               }
-              val controller = LoginController()
-              if (response.getInt("code") < 400) controller.fillUser(this@MainActivity, response, balance, info)
-              move(if (response.getInt("code") >= 400) "login" else "main", info)
+            } else runOnUiThread {
+              user.clear()
+              bet.clear()
+              move("login", info)
             }
           } else runOnUiThread {
             user.clear()
@@ -80,10 +91,9 @@ class MainActivity : AppCompatActivity() {
           bet.clear()
           move("login", info)
         }
-      } else runOnUiThread {
-        user.clear()
-        bet.clear()
-        move("login", info)
+      }catch (e: Exception){
+        Log.e("ERROR",e.message, e)
+        moveError(InfoOnlyActivity.CANNOT_CONNECT)
       }
     }
   }

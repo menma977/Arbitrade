@@ -1,6 +1,7 @@
 package biz.arbitrade.view.activity
 
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import biz.arbitrade.R
@@ -20,7 +21,8 @@ class SendTicketActivity : AppCompatActivity() {
   private lateinit var txtWallet: EditText
   private lateinit var txtAmount: EditText
   private lateinit var scannerEngine: ZXingScannerView
-  private var isStart = false
+  private lateinit var scroll: ScrollView
+  private var isStart = true
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -33,12 +35,26 @@ class SendTicketActivity : AppCompatActivity() {
     frameScanner = findViewById(R.id.frameLayoutScanner)
     txtWallet = findViewById(R.id.editTextWallet)
     txtAmount = findViewById(R.id.editTextTicket)
+    scroll = findViewById(R.id.scrollview)
 
     initScannerView()
     btnScan.setOnClickListener {
-      if (isStart) {
+      isStart = if (isStart) {
         scannerEngine.startCamera()
-        isStart = false
+        frameScanner.visibility = View.VISIBLE
+        scroll.post {
+          scroll.fullScroll(View.FOCUS_DOWN)
+          frameScanner.requestFocus()
+        }
+        false
+      }else{
+        frameScanner.visibility = View.GONE
+        scannerEngine.stopCamera()
+        scroll.post {
+          scroll.fullScroll(View.FOCUS_UP)
+          btnSend.requestFocus()
+        }
+        true
       }
     }
     btnSend.setOnClickListener { send() }
@@ -56,11 +72,18 @@ class SendTicketActivity : AppCompatActivity() {
           body.add("total", txtAmount.text.toString())
           body.add("wallet", txtWallet.text.toString())
           val response = ArbizAPI("pin.store", "post", user.getString("token"), body).call()
-          if (response.getInt("code") < 400) {
-            Toast.makeText(this@SendTicketActivity, response.getString("message"), Toast.LENGTH_SHORT).show()
-          }else{
-            if(response.optString("data") == "Unauthenticated."){
-              Helper.logoutAll(this@SendTicketActivity)
+          runOnUiThread {
+            val message = when {
+              response.optString("data").isNotBlank() -> response.getString("data")
+              response.optString("message").isNotBlank() -> response.getString("message")
+              response.getInt("code") >= 400 -> "Cannot complete transaction"
+              else -> "Success"
+            }
+            Toast.makeText(this@SendTicketActivity, message, Toast.LENGTH_SHORT).show()
+            if (response.getInt("code") >= 400) {
+              if(response.optString("data") == "Unauthenticated."){
+                Helper.logoutAll(this@SendTicketActivity)
+              }
             }
           }
         }
@@ -74,8 +97,21 @@ class SendTicketActivity : AppCompatActivity() {
       if (it?.text?.isNotEmpty()!!) {
         val wallet = it.text.toString()
         txtWallet.setText(wallet)
+        frameScanner.visibility = View.GONE
+        scannerEngine.stopCamera()
+        scroll.post {
+          scroll.fullScroll(View.FOCUS_UP)
+          btnSend.requestFocus()
+        }
+        isStart = true
       }
     }
+    frameScanner.visibility = View.GONE
     frameScanner.addView(scannerEngine)
+  }
+
+  override fun onPause() {
+    scannerEngine.stopCamera()
+    super.onPause()
   }
 }

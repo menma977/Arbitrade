@@ -60,7 +60,7 @@ class TradeOneActivity : AppCompatActivity() {
     Log.d("MINE", user.getString("hasTradedFake"))
     if (user.getString("hasTradedFake") == "true") {
       Toast.makeText(this@TradeOneActivity, "You have traded today", Toast.LENGTH_SHORT).show()
-      finish()
+      //finish()
       return
     } else {
       val lastBet = Bet.getCalendar(bet.getLong("last_f_trade"))
@@ -78,7 +78,7 @@ class TradeOneActivity : AppCompatActivity() {
         spinner.visibility = View.VISIBLE
         status.visibility = View.GONE
         progressBar.progress = 0
-        startTask()
+        //startTask()
       }
     }
   }
@@ -118,7 +118,8 @@ class TradeOneActivity : AppCompatActivity() {
           status.visibility = View.VISIBLE
           statusChange(R.string.cannot_start_trading, R.color.Danger, response.optString("message"))
           onTrading = false
-          Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+          if(message.isNotBlank())
+            Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
         }
         if(response.optString("data") == "Unauthenticated."){
           runOnUiThread {

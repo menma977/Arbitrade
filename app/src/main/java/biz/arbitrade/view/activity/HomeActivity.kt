@@ -18,6 +18,7 @@ import biz.arbitrade.model.Bet
 import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.view.fragments.HomeFragment
+import biz.arbitrade.view.fragments.NetworkFragment
 import biz.arbitrade.view.fragments.SettingFragment
 import com.pusher.client.channel.PusherEvent
 import java.util.*
@@ -26,6 +27,7 @@ import kotlin.concurrent.schedule
 class HomeActivity : AppCompatActivity() {
   private lateinit var homeFragment: HomeFragment
   private lateinit var settingFragment: SettingFragment
+  private lateinit var networkFragment: NetworkFragment
   private lateinit var user: User
   private lateinit var bets: Bet
   private lateinit var intentPersonalReceiver: Intent
@@ -40,18 +42,12 @@ class HomeActivity : AppCompatActivity() {
     bets = Bet(this)
     homeFragment = HomeFragment()
     settingFragment = SettingFragment()
+    networkFragment = NetworkFragment()
 
     findViewById<LinearLayout>(R.id.btnToHome).setOnClickListener { addFragment(homeFragment) }
+    findViewById<LinearLayout>(R.id.btnToNetwork).setOnClickListener { addFragment(networkFragment) }
     findViewById<LinearLayout>(R.id.btnToSetting).setOnClickListener {
       addFragment(settingFragment)
-    }
-    findViewById<LinearLayout>(R.id.btnToNetwork).setOnClickListener {
-      Timer().schedule(100) {
-        val response = ArbizAPI("test", "get", user.getString("token"), null).call()
-        if (response.optString("data") == "Unauthenticated.") {
-          Helper.logoutAll(this@HomeActivity)
-        }
-      }
     }
 
     addFragment(homeFragment)

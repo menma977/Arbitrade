@@ -58,8 +58,8 @@ class TradeTwoActivity : AppCompatActivity() {
   private val dogeWinChance = .5f
   private val betLow = 0
   private val betHigh = (999999 * dogeWinChance).toInt()
-  private val loseTarget = .1f
-  private var winTarget = .1f
+  private val loseTarget = 1f
+  private var winTarget = .02f
   private val maxBetCount = 5
   private lateinit var initialTask: TimerTask
 
