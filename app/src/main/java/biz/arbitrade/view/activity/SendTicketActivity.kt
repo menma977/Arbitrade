@@ -8,6 +8,7 @@ import biz.arbitrade.R
 import biz.arbitrade.controller.Helper
 import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
+import biz.arbitrade.view.dialog.Loading
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import okhttp3.FormBody
 import java.util.*
@@ -15,6 +16,7 @@ import kotlin.concurrent.schedule
 
 class SendTicketActivity : AppCompatActivity() {
   private lateinit var frameScanner: FrameLayout
+  private lateinit var loading: Loading
   private lateinit var user: User
   private lateinit var btnScan: ImageView
   private lateinit var btnSend: Button
@@ -29,6 +31,7 @@ class SendTicketActivity : AppCompatActivity() {
     setContentView(R.layout.activity_send_ticket)
 
     user = User(this)
+    loading = Loading(this)
 
     btnScan = findViewById(R.id.btnScan)
     btnSend = findViewById(R.id.btnSend)
@@ -66,7 +69,8 @@ class SendTicketActivity : AppCompatActivity() {
         Toast.makeText(this@SendTicketActivity, "Invalid Amount", Toast.LENGTH_SHORT).show()
       txtWallet.text.toString().isBlank() ->
           Toast.makeText(this@SendTicketActivity, "Wallet cannot be empty", Toast.LENGTH_SHORT).show()
-      else ->
+      else -> {
+        loading.openDialog()
         Timer().schedule(100) {
           val body = FormBody.Builder()
           body.add("total", txtAmount.text.toString())
@@ -81,12 +85,14 @@ class SendTicketActivity : AppCompatActivity() {
             }
             Toast.makeText(this@SendTicketActivity, message, Toast.LENGTH_SHORT).show()
             if (response.getInt("code") >= 400) {
-              if(response.optString("data") == "Unauthenticated."){
+              if (response.optString("data") == "Unauthenticated.") {
                 Helper.logoutAll(this@SendTicketActivity)
               }
             }
+            loading.closeDialog()
           }
         }
+      }
     }
   }
 

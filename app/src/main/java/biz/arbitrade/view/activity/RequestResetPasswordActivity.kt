@@ -9,16 +9,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import biz.arbitrade.R
 import biz.arbitrade.network.ArbizAPI
+import biz.arbitrade.view.dialog.Loading
 import okhttp3.FormBody
 import java.util.*
 import kotlin.concurrent.schedule
 
 class RequestResetPasswordActivity : AppCompatActivity() {
+  private lateinit var loading: Loading
   private lateinit var submit: Button
   private lateinit var email: EditText
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    loading = Loading(this)
     setContentView(R.layout.activity_forget_password)
 
     email = findViewById(R.id.editTextEmail)
@@ -30,6 +33,7 @@ class RequestResetPasswordActivity : AppCompatActivity() {
   }
 
   private fun run() {
+    loading.openDialog()
     Timer().schedule(100) {
       val body = FormBody.Builder()
       body.add("email", email.text.toString())
@@ -46,6 +50,7 @@ class RequestResetPasswordActivity : AppCompatActivity() {
           intent.putExtra("code", code)
           intent.putExtra("email", email.text.toString())
           startActivity(intent)
+          loading.closeDialog()
           finishAfterTransition()
         }
       } else {
@@ -54,6 +59,7 @@ class RequestResetPasswordActivity : AppCompatActivity() {
           Toast.makeText(
             this@RequestResetPasswordActivity, request.getString("data") ?: "Cannot connect to server", Toast.LENGTH_SHORT
           ).show()
+          loading.closeDialog()
         }
       }
     }

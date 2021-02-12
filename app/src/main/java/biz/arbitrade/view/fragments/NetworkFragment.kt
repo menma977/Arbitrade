@@ -12,6 +12,7 @@ import biz.arbitrade.R
 import biz.arbitrade.model.User
 import biz.arbitrade.network.Url
 import biz.arbitrade.network.WebViewController
+import biz.arbitrade.view.activity.HomeActivity
 import biz.arbitrade.view.dialog.Loading
 import org.json.JSONObject
 import java.util.*
@@ -22,6 +23,7 @@ class NetworkFragment : Fragment() {
   private lateinit var loading: Loading
   private lateinit var webContent: WebView
   private lateinit var result: JSONObject
+  private lateinit var parentActivity: HomeActivity
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -30,8 +32,10 @@ class NetworkFragment : Fragment() {
   ): View? {
     val view = inflater.inflate(R.layout.fragment_network, container, false)
 
-    user = User(context!!)
-    loading = Loading(activity!!)
+    parentActivity = activity as HomeActivity
+
+    user = User(parentActivity.applicationContext)
+    loading = Loading(parentActivity)
 
     webContent = view.findViewById(R.id.webViewContent)
 
@@ -39,7 +43,7 @@ class NetworkFragment : Fragment() {
     Timer().schedule(100) {
       result = WebViewController("binary.index", user.getString("token")).call()
       if (result.getInt("code") == 200) {
-        activity!!.runOnUiThread {
+        parentActivity.runOnUiThread {
           webContent.removeAllViews()
           webContent.webViewClient = WebViewClient()
           webContent.webChromeClient = WebChromeClient()
