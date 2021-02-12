@@ -50,9 +50,6 @@ class HomeFragment : Fragment() {
     val view = inflater.inflate(R.layout.fragment_home, container, false)
 
     user = User(activity!!.applicationContext)
-
-    Log.d("MINE", R.id.btnRegister.toString())
-
     username = view.findViewById(R.id.textViewUsername)
     balance = view.findViewById(R.id.textViewBalance)
     txtTotalPin = view.findViewById(R.id.txtTotalPin)

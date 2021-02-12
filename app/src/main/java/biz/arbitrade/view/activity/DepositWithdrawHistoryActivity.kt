@@ -15,7 +15,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 
-class DepositWithdrawHistoryActivity() :
+class DepositWithdrawHistoryActivity :
   HistoryActivity<DepositHistoryAdapter.ViewHolder, DepositHistoryAdapter>("Deposit History") {
 
   private lateinit var loading: Loading
@@ -24,11 +24,7 @@ class DepositWithdrawHistoryActivity() :
   private val perPage = 10
   private val dataHolder = ArrayList<Withdraw>()
   private var dataList = ArrayList<Withdraw>()
-  override val listAdapter: DepositHistoryAdapter
-
-  init {
-    listAdapter = DepositHistoryAdapter(dataList)
-  }
+  override val listAdapter: DepositHistoryAdapter = DepositHistoryAdapter(dataList)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -58,7 +54,6 @@ class DepositWithdrawHistoryActivity() :
   private fun refreshAdapter(){
     listAdapter.clear()
     for (i in dataList) {
-      Log.d("M", i.description)
       listAdapter.add(i)
     }
     btnNext((currentPage + 1) * perPage <= dataHolder.size)

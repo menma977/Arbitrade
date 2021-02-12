@@ -57,7 +57,6 @@ class TradeOneActivity : AppCompatActivity() {
     minTrading.text = Helper.toDogeString(user.getLong("minBot"))
     maxTrading.text = Helper.toDogeString(user.getLong("maxBot"))
 
-    Log.d("MINE", user.getString("hasTradedFake"))
     if (user.getString("hasTradedFake") == "true") {
       Toast.makeText(this@TradeOneActivity, "You have traded today", Toast.LENGTH_SHORT).show()
       //finish()
@@ -85,9 +84,7 @@ class TradeOneActivity : AppCompatActivity() {
 
   private fun startTask() {
     Timer().schedule(100) {
-      Log.d("MINE", user.getLong("balance").toString())
       val response = controller.trade(user)
-      Log.d("MINE", response.toString())
       if (response.getInt("code") < 400) {
         onTrading = true
         Timer().scheduleAtFixedRate(
@@ -98,7 +95,6 @@ class TradeOneActivity : AppCompatActivity() {
             if (progressBar.progress == progressBar.max) {
               spinner.visibility = View.GONE
               status.visibility = View.VISIBLE
-              Log.d("MINE", response.toString())
               statusChange(
                 if (response.getString("message") == "WIN") R.string.win else R.string.lose, if (response.getString("message") == "WIN") R.color.Info else R.color.Danger
               )

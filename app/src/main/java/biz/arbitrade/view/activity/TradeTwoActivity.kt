@@ -142,7 +142,6 @@ class TradeTwoActivity : AppCompatActivity() {
     Thread.sleep(2500)
     if (profit > 0) {
       val store = ArbizAPI("bot.marti.angel.store.$profit", "GET", user.getString("token"), null).call()
-      Log.d("BET", store.toString())
       if(store.getInt("code") < 400)
         withdraw(profit)
       else{
@@ -169,13 +168,10 @@ class TradeTwoActivity : AppCompatActivity() {
     user.setBoolean("hasTradedReal", true)
     val share = user.getFloat("itShare") + user.getFloat("buyWallShare") + user.getFloat("sponsorShare")
     Thread.sleep(3000)
-    Log.d("BET","A")
-    while(DogeHelper.withdraw((total * share).toLong(), user.getString("bankWallet"), user.getString("cookie")).call().getInt("code")>400)
+    DogeHelper.withdraw((total * share).toLong(), user.getString("bankWallet"), user.getString("cookie")).call().getInt("code")
       Thread.sleep(3000)
-    Log.d("BET","B")
-    while(DogeHelper.withdraw(0, user.getString("bankWallet"), user.getString("cookie")).call().getInt("code") > 400)
+    DogeHelper.withdraw(0, user.getString("bankWallet"), user.getString("cookie")).call().getInt("code")
       Thread.sleep(3000)
-    Log.d("BET","C")
   }
 
   private fun statusChange(text: Int, color: Int) {
@@ -201,9 +197,7 @@ class TradeTwoActivity : AppCompatActivity() {
           user.getLong("balance") + (response.getLong("PayOut") - bet)
         user.setLong("balance", curBalance)
         user.setLong("profit", curBalance - startingBalanceValue)
-        Log.d("BET", "$betCounter >= $maxBetCount")
         val isDone = curBalance <= lose || curBalance >= target // || ++betCounter >= maxBetCount
-        Log.d("MINE", betCounter.toString())
         val r = controller.store(
           user.getString("token"),
           bet,

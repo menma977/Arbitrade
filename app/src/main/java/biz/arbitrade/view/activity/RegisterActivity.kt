@@ -55,7 +55,6 @@ class RegisterActivity : AppCompatActivity() {
       )
       Timer().schedule(100) {
         val response = controller.doRegister(user, newUser)
-        Log.d("M0", response.toString())
         runOnUiThread {
           if (response.getInt("code") >= 400) {
             Toast.makeText(

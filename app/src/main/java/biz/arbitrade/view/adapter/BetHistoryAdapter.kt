@@ -26,11 +26,9 @@ class BetHistoryAdapter(private val dataList: ArrayList<BetHistory>) :
     private lateinit var context: Context
 
     fun add(value: BetHistory){
-        Log.d("M", dataList.size.toString())
         dataList.add(0, value)
         notifyItemRangeChanged(0, dataList.size+1)
         notifyDataSetChanged()
-        Log.d("M", dataList.size.toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

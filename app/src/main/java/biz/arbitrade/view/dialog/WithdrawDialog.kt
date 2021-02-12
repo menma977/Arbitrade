@@ -3,6 +3,7 @@ package biz.arbitrade.view.dialog;
 import android.R.style.Theme_Translucent_NoTitleBar
 import android.app.Activity
 import android.app.Dialog
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -72,7 +73,8 @@ class WithdrawDialog(private val activity: Activity, private val token: String) 
         } else {
           Toast.makeText(
             activity,
-            response.optString("data") ?: "Failed to withdraw",
+            if (response.optString("data").isNotBlank()) response.optString("data")
+            else "Failed to withdraw",
             Toast.LENGTH_SHORT
           ).show()
           toggleInput(true)

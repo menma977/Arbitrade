@@ -52,7 +52,6 @@ class WithdrawHistoryActivity() :
   private fun refreshAdapter(){
     listAdapter.clear()
     for (i in dataList) {
-      Log.d("M", i.description)
       listAdapter.add(i)
     }
     btnNext((currentPage + 1) * perPage <= dataHolder.size)
@@ -107,7 +106,6 @@ class WithdrawHistoryActivity() :
   }
 
   private fun fetch(token: String?): JSONObject {
-    Log.e("FETCH", token ?: "A")
     val body = FormBody.Builder()
     body.add("a", "GetWithdrawals")
     body.add("s", "ee40fd575c5d452884e330cc4196ec4a")

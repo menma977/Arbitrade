@@ -26,7 +26,6 @@ class LoginController {
   }
 
   fun fillUser(context: Context, result: JSONObject, balance: Long, info: JSONObject): User {
-    Log.e("MINE", result.toString())
     val result = if (result.has("user")) result.getJSONObject("user") else result
     val user = User(context)
 

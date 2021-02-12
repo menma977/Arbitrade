@@ -38,14 +38,12 @@ class RequestResetPasswordActivity : AppCompatActivity() {
       val body = FormBody.Builder()
       body.add("email", email.text.toString())
       val request = ArbizAPI("forgot.email", "POST", null, body).call()
-      Log.d("MINE", request.toString())
       if (request.getInt("code") < 400) {
         val code = request.getInt("uniqueCode")
         runOnUiThread {
           Toast.makeText(
             this@RequestResetPasswordActivity, request.getString("message"), Toast.LENGTH_SHORT
           ).show()
-          Log.d("PASSWORD", code.toString())
           val intent = Intent(this@RequestResetPasswordActivity, ResetPasswordActivity::class.java)
           intent.putExtra("code", code)
           intent.putExtra("email", email.text.toString())

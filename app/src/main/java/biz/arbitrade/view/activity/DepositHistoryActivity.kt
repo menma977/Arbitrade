@@ -52,7 +52,6 @@ class DepositHistoryActivity() :
   private fun refreshAdapter(){
     listAdapter.clear()
     for (i in dataList) {
-      Log.d("M", i.description)
       listAdapter.add(i)
     }
     btnNext((currentPage + 1) * perPage <= dataHolder.size)

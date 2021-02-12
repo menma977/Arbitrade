@@ -69,7 +69,6 @@ class LoginActivity : AppCompatActivity() {
           }
         }
         runOnUiThread {
-          Log.d("MINE",result.toString())
           if (result.getInt("code") >= 400) {
             val msg = if (result.getString("message")
                 .contains("failed to connect")
@@ -77,7 +76,6 @@ class LoginActivity : AppCompatActivity() {
             else result.getString("message")
             Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
           } else {
-            Log.d("MINE", resultDoge.toString())
             if (resultDoge.getInt("code") >= 400) {
               Toast.makeText(
                 applicationContext,

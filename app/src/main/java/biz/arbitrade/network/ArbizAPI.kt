@@ -22,9 +22,6 @@ class ArbizAPI(private var command: String, private var method: String, private 
 
   private val http = object : Base() {
     override fun responseHandler(response: Response, json: JSONObject): JSONObject {
-      Log.d("MINE", response.code.toString())
-      Log.d("MINE", json.toString())
-      Log.d("MINE", response.message)
       if (response.isSuccessful) {
         if (!json.has("code")) json.put("code", response.code)
         return json
