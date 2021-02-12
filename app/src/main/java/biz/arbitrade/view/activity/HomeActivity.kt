@@ -127,14 +127,18 @@ class HomeActivity : AppCompatActivity() {
       val mIntent = Intent(applicationContext, MainActivity::class.java)
       user.clear()
       bets.clear()
-      startActivity(mIntent)
       finishAffinity()
+      startActivity(mIntent)
     }
   }
 
   private var broadcastReceiverLogout: BroadcastReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-      Helper.logoutAll(this@HomeActivity)
+      val mIntent = Intent(applicationContext, MainActivity::class.java)
+      user.clear()
+      bets.clear()
+      finishAffinity()
+      startActivity(mIntent)
     }
   }
 }
