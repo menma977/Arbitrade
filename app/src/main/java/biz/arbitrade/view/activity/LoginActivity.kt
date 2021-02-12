@@ -1,6 +1,8 @@
 package biz.arbitrade.view.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -8,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import biz.arbitrade.R
 import biz.arbitrade.controller.LoginController
 import biz.arbitrade.controller.background.PusherReceiver
@@ -43,7 +46,11 @@ class LoginActivity : AppCompatActivity() {
 
     btnLogin.setOnClickListener {
       if (controller.validate(textUsername, textPassword).isNotBlank()) {
-        Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "username and/or password cannot be empty", Toast.LENGTH_SHORT).show()
+        return@setOnClickListener
+      }
+      if(PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
+        requestPermissions(arrayOf(Manifest.permission.CAMERA), 100)
         return@setOnClickListener
       }
       loading.openDialog()

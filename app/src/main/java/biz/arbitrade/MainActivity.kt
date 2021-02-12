@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-    if(PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA))
-      requestPermissions(arrayOf(Manifest.permission.CAMERA), 100)
     val user = User(this)
     val bet = Bet(this)
     Timer().schedule(100) {

@@ -90,7 +90,7 @@ class TradeTwoActivity : AppCompatActivity() {
     history = findViewById(R.id.listHistory)
     val series = ValueLineSeries()
     series.color = getColor(R.color.colorPrimary)
-    series.addPoint(ValueLinePoint("0", (user.getLong("balance") / 10.0.pow(8)).toFloat()))
+    series.addPoint(ValueLinePoint("0", (user.getLong("balance") / 10.0.pow(4)).toFloat()))
     findViewById<Button>(R.id.continueBtn).setOnClickListener {}
     txtWarning.isSelected = true
     val adapter = BetHistoryAdapter(betHistory)
@@ -229,7 +229,7 @@ class TradeTwoActivity : AppCompatActivity() {
           )
           series.addPoint(
             ValueLinePoint(
-              counter++.toString(), (curBalance / 10.0.pow(8)).toFloat()
+              counter++.toString(), (curBalance / 10.0.pow(4)).toFloat()
             )
           )
           if (series.series.size > chartFreq) series.series.removeAt(0)
