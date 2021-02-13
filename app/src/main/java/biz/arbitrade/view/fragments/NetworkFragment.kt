@@ -26,9 +26,7 @@ class NetworkFragment : Fragment() {
   private lateinit var parentActivity: HomeActivity
 
   override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
     val view = inflater.inflate(R.layout.fragment_network, container, false)
 
@@ -52,11 +50,7 @@ class NetworkFragment : Fragment() {
           webContent.settings.javaScriptCanOpenWindowsAutomatically = true
           webContent.loadData(result.getString("data"), "text/html", "UTF-8")
           webContent.loadDataWithBaseURL(
-            Url.web("binary"),
-            result.getString("data"),
-            "text/html",
-            "UTF-8",
-            null
+            Url.web("binary.index"), result.getString("data"), "text/html", "UTF-8", null
           )
           loading.closeDialog()
         }
