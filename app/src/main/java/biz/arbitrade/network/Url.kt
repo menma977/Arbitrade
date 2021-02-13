@@ -2,7 +2,7 @@ package biz.arbitrade.network
 
 object Url {
   fun web(target: String?): String {
-    return "http://10.0.2.2:8000/api/${
+    return "https://tradearbi.com/api/${
       if (!target.isNullOrEmpty()) target.replace(
         ".", "/"
       ) else ""
@@ -14,10 +14,10 @@ object Url {
   }
 
   object Pusher {
-    const val url = "10.0.2.2"
+    const val url = "tradearbi.com"
     private const val authEndpoint = "broadcasting.auth"
     const val port = 6001
-    const val secured = false
+    const val secured = true
 
     fun auth(): String {
       return web(authEndpoint)
