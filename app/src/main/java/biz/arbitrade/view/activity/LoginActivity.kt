@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -14,7 +13,6 @@ import androidx.core.content.ContextCompat
 import biz.arbitrade.R
 import biz.arbitrade.controller.LoginController
 import biz.arbitrade.controller.background.PusherReceiver
-import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.network.DogeAPI
 import biz.arbitrade.view.dialog.Loading
 import okhttp3.FormBody
@@ -40,9 +38,6 @@ class LoginActivity : AppCompatActivity() {
     textUsername = findViewById(R.id.editTextUsername)
     textPassword = findViewById(R.id.editTextPassword)
     textForgetPassword = findViewById(R.id.textViewForgotPassword)
-
-    textUsername.setText("admin")
-    textPassword.setText("admin")
 
     btnLogin.setOnClickListener {
       if (controller.validate(textUsername, textPassword).isNotBlank()) {

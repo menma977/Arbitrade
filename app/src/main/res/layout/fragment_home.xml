@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/lnrLayoutContent"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="@color/colorPrimaryLight">
@@ -88,7 +87,6 @@
                     tools:ignore="UseCompoundDrawables">
 
                   <ImageView
-                      android:id="@+id/imageView3"
                       android:layout_width="30sp"
                       android:layout_height="30sp"
                       android:contentDescription="@string/icon"
@@ -338,7 +336,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:contentDescription="@string/icon"
-                app:srcCompat="@drawable/ic_baseline_supervised_user_circle"
+                app:srcCompat="@drawable/baseline_confirmation_number_24"
                 app:tint="@color/textSecondary" />
 
             <TextView

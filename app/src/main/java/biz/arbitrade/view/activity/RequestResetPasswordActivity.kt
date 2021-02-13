@@ -27,8 +27,6 @@ class RequestResetPasswordActivity : AppCompatActivity() {
     email = findViewById(R.id.editTextEmail)
     submit = findViewById(R.id.buttonSend)
 
-    email.setText("admin@arbi.biz")
-
     submit.setOnClickListener { run() }
   }
 
