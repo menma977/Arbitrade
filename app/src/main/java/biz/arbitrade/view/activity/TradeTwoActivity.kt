@@ -7,10 +7,7 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -35,6 +32,7 @@ import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 import kotlin.concurrent.scheduleAtFixedRate
 import kotlin.math.pow
+import kotlin.random.Random
 
 class TradeTwoActivity : AppCompatActivity() {
   private lateinit var user: User
@@ -42,6 +40,10 @@ class TradeTwoActivity : AppCompatActivity() {
   private lateinit var chart: ValueLineChart
   private lateinit var history: RecyclerView
   private lateinit var controller: TradeTwoController
+  private lateinit var layoutMain: LinearLayout
+  private lateinit var layoutBtn: LinearLayout
+  private lateinit var btnContinue: Button
+  private lateinit var btnStop: Button
   private lateinit var spinner: ProgressBar
   private lateinit var status: TextView
   private lateinit var startingBalance: TextView
@@ -73,12 +75,22 @@ class TradeTwoActivity : AppCompatActivity() {
     user = User(this)
     bets = Bet(this)
 
+    layoutBtn = findViewById(R.id.lnrLayoutBtnTrade)
+    layoutMain = findViewById(R.id.lnrLayoutMain)
+
     spinner = findViewById(R.id.spinner)
     status = findViewById(R.id.txtStatus)
     startingBalance = findViewById(R.id.starting_balance)
     remainingBalance = findViewById(R.id.remaining_balance)
     txtTarget = findViewById(R.id.target_win)
     txtLose = findViewById(R.id.target_lose)
+
+    btnStop = findViewById(R.id.stopBtn)
+    btnContinue = findViewById(R.id.continueBtn)
+
+    layoutBtn.visibility = View.GONE
+    layoutMain.invalidate()
+    layoutMain.requestLayout()
 
     spinner.visibility = View.VISIBLE
     status.visibility = View.GONE
@@ -91,7 +103,6 @@ class TradeTwoActivity : AppCompatActivity() {
     val series = ValueLineSeries()
     series.color = getColor(R.color.colorPrimary)
     series.addPoint(ValueLinePoint("0", (user.getLong("balance") / 10.0.pow(4)).toFloat()))
-    findViewById<Button>(R.id.continueBtn).setOnClickListener {}
     txtWarning.isSelected = true
     val adapter = BetHistoryAdapter(betHistory)
     history.layoutManager = LinearLayoutManager(this)
@@ -104,6 +115,19 @@ class TradeTwoActivity : AppCompatActivity() {
     chart.startAnimation()
     val target = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
     val lose = user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
+
+    btnStop.setOnClickListener {
+      Timer().schedule(100) {
+        initialTask.cancel()
+        endTrading(user.getLong("profit"))
+      }
+    }
+
+    btnContinue.setOnClickListener {
+      val t = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
+      val l = user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
+      startTask(t, l, series)
+    }
 
     bet = (user.getLong("balance") * 0.001).toLong()
     if(bet > 0) {
@@ -139,6 +163,7 @@ class TradeTwoActivity : AppCompatActivity() {
   private fun endTrading(profit: Long) {
     //send to bank
     timerRunning = false
+    btnContinue.isEnabled = false
     Thread.sleep(2500)
     if (profit > 0) {
       val store = ArbizAPI("bot.marti.angel.store.$profit", "GET", user.getString("token"), null).call()
@@ -183,6 +208,7 @@ class TradeTwoActivity : AppCompatActivity() {
     timerRunning = true
     txtTarget.text = Helper.toDogeString(target)
     txtLose.text = Helper.toDogeString(lose)
+    btnContinue.isEnabled = false
     val startingBalanceValue = user.getLong("balance")
     initialTask = Timer().scheduleAtFixedRate(betDelay, betPeriod) {
       if (user.getString("hasTradedReal") == "true") {
@@ -232,7 +258,14 @@ class TradeTwoActivity : AppCompatActivity() {
 
         bet = controller.martingale(bet, response.getInt("PayOut") - bet)
         if (isDone) {
-          endTrading(curBalance)
+          runOnUiThread {
+            if(lnrLayoutBtnTrade.visibility == View.GONE){
+              lnrLayoutBtnTrade.visibility = View.VISIBLE
+              lnrLayoutMain.invalidate()
+              lnrLayoutMain.requestLayout()
+            }
+            btnContinue.isEnabled = true
+          }
           this.cancel()
         }
       } else {
@@ -251,8 +284,6 @@ class TradeTwoActivity : AppCompatActivity() {
     override fun onReceive(context: Context?, intent: Intent?) {
       if (user.getString("hasTradedReal") == "true") {
         Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
-        continueBtn.isEnabled = false
-        stopBtn.isEnabled = false
       }
     }
   }

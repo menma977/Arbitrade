@@ -29,6 +29,7 @@
       tools:layout_editor_absoluteX="10dp">
 
     <LinearLayout
+        android:id="@+id/lnrLayoutMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="140dp"
@@ -41,10 +42,38 @@
           android:id="@+id/cubicLineChart"
           android:layout_width="match_parent"
           android:layout_height="300dp"
-          app:egUseCubic="true"
-          app:egUseOverlapFill="true"
           app:egCurveSmoothness="0.4"
-          app:egLegendHeight="40dp"/>
+          app:egLegendHeight="40dp"
+          app:egUseCubic="true"
+          app:egUseOverlapFill="true" />
+
+      <LinearLayout
+          android:id="@+id/lnrLayoutBtnTrade"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@drawable/button_warning"
+          android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/continueBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8sp"
+            android:layout_weight="1"
+            android:background="@drawable/button_success"
+            android:text="@string/proceed"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/stopBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8sp"
+            android:layout_weight="1"
+            android:background="@drawable/button_danger"
+            android:text="@string/stop"
+            android:visibility="visible" />
+      </LinearLayout>
 
       <LinearLayout
           android:layout_width="match_parent"
@@ -62,27 +91,27 @@
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
-              android:text="@string/starting_balance"/>
+              android:text="@string/starting_balance" />
 
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="3sp"
               android:layout_marginEnd="3sp"
-              android:text="@string/colon"/>
+              android:text="@string/colon" />
 
           <TextView
               android:id="@+id/starting_balance"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:textStyle="bold"/>
+              android:textStyle="bold" />
 
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="3sp"
-              android:text="@string/doge"/>
+              android:text="@string/doge" />
         </LinearLayout>
 
         <LinearLayout
@@ -93,27 +122,27 @@
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
-              android:text="@string/remaining_balance"/>
+              android:text="@string/remaining_balance" />
 
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="3sp"
               android:layout_marginEnd="3sp"
-              android:text="@string/colon"/>
+              android:text="@string/colon" />
 
           <TextView
               android:id="@+id/remaining_balance"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:textStyle="bold"/>
+              android:textStyle="bold" />
 
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="3sp"
-              android:text="@string/doge"/>
+              android:text="@string/doge" />
         </LinearLayout>
 
         <LinearLayout
@@ -124,27 +153,27 @@
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
-              android:text="@string/target_win"/>
+              android:text="@string/target_win" />
 
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="3sp"
               android:layout_marginEnd="3sp"
-              android:text="@string/colon"/>
+              android:text="@string/colon" />
 
           <TextView
               android:id="@+id/target_win"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:textStyle="bold"/>
+              android:textStyle="bold" />
 
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="3sp"
-              android:text="@string/doge"/>
+              android:text="@string/doge" />
         </LinearLayout>
 
         <LinearLayout
@@ -155,27 +184,27 @@
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
-              android:text="@string/target_lose"/>
+              android:text="@string/target_lose" />
 
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="3sp"
               android:layout_marginEnd="3sp"
-              android:text="@string/colon"/>
+              android:text="@string/colon" />
 
           <TextView
               android:id="@+id/target_lose"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:textStyle="bold"/>
+              android:textStyle="bold" />
 
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="3sp"
-              android:text="@string/doge"/>
+              android:text="@string/doge" />
         </LinearLayout>
 
         <LinearLayout
@@ -198,7 +227,7 @@
                 android:indeterminateDrawable="@drawable/progress_circular"
                 android:padding="18sp"
                 android:progressDrawable="@drawable/progress_circular"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/txtStatus"
@@ -210,28 +239,9 @@
                 android:textColor="@color/Danger"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:visibility="gone"/>
+                android:visibility="gone" />
           </LinearLayout>
 
-          <Button
-              android:id="@+id/continueBtn"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="8sp"
-              android:layout_weight="1"
-              android:background="@drawable/button_success"
-              android:text="@string/proceed"
-              android:visibility="gone"/>
-
-          <Button
-              android:id="@+id/stopBtn"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="8sp"
-              android:layout_weight="1"
-              android:background="@drawable/button_danger"
-              android:text="@string/stop"
-              android:visibility="gone"/>
         </LinearLayout>
 
         <TextView
@@ -243,7 +253,7 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="@string/trade_warning"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
       </LinearLayout>
 
@@ -254,7 +264,7 @@
           android:layout_marginTop="18sp"
           android:background="@color/Default"
           android:nestedScrollingEnabled="true"
-          android:visibility="gone"/>
+          android:visibility="gone" />
 
     </LinearLayout>
   </androidx.core.widget.NestedScrollView>
