@@ -1,7 +1,6 @@
 package biz.arbitrade.network
 
 import android.annotation.SuppressLint
-import android.util.Log
 import okhttp3.FormBody
 import okhttp3.Response
 import org.json.JSONObject
