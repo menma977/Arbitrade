@@ -1,7 +1,6 @@
 package biz.arbitrade.controller
 
 import android.content.Context
-import android.util.Log
 import android.widget.EditText
 import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
@@ -26,22 +25,22 @@ class LoginController {
   }
 
   fun fillUser(context: Context, result: JSONObject, balance: Long, info: JSONObject): User {
-    val result = if (result.has("user")) result.getJSONObject("user") else result
+    val json = if (result.has("user")) result.getJSONObject("user") else result
     val user = User(context)
 
-    user.setString("username", result.getString("username"))
-    user.setString("email", result.getString("email"))
-    user.setString("hasTradedReal", result.getString("hasTradedReal"))
-    user.setString("hasTradedFake", result.getString("hasTradedFake"))
-    if (!user.has("token")) user.setString("token", result.getString("token"))
-    user.setString("cookie", result.getString("cookie"))
-    user.setString("wallet", result.getString("wallet"))
-    user.setLong("totalPin", result.getLong("totalPin"))
-    user.setInteger("pinSpent", result.getInt("pinSpent"))
-    user.setInteger("totalDownLine", result.getInt("totalDownLine"))
-    user.setString("downLines", result.getJSONArray("downLines").toString())
-    user.setString("sponsorId", result.getString("sponsorId"))
-    user.setString("sponsor", result.getString("sponsor"))
+    user.setString("username", json.getString("username"))
+    user.setString("email", json.getString("email"))
+    user.setString("hasTradedReal", json.getString("hasTradedReal"))
+    user.setString("hasTradedFake", json.getString("hasTradedFake"))
+    if (!user.has("token")) user.setString("token", json.getString("token"))
+    user.setString("cookie", json.getString("cookie"))
+    user.setString("wallet", json.getString("wallet"))
+    user.setLong("totalPin", json.getLong("totalPin"))
+    user.setInteger("pinSpent", json.getInt("pinSpent"))
+    user.setInteger("totalDownLine", json.getInt("totalDownLine"))
+    user.setString("downLines", json.getJSONArray("downLines").toString())
+    user.setString("sponsorId", json.getString("sponsorId"))
+    user.setString("sponsor", json.getString("sponsor"))
     user.setLong("balance", balance)
     user.setLong("minBot", info.getLong("min_bot"))
     user.setLong("maxBot", info.getLong("max_bot"))
