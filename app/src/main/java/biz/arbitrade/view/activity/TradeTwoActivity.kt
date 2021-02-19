@@ -143,7 +143,15 @@ class TradeTwoActivity : AppCompatActivity() {
           if (!bets.getBoolean("isWithdrawn")) {
             Timer().schedule(100) {
               endTrading(user.getLong("profit"))
+              runOnUiThread {
+                Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
+                finish()
+              }
             }
+          }else{
+            Toast.makeText(this, "You have traded today", Toast.LENGTH_SHORT).show()
+            finish()
+            return
           }
         }
       } else {
@@ -151,6 +159,27 @@ class TradeTwoActivity : AppCompatActivity() {
           Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
           finish()
         } else {
+
+          if (user.getLong("balance") < user.getLong("minBot")) {
+            Toast.makeText(
+              this@TradeTwoActivity,
+              "Insufficient balance (min: ${Helper.toDogeString(user.getLong("minBot"))})",
+              Toast.LENGTH_SHORT
+            ).show()
+            finish()
+            return
+          }
+
+          if (user.getLong("balance") > user.getLong("maxBot")) {
+            Toast.makeText(
+              this@TradeTwoActivity,
+              "Too much balance (max: ${Helper.toDogeString(user.getLong("maxBot"))})",
+              Toast.LENGTH_SHORT
+            ).show()
+            finish()
+            return
+          }
+
           startTask(target, lose, series)
           bets.setBoolean("isWithdrawn", false)
         }
@@ -158,26 +187,6 @@ class TradeTwoActivity : AppCompatActivity() {
     } else {
       Toast.makeText(this, "Cannot trade with empty balance", Toast.LENGTH_SHORT).show()
       finish()
-    }
-
-    if (user.getLong("balance") < user.getLong("minBot")) {
-      Toast.makeText(
-        this@TradeTwoActivity,
-        "Insufficient balance (min: ${Helper.toDogeString(user.getLong("minBot"))})",
-        Toast.LENGTH_SHORT
-      ).show()
-      finish()
-      return
-    }
-
-    if (user.getLong("balance") > user.getLong("maxBot")) {
-      Toast.makeText(
-        this@TradeTwoActivity,
-        "Too much balance (max: ${Helper.toDogeString(user.getLong("maxBot"))})",
-        Toast.LENGTH_SHORT
-      ).show()
-      finish()
-      return
     }
   }
 
