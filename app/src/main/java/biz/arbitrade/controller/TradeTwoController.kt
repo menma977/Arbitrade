@@ -53,7 +53,7 @@ class TradeTwoController() {
     body.add("high", high.toString())
     body.add(
       "status",
-      if (satoshi < (data.getLong("PayOut") - satoshi)) "lose" else "win"
+      if ((data.getLong("PayOut") - satoshi) <= 0) "lose" else "win"
     )
     body.add("is_finish", finish.toString())
     return ArbizAPI("bot.marti.angel", "POST", token, body).call()

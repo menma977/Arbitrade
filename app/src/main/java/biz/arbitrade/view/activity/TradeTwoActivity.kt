@@ -101,7 +101,7 @@ class TradeTwoActivity : AppCompatActivity() {
     history = findViewById(R.id.listHistory)
     val series = ValueLineSeries()
     series.color = getColor(R.color.colorPrimary)
-    series.addPoint(ValueLinePoint("0", (user.getLong("balance") / 10.0.pow(4)).toFloat()))
+    series.addPoint(ValueLinePoint("0", (user.getLong("balance") / 10.0.pow(8)).toFloat()))
     txtWarning.isSelected = true
     val adapter = BetHistoryAdapter(betHistory)
     history.layoutManager = LinearLayoutManager(this)
@@ -113,7 +113,8 @@ class TradeTwoActivity : AppCompatActivity() {
     chart.addSeries(series)
     chart.startAnimation()
     val target = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
-    val lose = if(loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
+    val lose =
+      if (loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
 
     btnStop.setOnClickListener {
       Timer().schedule(100) {
@@ -124,7 +125,8 @@ class TradeTwoActivity : AppCompatActivity() {
 
     btnContinue.setOnClickListener {
       val t = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
-      val l = if(loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
+      val l =
+        if (loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
       startTask(t, l, series)
     }
 
@@ -158,14 +160,22 @@ class TradeTwoActivity : AppCompatActivity() {
       finish()
     }
 
-    if(user.getLong("balance") < user.getLong("minBot")){
-      Toast.makeText(this@TradeTwoActivity, "Insufficient balance (min: ${Helper.toDogeString(user.getLong("minBot"))})", Toast.LENGTH_SHORT).show()
+    if (user.getLong("balance") < user.getLong("minBot")) {
+      Toast.makeText(
+        this@TradeTwoActivity,
+        "Insufficient balance (min: ${Helper.toDogeString(user.getLong("minBot"))})",
+        Toast.LENGTH_SHORT
+      ).show()
       finish()
       return
     }
 
-    if(user.getLong("balance") > user.getLong("maxBot")){
-      Toast.makeText(this@TradeTwoActivity, "Too much balance (max: ${Helper.toDogeString(user.getLong("maxBot"))})", Toast.LENGTH_SHORT).show()
+    if (user.getLong("balance") > user.getLong("maxBot")) {
+      Toast.makeText(
+        this@TradeTwoActivity,
+        "Too much balance (max: ${Helper.toDogeString(user.getLong("maxBot"))})",
+        Toast.LENGTH_SHORT
+      ).show()
       finish()
       return
     }
@@ -268,7 +278,7 @@ class TradeTwoActivity : AppCompatActivity() {
           )
           series.addPoint(
             ValueLinePoint(
-              counter++.toString(), (curBalance / 10.0.pow(4)).toFloat()
+              counter++.toString(), (curBalance / 10.0.pow(8)).toFloat()
             )
           )
           if (series.series.size > chartFreq) series.series.removeAt(0)
@@ -276,6 +286,7 @@ class TradeTwoActivity : AppCompatActivity() {
         }
 
         bet = controller.martingale(bet, response.getInt("PayOut") - bet)
+        user.setLong("profit", controller.getTotalProfit())
         if (isDone) {
           runOnUiThread {
             if (lnrLayoutBtnTrade.visibility == View.GONE) {
