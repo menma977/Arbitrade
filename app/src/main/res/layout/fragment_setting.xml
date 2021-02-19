@@ -120,61 +120,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/wallet_dax"
-                android:textAllCaps="true"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="4sp"
-                android:text="@string/change"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-          </LinearLayout>
-
-          <EditText
-              android:id="@+id/editTextWalletDax"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="12sp"
-              android:background="@drawable/edit_text_light"
-              android:ems="10"
-              android:hint="@string/new_wallet_dax"
-              android:inputType="textPersonName"
-              android:padding="10dp"
-              android:textAlignment="center" />
-
-          <Button
-              android:id="@+id/buttonChangeWallet"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="end"
-              android:layout_marginTop="12sp"
-              android:background="@drawable/button_primary"
-              android:text="@string/change"
-              android:textColor="@color/White"
-              android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="14sp"
-            android:orientation="vertical">
-
-          <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/password"
                 android:textAllCaps="true"
                 android:textSize="18sp"

@@ -16,7 +16,6 @@ class RegisterController {
     body.add("email", newUser.email)
     body.add("password", newUser.password)
     body.add("confirmation_password", newUser.passwordConfirm)
-    body.add("wallet_dax", newUser.walletDax)
     return ArbizAPI("register", "post", user.getString("token"), body).call()
   }
 }

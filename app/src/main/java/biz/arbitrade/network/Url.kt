@@ -2,11 +2,16 @@ package biz.arbitrade.network
 
 object Url {
   fun web(target: String?): String {
-    return "https://tradearbi.com/api/${
-      if (!target.isNullOrEmpty()) target.replace(
-        ".", "/"
-      ) else ""
-    }"
+    var target = if (!target.isNullOrEmpty()) target.replace(
+      Regex("(?<=[a-z])\\."),
+      "/"
+    ) else ""
+    if(target.endsWith(".0") || target.endsWith(".1")){
+      val r = target[target.length-1]
+      target = target.substring(0, target.length-2)
+      target = "$target/$r"
+    }
+    return "https://tradearbi.com/api/$target"
   }
 
   fun doge(): String {

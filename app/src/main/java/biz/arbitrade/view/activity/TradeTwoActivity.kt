@@ -32,7 +32,6 @@ import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 import kotlin.concurrent.scheduleAtFixedRate
 import kotlin.math.pow
-import kotlin.random.Random
 
 class TradeTwoActivity : AppCompatActivity() {
   private lateinit var user: User
@@ -114,7 +113,7 @@ class TradeTwoActivity : AppCompatActivity() {
     chart.addSeries(series)
     chart.startAnimation()
     val target = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
-    val lose = user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
+    val lose = if(loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
 
     btnStop.setOnClickListener {
       Timer().schedule(100) {
@@ -125,12 +124,12 @@ class TradeTwoActivity : AppCompatActivity() {
 
     btnContinue.setOnClickListener {
       val t = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
-      val l = user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
+      val l = if(loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
       startTask(t, l, series)
     }
 
     bet = (user.getLong("balance") * 0.001).toLong()
-    if(bet > 0) {
+    if (bet > 0) {
       controller.initialBet = bet
 
       if (bets.has("last_bet")) {
@@ -154,30 +153,45 @@ class TradeTwoActivity : AppCompatActivity() {
           bets.setBoolean("isWithdrawn", false)
         }
       }
-    }else{
-      finish()
+    } else {
       Toast.makeText(this, "Cannot trade with empty balance", Toast.LENGTH_SHORT).show()
+      finish()
+    }
+
+    if(user.getLong("balance") < user.getLong("minBot")){
+      Toast.makeText(this@TradeTwoActivity, "Insufficient balance (min: ${Helper.toDogeString(user.getLong("minBot"))})", Toast.LENGTH_SHORT).show()
+      finish()
+      return
+    }
+
+    if(user.getLong("balance") > user.getLong("maxBot")){
+      Toast.makeText(this@TradeTwoActivity, "Too much balance (max: ${Helper.toDogeString(user.getLong("maxBot"))})", Toast.LENGTH_SHORT).show()
+      finish()
+      return
     }
   }
 
   private fun endTrading(profit: Long) {
     //send to bank
     timerRunning = false
-    btnContinue.isEnabled = false
+    runOnUiThread { btnContinue.isEnabled = false }
     Thread.sleep(2500)
-    if (profit > 0) {
-      val store = ArbizAPI("bot.marti.angel.store.$profit", "GET", user.getString("token"), null).call()
-      if(store.getInt("code") < 400)
-        withdraw(profit)
-      else{
-        if(store.optString("data") == "Unauthenticated."){
-          Helper.logoutAll(this)
-        }
+
+    val store = ArbizAPI(
+      "bot.marti.angel.store.$profit.${if (profit > 0) 1 else 0}",
+      "GET",
+      user.getString("token"),
+      null
+    ).call()
+    if (store.getInt("code") < 400)
+      withdraw(profit)
+    else {
+      if (store.optString("data") == "Unauthenticated.") {
+        Helper.logoutAll(this)
       }
-    } else {
-      DogeHelper.withdraw(0, user.getString("walletDax"), user.getString("cookie")).call()
-      user.setBoolean("hasTradedReal", true)
     }
+    user.setBoolean("hasTradedReal", true)
+    bets.setBoolean("isWithdrawn", true)
 
     runOnUiThread {
       spinner.visibility = View.GONE
@@ -189,14 +203,17 @@ class TradeTwoActivity : AppCompatActivity() {
     }
   }
 
-  private fun withdraw(total: Long){
+  private fun withdraw(total: Long) {
     user.setBoolean("hasTradedReal", true)
-    val share = user.getFloat("itShare") + user.getFloat("buyWallShare") + user.getFloat("sponsorShare")
+    val share =
+      user.getFloat("itShare") + user.getFloat("buyWallShare") + user.getFloat("sponsorShare")
     Thread.sleep(3000)
-    DogeHelper.withdraw((total * share).toLong(), user.getString("bankWallet"), user.getString("cookie")).call().getInt("code")
-      Thread.sleep(3000)
-    DogeHelper.withdraw(0, user.getString("bankWallet"), user.getString("cookie")).call().getInt("code")
-      Thread.sleep(3000)
+    DogeHelper.withdraw(
+      (total * share).toLong(),
+      user.getString("bankWallet"),
+      user.getString("cookie")
+    ).call().getInt("code")
+    Thread.sleep(3000)
   }
 
   private fun statusChange(text: Int, color: Int) {
@@ -206,9 +223,11 @@ class TradeTwoActivity : AppCompatActivity() {
 
   private fun startTask(target: Long, lose: Long, series: ValueLineSeries) {
     timerRunning = true
-    txtTarget.text = Helper.toDogeString(target)
-    txtLose.text = Helper.toDogeString(lose)
-    btnContinue.isEnabled = false
+    runOnUiThread {
+      txtTarget.text = Helper.toDogeString(target)
+      txtLose.text = Helper.toDogeString(lose)
+      btnContinue.isEnabled = false
+    }
     val startingBalanceValue = user.getLong("balance")
     initialTask = Timer().scheduleAtFixedRate(betDelay, betPeriod) {
       if (user.getString("hasTradedReal") == "true") {
@@ -234,7 +253,7 @@ class TradeTwoActivity : AppCompatActivity() {
           bet - response.getLong("PayOut"),
           response
         )
-        if(r.optString("data") == "Unauthenticated."){
+        if (r.optString("data") == "Unauthenticated.") {
           runOnUiThread {
             Helper.logoutAll(this@TradeTwoActivity)
           }
@@ -259,7 +278,7 @@ class TradeTwoActivity : AppCompatActivity() {
         bet = controller.martingale(bet, response.getInt("PayOut") - bet)
         if (isDone) {
           runOnUiThread {
-            if(lnrLayoutBtnTrade.visibility == View.GONE){
+            if (lnrLayoutBtnTrade.visibility == View.GONE) {
               lnrLayoutBtnTrade.visibility = View.VISIBLE
               lnrLayoutMain.invalidate()
               lnrLayoutMain.requestLayout()
@@ -271,9 +290,9 @@ class TradeTwoActivity : AppCompatActivity() {
       } else {
         runOnUiThread {
           Toast.makeText(
-            applicationContext, "Cannot start trading, please try again later", Toast.LENGTH_LONG
+            applicationContext, "failed, Retrying . . .", Toast.LENGTH_LONG
           ).show()
-          Log.e("TradeTwo.DogeRequest", rawResponse.getString("message")) //TODO: make sure!
+          Log.e("TradeTwo.DogeRequest", rawResponse.getString("data")) //TODO: make sure!
           // this.cancel()
         }
       }

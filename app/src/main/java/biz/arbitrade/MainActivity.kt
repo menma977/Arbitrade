@@ -15,6 +15,7 @@ import biz.arbitrade.model.User
 import biz.arbitrade.network.ArbizAPI
 import biz.arbitrade.network.DogeAPI
 import biz.arbitrade.network.JWTUtils
+import biz.arbitrade.network.Url
 import biz.arbitrade.view.activity.HomeActivity
 import biz.arbitrade.view.activity.InfoOnlyActivity
 import biz.arbitrade.view.activity.LoginActivity
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     Timer().schedule(100) {
       try{
         val info = ArbizAPI("info", "GET", null, null).call()
+        Log.d("INFO", info.toString())
         if (info.optString("data").matches(Regex("^(failed to connect)"))) {
           runOnUiThread {
             move("login", info)

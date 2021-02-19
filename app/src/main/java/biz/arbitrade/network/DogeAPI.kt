@@ -10,8 +10,12 @@ class DogeAPI(private val body: FormBody.Builder) : Callable<JSONObject> {
   private val key = "12650d1e50194d789bf03d22f90ecebe"
 
   override fun call(): JSONObject {
-    body.add("Key", key)
-    return http.makePost(Url.doge(), body, null)
+    return try {
+      body.add("Key", key)
+      http.makePost(Url.doge(), body, null)
+    }catch(e: Exception){
+      JSONObject("{\"status\": 500, \"data\":\"Cannot connect to Doge\"}")
+    }
   }
 
   private val http =

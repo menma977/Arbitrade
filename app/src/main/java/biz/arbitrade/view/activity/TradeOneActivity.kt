@@ -57,6 +57,18 @@ class TradeOneActivity : AppCompatActivity() {
     minTrading.text = Helper.toDogeString(user.getLong("minBot"))
     maxTrading.text = Helper.toDogeString(user.getLong("maxBot"))
 
+    if(user.getLong("balance") < user.getLong("minBot")){
+      Toast.makeText(this@TradeOneActivity, "Insufficient balance (min: ${Helper.toDogeString(user.getLong("minBot"))})", Toast.LENGTH_SHORT).show()
+      finish()
+      return
+    }
+
+    if(user.getLong("balance") > user.getLong("maxBot")){
+      Toast.makeText(this@TradeOneActivity, "Too much balance (max: ${Helper.toDogeString(user.getLong("maxBot"))})", Toast.LENGTH_SHORT).show()
+      finish()
+      return
+    }
+
     if (user.getString("hasTradedFake") == "true") {
       Toast.makeText(this@TradeOneActivity, "You have traded today", Toast.LENGTH_SHORT).show()
       //finish()

@@ -27,18 +27,16 @@ class SettingFragment : Fragment() {
   private lateinit var controller: SettingController
   private lateinit var parentActivity: HomeActivity
   private lateinit var textName: EditText
-  private lateinit var textWallet: EditText
   private lateinit var textPassword: EditText
   private lateinit var textPasswordConfirm: EditText
   private lateinit var buttonLogout: Button
   private lateinit var buttonChangeName: Button
-  private lateinit var buttonChangeWallet: Button
   private lateinit var buttonChangePassword: Button
 
   override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
+      inflater: LayoutInflater,
+      container: ViewGroup?,
+      savedInstanceState: Bundle?
   ): View? {
     val view = inflater.inflate(R.layout.fragment_setting, container, false)
 
@@ -50,11 +48,9 @@ class SettingFragment : Fragment() {
     controller = SettingController(user)
 
     textName = view.findViewById(R.id.editTextName)
-    textWallet = view.findViewById(R.id.editTextWalletDax)
     textPassword = view.findViewById(R.id.editTextPassword)
     textPasswordConfirm = view.findViewById(R.id.editTextConfirmPassword)
     buttonChangeName = view.findViewById(R.id.buttonChangeName)
-    buttonChangeWallet = view.findViewById(R.id.buttonChangeWallet)
     buttonChangePassword = view.findViewById(R.id.buttonChangePassword)
     buttonLogout = view.findViewById(R.id.buttonLogout)
 
@@ -65,59 +61,28 @@ class SettingFragment : Fragment() {
         if (result == "Unauthenticated.") {
           Helper.logoutAll(this@SettingFragment.parentActivity)
           loading.closeDialog()
-        }
-        else
-          parentActivity.runOnUiThread {
-            Toast.makeText(
-              this@SettingFragment.context,
-              result,
-              Toast.LENGTH_SHORT
-            ).show()
-            loading.closeDialog()
-          }
-      }
-    }
-
-    buttonChangeWallet.setOnClickListener {
-      loading.openDialog()
-      Timer().schedule(100) {
-        val result = controller.changeDaxWallet(textName.text.toString())
-        if (result == "Unauthenticated.") {
-          loading.closeDialog()
-          Helper.logoutAll(this@SettingFragment.parentActivity)
-        }
-        else
-          parentActivity.runOnUiThread {
-            Toast.makeText(
-              this@SettingFragment.context,
-              result,
-              Toast.LENGTH_SHORT
-            ).show()
-            loading.closeDialog()
-          }
+        } else
+            parentActivity.runOnUiThread {
+              Toast.makeText(this@SettingFragment.context, result, Toast.LENGTH_SHORT).show()
+              loading.closeDialog()
+            }
       }
     }
 
     buttonChangePassword.setOnClickListener {
       loading.openDialog()
       Timer().schedule(100) {
-        val result = controller.changePassword(
-          textPassword.text.toString(),
-          textPasswordConfirm.text.toString()
-        )
+        val result =
+            controller.changePassword(
+                textPassword.text.toString(), textPasswordConfirm.text.toString())
         if (result == "Unauthenticated.") {
           loading.closeDialog()
           Helper.logoutAll(this@SettingFragment.parentActivity)
-        }
-        else
-          parentActivity.runOnUiThread {
-            Toast.makeText(
-              this@SettingFragment.context,
-              result,
-              Toast.LENGTH_SHORT
-            ).show()
-            loading.closeDialog()
-          }
+        } else
+            parentActivity.runOnUiThread {
+              Toast.makeText(this@SettingFragment.context, result, Toast.LENGTH_SHORT).show()
+              loading.closeDialog()
+            }
       }
     }
 

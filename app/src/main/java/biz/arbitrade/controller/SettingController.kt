@@ -20,20 +20,6 @@ class SettingController(private val user: User) {
     }
   }
 
-  fun changeDaxWallet(wallet: String): String {
-    val body = FormBody.Builder()
-    body.add("wallet", wallet)
-    val result = ArbizAPI("user/update/wallet", "POST", user.getString("token"), body).call()
-    if(result.getInt("code") < 400){
-      user.setString("walletDax", wallet)
-    }
-    return when{
-      result.optString("message").isNotBlank() -> result.optString("message")
-      result.optString("data").isNotBlank() -> result.optString("data")
-      else -> "Changing wallet dax failed"
-    }
-  }
-
   fun changePassword(password: String, passwordConfirm: String): String {
     val body = FormBody.Builder()
     body.add("password", password)

@@ -27,7 +27,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/withdraw"
@@ -44,6 +44,26 @@
                     android:background="@drawable/background_card"
                     android:contentDescription="@string/icon"
                     app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6sp"
+                android:background="@drawable/edit_text_light"
+                android:orientation="horizontal"
+                android:padding="6sp">
+
+                <EditText
+                    android:id="@+id/txtWallet"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/wallet"
+                    android:inputType="numberSigned"
+                    android:textAlignment="center" />
+
             </LinearLayout>
 
             <LinearLayout

@@ -36,7 +36,6 @@ class LoginController {
     if (!user.has("token")) user.setString("token", result.getString("token"))
     user.setString("cookie", result.getString("cookie"))
     user.setString("wallet", result.getString("wallet"))
-    user.setString("walletDax", result.getString("walletDax"))
     user.setLong("totalPin", result.getLong("totalPin"))
     user.setInteger("pinSpent", result.getInt("pinSpent"))
     user.setInteger("totalDownLine", result.getInt("totalDownLine"))

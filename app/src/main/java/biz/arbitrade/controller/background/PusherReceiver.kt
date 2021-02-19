@@ -47,6 +47,7 @@ class PusherReceiver : Service() {
       }
 
       override fun onError(message: String?, code: String?, e: Exception?) {
+        Log.e("json", e?.stackTraceToString() ?: "")
         Log.e("pusher", "PersonalReceiver connection fail: $message ; $e code $code")
       }
     })

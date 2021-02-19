@@ -41,10 +41,18 @@ class LoginActivity : AppCompatActivity() {
 
     btnLogin.setOnClickListener {
       if (controller.validate(textUsername, textPassword).isNotBlank()) {
-        Toast.makeText(applicationContext, "username and/or password cannot be empty", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+          applicationContext,
+          "username and/or password cannot be empty",
+          Toast.LENGTH_SHORT
+        ).show()
         return@setOnClickListener
       }
-      if(PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
+      if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(
+          this,
+          Manifest.permission.CAMERA
+        )
+      ) {
         requestPermissions(arrayOf(Manifest.permission.CAMERA), 100)
         return@setOnClickListener
       }
@@ -65,10 +73,14 @@ class LoginActivity : AppCompatActivity() {
         }
         runOnUiThread {
           if (result.getInt("code") >= 400) {
-            val msg = if (result.getString("message")
+            val msg = if ((if (result.optString("message")
+                  .isNullOrBlank()
+              ) result.optString("message") else result.optString("data"))
                 .contains("failed to connect")
             ) "Cannot Connect to Server please check your connection"
-            else result.getString("message")
+            else (if (result.optString("message")
+                .isNullOrBlank()
+            ) result.optString("message") else result.optString("data"))
             Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
           } else {
             if (resultDoge.getInt("code") >= 400) {

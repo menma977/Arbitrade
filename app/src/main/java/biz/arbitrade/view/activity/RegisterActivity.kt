@@ -1,7 +1,6 @@
 package biz.arbitrade.view.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -24,7 +23,6 @@ class RegisterActivity : AppCompatActivity() {
   private lateinit var username: EditText
   private lateinit var password: EditText
   private lateinit var passwordConfirm: EditText
-  private lateinit var walletDax: EditText
   private lateinit var registerBtn: Button
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,19 +38,18 @@ class RegisterActivity : AppCompatActivity() {
     email = findViewById(R.id.editTextEmail)
     password = findViewById(R.id.editTextPassword)
     passwordConfirm = findViewById(R.id.editTextConfirmPassword)
-    walletDax = findViewById(R.id.editTextWalletDax)
     registerBtn = findViewById(R.id.btnRegister)
 
     registerBtn.setOnClickListener {
       loading.openDialog()
-      val newUser = RegisterForm(
-        name.text.toString(),
-        username.text.toString(),
-        email.text.toString(),
-        password.text.toString(),
-        passwordConfirm.text.toString(),
-        walletDax.text.toString(),
-      )
+      val newUser =
+        RegisterForm(
+          name.text.toString(),
+          username.text.toString(),
+          email.text.toString(),
+          password.text.toString(),
+          passwordConfirm.text.toString(),
+        )
       Timer().schedule(100) {
         val response = controller.doRegister(user, newUser)
         runOnUiThread {
@@ -65,15 +62,17 @@ class RegisterActivity : AppCompatActivity() {
                 else -> "Failed to new register User"
               },
               Toast.LENGTH_LONG
-            ).show()
-            if(response.optString("data") == "Unauthenticated.")
+            )
+              .show()
+            if (response.optString("data") == "Unauthenticated.")
               Helper.logoutAll(this@RegisterActivity)
           } else {
             Toast.makeText(
               applicationContext,
               "User ${username.text} successfully created!",
               Toast.LENGTH_LONG
-            ).show()
+            )
+              .show()
           }
         }
         loading.closeDialog()
