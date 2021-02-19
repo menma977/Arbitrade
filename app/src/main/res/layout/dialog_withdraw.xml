@@ -61,7 +61,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="@string/wallet"
-                    android:inputType="numberSigned"
+                    android:inputType="text"
                     android:textAlignment="center" />
 
             </LinearLayout>
