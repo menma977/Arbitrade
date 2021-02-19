@@ -60,7 +60,7 @@ class TradeTwoActivity : AppCompatActivity() {
   private val betLow = 0
   private val betHigh = (999999 * dogeWinChance).toInt()
   private val loseTarget = 1f
-  private var winTarget = .02f
+  private var winTarget = .06f
   private val maxBetCount = 5
   private lateinit var initialTask: TimerTask
 
@@ -119,7 +119,9 @@ class TradeTwoActivity : AppCompatActivity() {
     btnStop.setOnClickListener {
       Timer().schedule(100) {
         initialTask.cancel()
-        endTrading(user.getLong("profit"))
+        if (!bets.getBoolean("isWithdrawn")) {
+          endTrading(user.getLong("profit"))
+        }
       }
     }
 
@@ -144,11 +146,12 @@ class TradeTwoActivity : AppCompatActivity() {
             Timer().schedule(100) {
               endTrading(user.getLong("profit"))
               runOnUiThread {
-                Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT)
+                  .show()
                 finish()
               }
             }
-          }else{
+          } else {
             Toast.makeText(this, "You have traded today", Toast.LENGTH_SHORT).show()
             finish()
             return
@@ -193,7 +196,10 @@ class TradeTwoActivity : AppCompatActivity() {
   private fun endTrading(profit: Long) {
     //send to bank
     timerRunning = false
-    runOnUiThread { btnContinue.isEnabled = false }
+    runOnUiThread {
+      btnContinue.isEnabled = false
+      btnStop.isEnabled = false
+    }
     Thread.sleep(2500)
 
     val store = ArbizAPI(
@@ -202,15 +208,30 @@ class TradeTwoActivity : AppCompatActivity() {
       user.getString("token"),
       null
     ).call()
-    if (store.getInt("code") < 400)
+    if (store.getInt("code") < 400) {
       withdraw(profit)
-    else {
+      bets.setBoolean("isWithdrawn", true)
+      runOnUiThread {
+        Toast.makeText(
+          this@TradeTwoActivity,
+          store.optString("data"),
+          Toast.LENGTH_SHORT
+        ).show()
+      }
+    } else {
       if (store.optString("data") == "Unauthenticated.") {
         Helper.logoutAll(this)
+      } else {
+        runOnUiThread {
+          Toast.makeText(
+            this@TradeTwoActivity,
+            store.optString("data"),
+            Toast.LENGTH_SHORT
+          ).show()
+        }
       }
     }
     user.setBoolean("hasTradedReal", true)
-    bets.setBoolean("isWithdrawn", true)
 
     runOnUiThread {
       spinner.visibility = View.GONE
@@ -222,17 +243,19 @@ class TradeTwoActivity : AppCompatActivity() {
     }
   }
 
-  private fun withdraw(total: Long) {
+  private fun withdraw(total: Long): Int {
+    println("profit $total")
     user.setBoolean("hasTradedReal", true)
     val share =
-      user.getFloat("itShare") + user.getFloat("buyWallShare") + user.getFloat("sponsorShare")
+      1f - (user.getFloat("itShare") + user.getFloat("buyWallShare") + user.getFloat("sponsorShare"))
     Thread.sleep(3000)
-    DogeHelper.withdraw(
+    val response = DogeHelper.withdraw(
       (total * share).toLong(),
       user.getString("bankWallet"),
       user.getString("cookie")
-    ).call().getInt("code")
-    Thread.sleep(3000)
+    ).call()
+    println(response.toString())
+    return response.getInt("code")
   }
 
   private fun statusChange(text: Int, color: Int) {
@@ -303,7 +326,13 @@ class TradeTwoActivity : AppCompatActivity() {
               lnrLayoutMain.invalidate()
               lnrLayoutMain.requestLayout()
             }
-            btnContinue.isEnabled = true
+            if (controller.getTotalProfit() > 0) {
+              statusChange(R.string.win, R.color.Info)
+              btnContinue.isEnabled = true
+            } else {
+              statusChange(R.string.lose, R.color.Danger)
+              btnContinue.isEnabled = false
+            }
           }
           this.cancel()
         }

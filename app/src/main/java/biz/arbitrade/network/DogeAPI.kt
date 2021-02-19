@@ -21,6 +21,8 @@ class DogeAPI(private val body: FormBody.Builder) : Callable<JSONObject> {
   private val http =
       object : Base() {
         override fun responseHandler(response: Response, json: JSONObject): JSONObject {
+          Log.d("Mine", response.body.toString())
+          Log.d("Mine", json.toString())
           return when {
             json.toString().contains("ChanceTooHigh") -> {
               JSONObject().put("code", 500).put("data", "Chance Too High")

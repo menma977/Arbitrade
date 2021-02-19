@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
     tradeOne.setOnClickListener { move("trade_one") }
     tradeTwo.setOnClickListener { move("trade_two") }
     withdraw.setOnClickListener {
-      WithdrawDialog(this@HomeFragment.requireActivity(), user.getString("token"))
+      WithdrawDialog(this@HomeFragment.requireActivity(), user.getString("cookie"))
     }
 
     if (user.getString("announcement").isNotBlank()) {

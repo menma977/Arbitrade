@@ -1,4 +1,4 @@
-package biz.arbitrade.view.dialog;
+package biz.arbitrade.view.dialog
 
 import android.R.style.Theme_Translucent_NoTitleBar
 import android.app.Activity
@@ -8,9 +8,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import biz.arbitrade.R
+import biz.arbitrade.controller.DogeHelper
 import biz.arbitrade.controller.Helper
-import biz.arbitrade.network.ArbizAPI
-import okhttp3.FormBody
+import biz.arbitrade.model.User
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -39,10 +39,8 @@ class WithdrawDialog(private val activity: Activity, private val token: String) 
           if (s > 0) withdraw(s)
         } catch (e: Exception) {
           Toast.makeText(
-            activity,
-            "Wallet and/or Doge Amount amount cannot be empty",
-            Toast.LENGTH_SHORT
-          ).show()
+                  activity, "Wallet and/or Doge Amount amount cannot be empty", Toast.LENGTH_SHORT)
+              .show()
         }
       }
     }
@@ -58,36 +56,28 @@ class WithdrawDialog(private val activity: Activity, private val token: String) 
     wdAllBtn.isEnabled = v
   }
 
-  private fun withdraw(satoshi: Long) {
-    val body = FormBody.Builder()
-    if (satoshi > 0) {
-      body.add("amount", satoshi.toString())
-    }
+  private fun withdraw(total: Long) {
     toggleInput(false)
     Timer().schedule(100) {
-      val response =
-        ArbizAPI(if (satoshi > 0) "withdraw" else "withdraw.all", "post", token, body).call()
+      Thread.sleep(3000)
+      val response = DogeHelper.withdraw(total, wallet.text.toString(), token)
+          .call()
       activity.runOnUiThread {
         if (response.getInt("code") < 400) {
           Toast.makeText(
-            activity,
-            "Successfully processing Withdrawal to queue",
-            Toast.LENGTH_SHORT
-          )
-            .show()
+                  activity, "Successfully processing Withdrawal to queue", Toast.LENGTH_SHORT)
+              .show()
           toggleInput(true)
         } else {
           Toast.makeText(
-            activity,
-            if (response.optString("data").isNotBlank()) response.optString("data")
-            else "Failed to withdraw",
-            Toast.LENGTH_SHORT
-          ).show()
+                  activity,
+                  if (response.optString("data").isNotBlank()) response.optString("data")
+                  else "Failed to withdraw",
+                  Toast.LENGTH_SHORT)
+              .show()
           toggleInput(true)
           if (response.optString("data") == "Unauthenticated.") {
-            dialog.ownerActivity?.runOnUiThread {
-              Helper.logoutAll(dialog.ownerActivity)
-            }
+            dialog.ownerActivity?.runOnUiThread { Helper.logoutAll(dialog.ownerActivity) }
           }
         }
       }
