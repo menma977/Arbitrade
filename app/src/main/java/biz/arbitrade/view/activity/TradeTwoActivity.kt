@@ -52,8 +52,8 @@ class TradeTwoActivity : AppCompatActivity() {
   private var bet: Long = 0
   private var betHistory = ArrayList<BetHistory>()
   private var counter = 1
-  private val betDelay: Long = 250
-  private val betPeriod: Long = 2500
+  private var betDelay: Long = 250
+  private var betPeriod: Long = 2500
   private val chartFreq: Int = 30
   private val dogeWinChance = .5f
   private val betLow = 0
@@ -246,6 +246,8 @@ class TradeTwoActivity : AppCompatActivity() {
     }
     val startingBalanceValue = user.getLong("balance")
     initialTask = Timer().scheduleAtFixedRate(betDelay, betPeriod) {
+      betDelay = 2500
+      betPeriod = 2500
       if (user.getString("hasTradedReal") == "true") {
         this.cancel()
         return@scheduleAtFixedRate
@@ -303,9 +305,11 @@ class TradeTwoActivity : AppCompatActivity() {
           this.cancel()
         }
       } else {
+        betDelay = 10000
+        betPeriod = 10000
         runOnUiThread {
           Toast.makeText(
-            applicationContext, "failed, Retrying . . .", Toast.LENGTH_LONG
+            applicationContext, "failed, Retrying wait 1 minute . . .", Toast.LENGTH_LONG
           ).show()
           Log.e("TradeTwo.DogeRequest", rawResponse.getString("data")) //TODO: make sure!
           // this.cancel()

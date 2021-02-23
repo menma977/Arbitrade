@@ -62,9 +62,8 @@ class RegisterActivity : AppCompatActivity() {
             ).show()
             if (response.optString("data") == "Unauthenticated.") Helper.logoutAll(this@RegisterActivity)
           } else {
-            Toast.makeText(
-              applicationContext, "User ${username.text} successfully created!", Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(applicationContext, "User ${username.text} successfully created!", Toast.LENGTH_LONG).show()
+            finish()
           }
         }
         loading.closeDialog()
