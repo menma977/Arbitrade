@@ -42,37 +42,29 @@ class RegisterActivity : AppCompatActivity() {
 
     registerBtn.setOnClickListener {
       loading.openDialog()
-      val newUser =
-        RegisterForm(
-          name.text.toString(),
-          username.text.toString(),
-          email.text.toString(),
-          password.text.toString(),
-          passwordConfirm.text.toString(),
-        )
+      val newUser = RegisterForm(
+        name.text.toString(),
+        username.text.toString(),
+        email.text.toString(),
+        password.text.toString(),
+        passwordConfirm.text.toString(),
+      )
       Timer().schedule(100) {
         val response = controller.doRegister(user, newUser)
         runOnUiThread {
           if (response.getInt("code") >= 400) {
             Toast.makeText(
-              applicationContext,
-              when {
+              applicationContext, when {
                 response.optString("message").isNotBlank() -> response.getString("message")
                 response.optString("data").isNotBlank() -> response.getString("data")
                 else -> "Failed to new register User"
-              },
-              Toast.LENGTH_LONG
-            )
-              .show()
-            if (response.optString("data") == "Unauthenticated.")
-              Helper.logoutAll(this@RegisterActivity)
+              }, Toast.LENGTH_LONG
+            ).show()
+            if (response.optString("data") == "Unauthenticated.") Helper.logoutAll(this@RegisterActivity)
           } else {
             Toast.makeText(
-              applicationContext,
-              "User ${username.text} successfully created!",
-              Toast.LENGTH_LONG
-            )
-              .show()
+              applicationContext, "User ${username.text} successfully created!", Toast.LENGTH_LONG
+            ).show()
           }
         }
         loading.closeDialog()

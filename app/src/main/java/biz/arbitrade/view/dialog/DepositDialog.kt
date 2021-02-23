@@ -13,7 +13,6 @@ import biz.arbitrade.R
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
-
 class DepositDialog(activity: Activity, wallet: String) {
   private val dialog = Dialog(activity, Theme_Translucent_NoTitleBar)
 
@@ -36,7 +35,7 @@ class DepositDialog(activity: Activity, wallet: String) {
     dialog.show()
   }
 
-  private fun copy(text: String){
+  private fun copy(text: String) {
     val clipboard = dialog.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText(text, text)
     clipboard.setPrimaryClip(clip)

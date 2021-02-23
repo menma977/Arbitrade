@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     val user = User(this)
     val bet = Bet(this)
     Timer().schedule(100) {
-      try{
+      try {
         val info = ArbizAPI("info", "GET", null, null).call()
         Log.d("INFO", info.toString())
         if (info.optString("data").matches(Regex("^(failed to connect)"))) {
@@ -67,8 +67,7 @@ class MainActivity : AppCompatActivity() {
               val responseDoge = DogeAPI(body).call()
               val dogeResponse = responseDoge.getJSONObject("data")
               var balance = user.getLong("balance")
-              if(responseDoge.toString().contains("Balance"))
-                balance = if (dogeResponse.optLong("Balance") > 0) dogeResponse.getLong("Balance") else user.getLong("balance")
+              if (responseDoge.toString().contains("Balance")) balance = if (dogeResponse.optLong("Balance") > 0) dogeResponse.getLong("Balance") else user.getLong("balance")
               runOnUiThread {
                 val intent = Intent(applicationContext, PusherReceiver::class.java)
                 if (applicationContext != null) {
@@ -93,8 +92,8 @@ class MainActivity : AppCompatActivity() {
           bet.clear()
           move("login", info)
         }
-      }catch (e: Exception){
-        Log.e("ERROR",e.message, e)
+      } catch (e: Exception) {
+        Log.e("ERROR", e.message, e)
         moveError(InfoOnlyActivity.CANNOT_CONNECT)
       }
     }

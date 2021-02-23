@@ -34,9 +34,7 @@ class SettingFragment : Fragment() {
   private lateinit var buttonChangePassword: Button
 
   override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
     val view = inflater.inflate(R.layout.fragment_setting, container, false)
 
@@ -61,28 +59,26 @@ class SettingFragment : Fragment() {
         if (result == "Unauthenticated.") {
           Helper.logoutAll(this@SettingFragment.parentActivity)
           loading.closeDialog()
-        } else
-            parentActivity.runOnUiThread {
-              Toast.makeText(this@SettingFragment.context, result, Toast.LENGTH_SHORT).show()
-              loading.closeDialog()
-            }
+        } else parentActivity.runOnUiThread {
+          Toast.makeText(this@SettingFragment.context, result, Toast.LENGTH_SHORT).show()
+          loading.closeDialog()
+        }
       }
     }
 
     buttonChangePassword.setOnClickListener {
       loading.openDialog()
       Timer().schedule(100) {
-        val result =
-            controller.changePassword(
-                textPassword.text.toString(), textPasswordConfirm.text.toString())
+        val result = controller.changePassword(
+          textPassword.text.toString(), textPasswordConfirm.text.toString()
+        )
         if (result == "Unauthenticated.") {
           loading.closeDialog()
           Helper.logoutAll(this@SettingFragment.parentActivity)
-        } else
-            parentActivity.runOnUiThread {
-              Toast.makeText(this@SettingFragment.context, result, Toast.LENGTH_SHORT).show()
-              loading.closeDialog()
-            }
+        } else parentActivity.runOnUiThread {
+          Toast.makeText(this@SettingFragment.context, result, Toast.LENGTH_SHORT).show()
+          loading.closeDialog()
+        }
       }
     }
 

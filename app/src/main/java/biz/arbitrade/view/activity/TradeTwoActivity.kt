@@ -50,7 +50,6 @@ class TradeTwoActivity : AppCompatActivity() {
   private lateinit var txtTarget: TextView
   private lateinit var txtLose: TextView
   private var bet: Long = 0
-  private var betCounter: Int = 0
   private var betHistory = ArrayList<BetHistory>()
   private var counter = 1
   private val betDelay: Long = 250
@@ -61,9 +60,7 @@ class TradeTwoActivity : AppCompatActivity() {
   private val betHigh = (999999 * dogeWinChance).toInt()
   private val loseTarget = 1f
   private var winTarget = .06f
-  private val maxBetCount = 5
   private lateinit var initialTask: TimerTask
-
   private var timerRunning = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,8 +110,7 @@ class TradeTwoActivity : AppCompatActivity() {
     chart.addSeries(series)
     chart.startAnimation()
     val target = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
-    val lose =
-      if (loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
+    val lose = if (loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
 
     btnStop.setOnClickListener {
       Timer().schedule(100) {
@@ -127,8 +123,7 @@ class TradeTwoActivity : AppCompatActivity() {
 
     btnContinue.setOnClickListener {
       val t = user.getLong("balance") + (user.getLong("balance") * winTarget).toLong()
-      val l =
-        if (loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
+      val l = if (loseTarget == 1f) 0 else user.getLong("balance") - (user.getLong("balance") * loseTarget).toLong()
       startTask(t, l, series)
     }
 
@@ -139,15 +134,12 @@ class TradeTwoActivity : AppCompatActivity() {
       if (bets.has("last_bet")) {
         val lastBet = Bet.getCalendar(bets.getLong("last_bet"))
         val now = Calendar.getInstance()
-        if (lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) &&
-          lastBet.get(Calendar.YEAR) == now.get(Calendar.YEAR)
-        ) {
+        if (lastBet.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR) && lastBet.get(Calendar.YEAR) == now.get(Calendar.YEAR)) {
           if (!bets.getBoolean("isWithdrawn")) {
             Timer().schedule(100) {
               endTrading(user.getLong("profit"))
               runOnUiThread {
-                Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT)
-                  .show()
+                Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
                 finish()
               }
             }
@@ -162,12 +154,9 @@ class TradeTwoActivity : AppCompatActivity() {
           Toast.makeText(this@TradeTwoActivity, "You have traded today", Toast.LENGTH_SHORT).show()
           finish()
         } else {
-
           if (user.getLong("balance") < user.getLong("minBot")) {
             Toast.makeText(
-              this@TradeTwoActivity,
-              "Insufficient balance (min: ${Helper.toDogeString(user.getLong("minBot"))})",
-              Toast.LENGTH_SHORT
+              this@TradeTwoActivity, "Insufficient balance (min: ${Helper.toDogeString(user.getLong("minBot"))})", Toast.LENGTH_SHORT
             ).show()
             finish()
             return
@@ -175,9 +164,7 @@ class TradeTwoActivity : AppCompatActivity() {
 
           if (user.getLong("balance") > user.getLong("maxBot")) {
             Toast.makeText(
-              this@TradeTwoActivity,
-              "Too much balance (max: ${Helper.toDogeString(user.getLong("maxBot"))})",
-              Toast.LENGTH_SHORT
+              this@TradeTwoActivity, "Too much balance (max: ${Helper.toDogeString(user.getLong("maxBot"))})", Toast.LENGTH_SHORT
             ).show()
             finish()
             return
@@ -193,29 +180,22 @@ class TradeTwoActivity : AppCompatActivity() {
     }
   }
 
-  private fun endTrading(profit: Long) {
-    //send to bank
+  private fun endTrading(profit: Long) { //send to bank
     timerRunning = false
     runOnUiThread {
       btnContinue.isEnabled = false
       btnStop.isEnabled = false
     }
     Thread.sleep(2500)
-
     val store = ArbizAPI(
-      "bot.marti.angel.store.$profit.${if (profit > 0) 1 else 0}",
-      "GET",
-      user.getString("token"),
-      null
+      "bot.marti.angel.store.$profit.${if (profit > 0) 1 else 0}", "GET", user.getString("token"), null
     ).call()
     if (store.getInt("code") < 400) {
       withdraw(profit)
       bets.setBoolean("isWithdrawn", true)
       runOnUiThread {
         Toast.makeText(
-          this@TradeTwoActivity,
-          store.optString("data"),
-          Toast.LENGTH_SHORT
+          this@TradeTwoActivity, store.optString("data"), Toast.LENGTH_SHORT
         ).show()
       }
     } else {
@@ -224,9 +204,7 @@ class TradeTwoActivity : AppCompatActivity() {
       } else {
         runOnUiThread {
           Toast.makeText(
-            this@TradeTwoActivity,
-            store.optString("data"),
-            Toast.LENGTH_SHORT
+            this@TradeTwoActivity, store.optString("data"), Toast.LENGTH_SHORT
           ).show()
         }
       }
@@ -237,8 +215,7 @@ class TradeTwoActivity : AppCompatActivity() {
       spinner.visibility = View.GONE
       status.visibility = View.VISIBLE
       statusChange(
-        if (profit > 0) R.string.win else R.string.lose,
-        if (profit > 0) R.color.Info else R.color.Danger
+        if (profit > 0) R.string.win else R.string.lose, if (profit > 0) R.color.Info else R.color.Danger
       )
     }
   }
@@ -246,13 +223,10 @@ class TradeTwoActivity : AppCompatActivity() {
   private fun withdraw(total: Long): Int {
     println("profit $total")
     user.setBoolean("hasTradedReal", true)
-    val share =
-      1f - (user.getFloat("itShare") + user.getFloat("buyWallShare") + user.getFloat("sponsorShare"))
+    val share = 1f - (user.getFloat("itShare") + user.getFloat("buyWallShare") + user.getFloat("sponsorShare"))
     Thread.sleep(3000)
     val response = DogeHelper.withdraw(
-      (total * share).toLong(),
-      user.getString("bankWallet"),
-      user.getString("cookie")
+      (total * share).toLong(), user.getString("bankWallet"), user.getString("cookie")
     ).call()
     println(response.toString())
     return response.getInt("code")
@@ -280,20 +254,12 @@ class TradeTwoActivity : AppCompatActivity() {
       if (rawResponse.getInt("code") < 400) {
         val response = rawResponse.getJSONObject("data")
         bets.setLong("last_bet", System.currentTimeMillis())
-        val curBalance =
-          user.getLong("balance") + (response.getLong("PayOut") - bet)
+        val curBalance = user.getLong("balance") + (response.getLong("PayOut") - bet)
         user.setLong("balance", curBalance)
         user.setLong("profit", curBalance - startingBalanceValue)
         val isDone = curBalance <= lose || curBalance >= target // || ++betCounter >= maxBetCount
         val r = controller.store(
-          user.getString("token"),
-          bet,
-          target,
-          betLow,
-          betHigh,
-          isDone,
-          bet - response.getLong("PayOut"),
-          response
+          user.getString("token"), bet, target, betLow, betHigh, isDone, bet - response.getLong("PayOut"), response
         )
         if (r.optString("data") == "Unauthenticated.") {
           runOnUiThread {
@@ -358,8 +324,7 @@ class TradeTwoActivity : AppCompatActivity() {
 
   override fun onStart() {
     super.onStart()
-    LocalBroadcastManager.getInstance(this)
-      .registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
+    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiverTrade, IntentFilter("trade"))
   }
 
   override fun onPause() {
@@ -374,8 +339,7 @@ class TradeTwoActivity : AppCompatActivity() {
 
   override fun onDestroy() {
     super.onDestroy()
-    if (timerRunning)
-      initialTask.cancel()
+    if (timerRunning) initialTask.cancel()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiverTrade)
   }
 }

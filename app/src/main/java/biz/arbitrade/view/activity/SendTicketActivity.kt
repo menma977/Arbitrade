@@ -50,7 +50,7 @@ class SendTicketActivity : AppCompatActivity() {
           frameScanner.requestFocus()
         }
         false
-      }else{
+      } else {
         frameScanner.visibility = View.GONE
         scannerEngine.stopCamera()
         scroll.post {
@@ -65,10 +65,8 @@ class SendTicketActivity : AppCompatActivity() {
 
   private fun send() {
     when {
-      !txtAmount.text.toString().matches(Regex("^\\d+(\\.\\d+)?$")) ->
-        Toast.makeText(this@SendTicketActivity, "Invalid Amount", Toast.LENGTH_SHORT).show()
-      txtWallet.text.toString().isBlank() ->
-          Toast.makeText(this@SendTicketActivity, "Wallet cannot be empty", Toast.LENGTH_SHORT).show()
+      !txtAmount.text.toString().matches(Regex("^\\d+(\\.\\d+)?$")) -> Toast.makeText(this@SendTicketActivity, "Invalid Amount", Toast.LENGTH_SHORT).show()
+      txtWallet.text.toString().isBlank() -> Toast.makeText(this@SendTicketActivity, "Wallet cannot be empty", Toast.LENGTH_SHORT).show()
       else -> {
         loading.openDialog()
         Timer().schedule(100) {

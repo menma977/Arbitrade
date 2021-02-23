@@ -41,9 +41,7 @@ class HomeFragment : Fragment() {
   private lateinit var user: User
 
   override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
     val view = inflater.inflate(R.layout.fragment_home, container, false)
 
@@ -58,7 +56,7 @@ class HomeFragment : Fragment() {
     sendTicket = view.findViewById(R.id.lnrLayoutSendTicket)
     tradeOne = view.findViewById(R.id.lnrLayoutTradeOne)
     tradeTwo = view.findViewById(R.id.lnrLayoutTradeTwo)
-    history =view.findViewById(R.id.lnrLayoutHistory)
+    history = view.findViewById(R.id.lnrLayoutHistory)
     announcementGroup = view.findViewById(R.id.lnrLayoutAnnouncements)
 
     txtTotalPin.text = Helper.toDogeString(user.getLong("totalPin"))
@@ -92,25 +90,24 @@ class HomeFragment : Fragment() {
   }
 
   private fun createAnnouncement(message: String) {
-    val v =
-        this.layoutInflater.inflate(
-            R.layout.part_announcement, null) // v.imageAnnouncementIcon.setImageResource()
+    val v = this.layoutInflater.inflate(
+      R.layout.part_announcement, null
+    ) // v.imageAnnouncementIcon.setImageResource()
     v.textAnnouncementMessage.text = message
     announcementGroup.addView(v)
   }
 
   private fun move(to: String, finish: Boolean = false, finishAffinity: Boolean = false) {
-    val intent =
-        Intent(
-            activity,
-            when (to) {
-              "register" -> RegisterActivity::class.java
-              "send_ticket" -> SendTicketActivity::class.java
-              "trade_one" -> TradeOneActivity::class.java
-              "trade_two" -> TradeTwoActivity::class.java
-              "history" -> HistoryActivity::class.java
-              else -> null
-            })
+    val intent = Intent(
+      activity, when (to) {
+        "register" -> RegisterActivity::class.java
+        "send_ticket" -> SendTicketActivity::class.java
+        "trade_one" -> TradeOneActivity::class.java
+        "trade_two" -> TradeTwoActivity::class.java
+        "history" -> HistoryActivity::class.java
+        else -> null
+      }
+    )
     startActivity(intent)
     if (finish) {
       if (finishAffinity) activity?.finishAffinity() else activity?.finish()
@@ -119,12 +116,9 @@ class HomeFragment : Fragment() {
 
   override fun onStart() {
     super.onStart()
-    LocalBroadcastManager.getInstance(activity!!)
-        .registerReceiver(broadcastReceiverAnnouncement, IntentFilter("announcement"))
-    LocalBroadcastManager.getInstance(activity!!)
-        .registerReceiver(broadcastReceiverTicket, IntentFilter("ticket"))
-    LocalBroadcastManager.getInstance(activity!!)
-        .registerReceiver(broadcastReceiverDoge, IntentFilter("web.doge"))
+    LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiverAnnouncement, IntentFilter("announcement"))
+    LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiverTicket, IntentFilter("ticket"))
+    LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiverDoge, IntentFilter("web.doge"))
   }
 
   override fun onDestroy() {
@@ -148,28 +142,25 @@ class HomeFragment : Fragment() {
     LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(broadcastReceiverDoge)
   }
 
-  private var broadcastReceiverDoge: BroadcastReceiver =
-      object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-          balance.text = Helper.toDogeString(user.getLong("balance"))
-        }
+  private var broadcastReceiverDoge: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      balance.text = Helper.toDogeString(user.getLong("balance"))
+    }
+  }
+  private var broadcastReceiverTicket: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      txtTotalPin.text = Helper.toDogeString(user.getLong("totalPin"))
+    }
+  }
+  private var broadcastReceiverAnnouncement: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+      announcementGroup.removeAllViewsInLayout()
+      if (user.getString("announcement").isNotBlank()) {
+        val announce = JSONObject(user.getString("announcement"))
+        createAnnouncement(announce.getString("message"))
       }
-  private var broadcastReceiverTicket: BroadcastReceiver =
-      object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-          txtTotalPin.text = Helper.toDogeString(user.getLong("totalPin"))
-        }
-      }
-  private var broadcastReceiverAnnouncement: BroadcastReceiver =
-      object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-          announcementGroup.removeAllViewsInLayout()
-          if (user.getString("announcement").isNotBlank()) {
-            val announce = JSONObject(user.getString("announcement"))
-            createAnnouncement(announce.getString("message"))
-          }
-          announcementGroup.invalidate()
-          announcementGroup.requestLayout()
-        }
-      }
+      announcementGroup.invalidate()
+      announcementGroup.requestLayout()
+    }
+  }
 }

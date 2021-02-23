@@ -39,8 +39,8 @@ class WithdrawDialog(private val activity: Activity, private val token: String) 
           if (s > 0) withdraw(s)
         } catch (e: Exception) {
           Toast.makeText(
-                  activity, "Wallet and/or Doge Amount amount cannot be empty", Toast.LENGTH_SHORT)
-              .show()
+            activity, "Wallet and/or Doge Amount amount cannot be empty", Toast.LENGTH_SHORT
+          ).show()
         }
       }
     }
@@ -60,21 +60,18 @@ class WithdrawDialog(private val activity: Activity, private val token: String) 
     toggleInput(false)
     Timer().schedule(100) {
       Thread.sleep(3000)
-      val response = DogeHelper.withdraw(total, wallet.text.toString(), token)
-          .call()
+      val response = DogeHelper.withdraw(total, wallet.text.toString(), token).call()
       activity.runOnUiThread {
         if (response.getInt("code") < 400) {
           Toast.makeText(
-                  activity, "Successfully processing Withdrawal to queue", Toast.LENGTH_SHORT)
-              .show()
+            activity, "Successfully processing Withdrawal to queue", Toast.LENGTH_SHORT
+          ).show()
           toggleInput(true)
         } else {
           Toast.makeText(
-                  activity,
-                  if (response.optString("data").isNotBlank()) response.optString("data")
-                  else "Failed to withdraw",
-                  Toast.LENGTH_SHORT)
-              .show()
+            activity, if (response.optString("data").isNotBlank()) response.optString("data")
+            else "Failed to withdraw", Toast.LENGTH_SHORT
+          ).show()
           toggleInput(true)
           if (response.optString("data") == "Unauthenticated.") {
             dialog.ownerActivity?.runOnUiThread { Helper.logoutAll(dialog.ownerActivity) }
