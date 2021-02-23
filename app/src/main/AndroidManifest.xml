@@ -19,14 +19,17 @@
       android:supportsRtl="true"
       android:theme="@style/AppTheme"
       tools:ignore="AllowBackup">
+<!--    <activity-->
+<!--        android:name=".view.activity.DepositHistoryActivity"-->
+<!--        android:theme="@style/AppTheme.NoActionBar"/>-->
+<!--    <activity-->
+<!--        android:name=".view.activity.WithdrawHistoryActivity"-->
+<!--        android:theme="@style/AppTheme.NoActionBar"/>-->
+<!--    <activity-->
+<!--        android:name=".view.activity.DepositWithdrawHistoryActivity"-->
+<!--        android:theme="@style/AppTheme.NoActionBar"/>-->
     <activity
-        android:name=".view.activity.DepositHistoryActivity"
-        android:theme="@style/AppTheme.NoActionBar"/>
-    <activity
-        android:name=".view.activity.WithdrawHistoryActivity"
-        android:theme="@style/AppTheme.NoActionBar"/>
-    <activity
-        android:name=".view.activity.DepositWithdrawHistoryActivity"
+        android:name=".view.activity.HistoryActivity"
         android:theme="@style/AppTheme.NoActionBar"/>
     <activity
         android:name=".view.activity.TradeTwoActivity"

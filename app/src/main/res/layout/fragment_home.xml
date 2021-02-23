@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@color/colorPrimaryLight">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight">
 
   <LinearLayout
       android:layout_width="match_parent"
@@ -70,7 +71,7 @@
                   android:layout_width="64dp"
                   android:layout_height="64dp"
                   android:contentDescription="@string/icon"
-                  tools:srcCompat="@tools:sample/avatars" />
+                  tools:srcCompat="@tools:sample/avatars"/>
 
               <LinearLayout
                   android:layout_width="match_parent"
@@ -91,7 +92,7 @@
                       android:layout_height="30sp"
                       android:contentDescription="@string/icon"
                       app:srcCompat="@drawable/ic_baseline_person"
-                      app:tint="@color/colorPrimary" />
+                      app:tint="@color/colorPrimary"/>
 
                   <TextView
                       android:id="@+id/textViewUsername"
@@ -102,7 +103,7 @@
                       android:layout_weight="1"
                       android:text="@string/username"
                       android:textSize="24sp"
-                      android:textStyle="bold" />
+                      android:textStyle="bold"/>
 
                 </LinearLayout>
 
@@ -120,7 +121,7 @@
                       android:layout_height="30sp"
                       android:contentDescription="@string/icon"
                       app:srcCompat="@drawable/baseline_confirmation_number_24"
-                      app:tint="@color/colorPrimary" />
+                      app:tint="@color/colorPrimary"/>
 
                   <TextView
                       android:id="@+id/txtTotalPin"
@@ -131,7 +132,7 @@
                       android:layout_weight="1"
                       android:text="ticket"
                       android:textSize="24sp"
-                      android:textStyle="bold" />
+                      android:textStyle="bold"/>
 
                 </LinearLayout>
 
@@ -155,7 +156,7 @@
                   android:text="@string/zero"
                   android:textAlignment="textEnd"
                   android:textSize="24sp"
-                  android:textStyle="bold" />
+                  android:textStyle="bold"/>
 
               <TextView
                   android:layout_width="wrap_content"
@@ -163,7 +164,7 @@
                   android:layout_marginEnd="10dp"
                   android:text="@string/doge"
                   android:textAllCaps="true"
-                  android:textSize="24sp" />
+                  android:textSize="24sp"/>
 
             </LinearLayout>
 
@@ -184,7 +185,7 @@
                   android:text="@string/wallet"
                   android:textAlignment="textEnd"
                   android:textSize="14sp"
-                  android:textStyle="bold" />
+                  android:textStyle="bold"/>
 
             </LinearLayout>
           </LinearLayout>
@@ -282,7 +283,7 @@
                 android:layout_height="64dp"
                 android:contentDescription="@string/icon"
                 app:srcCompat="@drawable/ic_baseline_person_add"
-                app:tint="@color/textSecondary" />
+                app:tint="@color/textSecondary"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -290,7 +291,7 @@
                 android:text="@string/register"
                 android:textAlignment="center"
                 android:textColor="@color/textSecondary"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
           </LinearLayout>
 
@@ -310,7 +311,7 @@
                 android:layout_height="64dp"
                 android:contentDescription="@string/icon"
                 app:srcCompat="@drawable/ic_baseline_account_balance"
-                app:tint="@color/textSecondary" />
+                app:tint="@color/textSecondary"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -318,7 +319,7 @@
                 android:text="@string/withdraw"
                 android:textAlignment="center"
                 android:textColor="@color/textSecondary"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
           </LinearLayout>
 
@@ -337,7 +338,7 @@
                 android:layout_height="64dp"
                 android:contentDescription="@string/icon"
                 app:srcCompat="@drawable/baseline_confirmation_number_24"
-                app:tint="@color/textSecondary" />
+                app:tint="@color/textSecondary"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -345,7 +346,7 @@
                 android:text="@string/send_ticket"
                 android:textAlignment="center"
                 android:textColor="@color/textSecondary"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
           </LinearLayout>
 
@@ -360,11 +361,11 @@
             android:orientation="horizontal"
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
-            android:weightSum="2">
+            android:weightSum="3">
 
           <LinearLayout
               android:id="@+id/lnrLayoutTradeOne"
-              android:layout_width="wrap_content"
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
               android:layout_margin="5dp"
               android:layout_weight="1"
@@ -391,7 +392,7 @@
 
           <LinearLayout
               android:id="@+id/lnrLayoutTradeTwo"
-              android:layout_width="wrap_content"
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
               android:layout_margin="5dp"
               android:layout_weight="1"
@@ -410,6 +411,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/trade_two"
+                android:textAlignment="center"
+                android:textColor="@color/textSecondary"
+                android:textSize="18sp"/>
+
+          </LinearLayout>
+
+          <LinearLayout
+              android:id="@+id/lnrLayoutHistory"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_margin="5dp"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:orientation="vertical"
+              tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:contentDescription="@string/icon"
+                app:srcCompat="@drawable/ic_baseline_access_time"
+                app:tint="@color/textSecondary"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/history"
                 android:textAlignment="center"
                 android:textColor="@color/textSecondary"
                 android:textSize="18sp"/>

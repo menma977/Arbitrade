@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,85 +8,133 @@
     android:background="@color/colorPrimary"
     tools:context=".view.activity.HistoryActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arbitrade_square" />
+  <ImageView
+      android:id="@+id/imageView"
+      android:layout_width="120dp"
+      android:layout_height="120dp"
+      android:layout_margin="10dp"
+      android:contentDescription="@string/icon"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/ic_arbitrade_square"/>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_marginTop="10dp"
+      android:background="@color/colorPrimaryLight"
+      android:orientation="vertical"
+      android:padding="12dp"
+      app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+      app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="@color/White"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorPrimaryLight"
-        android:orientation="vertical"
-        android:padding="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
-
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textColor="@color/White"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listHistory"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/Default" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="clip_horizontal"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_card"
+        android:padding="5dp"
         android:orientation="horizontal"
-        android:padding="16sp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:elevation="10dp"
+        android:layout_margin="5dp">
 
-        <Button
-            android:id="@+id/btnPrev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="6sp"
-            android:background="@drawable/button_warning"
-            android:paddingStart="30dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="30dp"
-            android:paddingBottom="15dp"
-            android:text="Button"
-            android:textSize="18sp" />
+      <Button
+          android:text="In"
+          android:layout_width="0dp"
+          android:layout_height="30dp"
+          android:id="@+id/buttonIn"
+          android:layout_weight="1"
+          android:background="@drawable/button_warning"
+          android:layout_margin="5dp"
+          tools:ignore="ButtonStyle"/>
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+      <Button
+          android:text="Out"
+          android:layout_width="0dp"
+          android:layout_height="30dp"
+          android:id="@+id/buttonOut"
+          android:layout_weight="1"
+          android:background="@drawable/button_warning"
+          android:layout_margin="5dp"
+          tools:ignore="ButtonStyle"/>
 
-        <Button
-            android:id="@+id/btnNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="6sp"
-            android:background="@drawable/button_warning"
-            android:paddingStart="30dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="30dp"
-            android:paddingBottom="15dp"
-            android:text="Button"
-            android:textSize="18sp" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_card"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:elevation="5dp"
+        android:layout_margin="10dp">
+
+      <Button
+          android:text="Internal"
+          android:layout_width="0dp"
+          android:layout_height="30dp"
+          android:id="@+id/buttonInternal"
+          android:layout_weight="1"
+          android:background="@drawable/button_warning"
+          android:layout_margin="5dp"
+          tools:ignore="ButtonStyle"
+          android:enabled="false"/>
+
+      <Button
+          android:text="External"
+          android:layout_width="0dp"
+          android:layout_height="30dp"
+          android:id="@+id/buttonExternal"
+          android:layout_weight="1"
+          android:background="@drawable/button_warning"
+          android:layout_margin="5dp"
+          tools:ignore="ButtonStyle"
+          android:enabled="false"/>
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"/>
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/linearLayout4"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_gravity="clip_horizontal"
+      android:background="@color/colorPrimaryDark"
+      android:orientation="horizontal"
+      android:padding="16sp"
+      app:layout_constraintBottom_toBottomOf="parent">
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6sp"
+        android:background="@drawable/button_warning"
+        android:paddingStart="30dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="30dp"
+        android:paddingBottom="15dp"
+        android:text="Next"
+        android:textSize="18sp"/>
+  </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

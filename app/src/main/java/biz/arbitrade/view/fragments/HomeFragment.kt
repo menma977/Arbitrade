@@ -16,10 +16,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import biz.arbitrade.R
 import biz.arbitrade.controller.Helper
 import biz.arbitrade.model.User
-import biz.arbitrade.view.activity.RegisterActivity
-import biz.arbitrade.view.activity.SendTicketActivity
-import biz.arbitrade.view.activity.TradeOneActivity
-import biz.arbitrade.view.activity.TradeTwoActivity
+import biz.arbitrade.view.activity.*
 import biz.arbitrade.view.dialog.DepositDialog
 import biz.arbitrade.view.dialog.WithdrawDialog
 import com.google.zxing.BarcodeFormat
@@ -39,6 +36,7 @@ class HomeFragment : Fragment() {
   private lateinit var sendTicket: LinearLayout
   private lateinit var tradeOne: LinearLayout
   private lateinit var tradeTwo: LinearLayout
+  private lateinit var history: LinearLayout
   private lateinit var announcementGroup: LinearLayout
   private lateinit var user: User
 
@@ -60,6 +58,7 @@ class HomeFragment : Fragment() {
     sendTicket = view.findViewById(R.id.lnrLayoutSendTicket)
     tradeOne = view.findViewById(R.id.lnrLayoutTradeOne)
     tradeTwo = view.findViewById(R.id.lnrLayoutTradeTwo)
+    history =view.findViewById(R.id.lnrLayoutHistory)
     announcementGroup = view.findViewById(R.id.lnrLayoutAnnouncements)
 
     txtTotalPin.text = Helper.toDogeString(user.getLong("totalPin"))
@@ -79,6 +78,7 @@ class HomeFragment : Fragment() {
     sendTicket.setOnClickListener { move("send_ticket") }
     tradeOne.setOnClickListener { move("trade_one") }
     tradeTwo.setOnClickListener { move("trade_two") }
+    history.setOnClickListener { move("history") }
     withdraw.setOnClickListener {
       WithdrawDialog(this@HomeFragment.requireActivity(), user.getString("cookie"))
     }
@@ -108,6 +108,7 @@ class HomeFragment : Fragment() {
               "send_ticket" -> SendTicketActivity::class.java
               "trade_one" -> TradeOneActivity::class.java
               "trade_two" -> TradeTwoActivity::class.java
+              "history" -> HistoryActivity::class.java
               else -> null
             })
     startActivity(intent)
