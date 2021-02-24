@@ -16,6 +16,7 @@ import biz.arbitrade.controller.SettingController
 import biz.arbitrade.model.Bet
 import biz.arbitrade.model.User
 import biz.arbitrade.view.activity.HomeActivity
+import biz.arbitrade.view.activity.RequestChangePinActivity
 import biz.arbitrade.view.dialog.Loading
 import java.util.*
 import kotlin.concurrent.schedule
@@ -30,6 +31,7 @@ class SettingFragment : Fragment() {
   private lateinit var textPassword: EditText
   private lateinit var textPasswordConfirm: EditText
   private lateinit var buttonLogout: Button
+  private lateinit var buttonChangePin: Button
   private lateinit var buttonChangeName: Button
   private lateinit var buttonChangePassword: Button
 
@@ -50,6 +52,7 @@ class SettingFragment : Fragment() {
     textPasswordConfirm = view.findViewById(R.id.editTextConfirmPassword)
     buttonChangeName = view.findViewById(R.id.buttonChangeName)
     buttonChangePassword = view.findViewById(R.id.buttonChangePassword)
+    buttonChangePin = view.findViewById(R.id.buttonChangePin)
     buttonLogout = view.findViewById(R.id.buttonLogout)
 
     buttonChangeName.setOnClickListener {
@@ -64,6 +67,11 @@ class SettingFragment : Fragment() {
           loading.closeDialog()
         }
       }
+    }
+
+    buttonChangePin.setOnClickListener {
+      val intent = Intent(activity, RequestChangePinActivity::class.java)
+      startActivity(intent)
     }
 
     buttonChangePassword.setOnClickListener {

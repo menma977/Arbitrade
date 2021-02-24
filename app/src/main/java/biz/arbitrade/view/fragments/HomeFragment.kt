@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
     tradeTwo.setOnClickListener { move("trade_two") }
     history.setOnClickListener { move("history") }
     withdraw.setOnClickListener {
-      WithdrawDialog(this@HomeFragment.requireActivity(), user.getString("cookie"))
+      WithdrawDialog(this@HomeFragment.requireActivity(), user.getString("pin"), user.getString("cookie"))
     }
 
     if (user.getString("announcement").isNotBlank()) {

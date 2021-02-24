@@ -23,6 +23,8 @@ class RegisterActivity : AppCompatActivity() {
   private lateinit var username: EditText
   private lateinit var password: EditText
   private lateinit var passwordConfirm: EditText
+  private lateinit var pin: EditText
+  private lateinit var pinConfirm: EditText
   private lateinit var registerBtn: Button
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +40,8 @@ class RegisterActivity : AppCompatActivity() {
     email = findViewById(R.id.editTextEmail)
     password = findViewById(R.id.editTextPassword)
     passwordConfirm = findViewById(R.id.editTextConfirmPassword)
+    pin = findViewById(R.id.editTextPin)
+    pinConfirm = findViewById(R.id.editTextConfirmPin)
     registerBtn = findViewById(R.id.btnRegister)
 
     registerBtn.setOnClickListener {
@@ -48,6 +52,8 @@ class RegisterActivity : AppCompatActivity() {
         email.text.toString(),
         password.text.toString(),
         passwordConfirm.text.toString(),
+        pin.text.toString(),
+        pinConfirm.text.toString()
       )
       Timer().schedule(100) {
         val response = controller.doRegister(user, newUser)

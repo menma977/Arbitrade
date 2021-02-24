@@ -1,8 +1,8 @@
 package biz.arbitrade.network
 
 object Url {
-  fun web(target: String?): String {
-    var target = if (!target.isNullOrEmpty()) target.replace(
+  fun web(url: String?): String {
+    var target = if (!url.isNullOrEmpty()) url.replace(
       Regex("(?<=[a-z])\\."),
       "/"
     ) else ""

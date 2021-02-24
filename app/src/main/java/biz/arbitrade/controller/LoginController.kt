@@ -41,6 +41,7 @@ class LoginController {
     user.setString("downLines", json.getJSONArray("downLines").toString())
     user.setString("sponsorId", json.getString("sponsorId"))
     user.setString("sponsor", json.getString("sponsor"))
+    user.setString("pin", json.getString("pin"))
     user.setLong("balance", balance)
     user.setLong("minBot", info.getLong("min_bot"))
     user.setLong("maxBot", info.getLong("max_bot"))

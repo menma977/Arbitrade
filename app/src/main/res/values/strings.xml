@@ -15,18 +15,22 @@
   <string name="change">Change</string>
   <string name="new_name">New Name</string>
   <string name="new_password">New Password</string>
+  <string name="new_pin">New PIN</string>
   <string name="trade">Trade</string>
   <string name="withdraw">Withdraw</string>
   <string name="withdraw_all">Withdraw All</string>
   <string name="submit">Submit</string>
   <string name="send">Send</string>
   <string name="reset_password">Reset Password</string>
+  <string name="reset_pin">Change PIN</string>
   <string name="send_ticket">Send Ticket</string>
 
   <!-- LABEL -->
   <string name="username">Username</string>
   <string name="password">Password</string>
   <string name="confirm_password">Re-Type Password</string>
+  <string name="pin">PIN</string>
+  <string name="confirm_pin">Re-Type PIN</string>
   <string name="email">Email</string>
   <string name="name">Name</string>
   <string name="wallet">Wallet</string>

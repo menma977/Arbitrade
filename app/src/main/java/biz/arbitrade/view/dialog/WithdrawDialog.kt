@@ -10,15 +10,15 @@ import android.widget.Toast
 import biz.arbitrade.R
 import biz.arbitrade.controller.DogeHelper
 import biz.arbitrade.controller.Helper
-import biz.arbitrade.model.User
 import java.util.*
 import kotlin.concurrent.schedule
 
-class WithdrawDialog(private val activity: Activity, private val token: String) {
+class WithdrawDialog(private val activity: Activity, private val mPIN: String, private val token: String) {
   private val dialog = Dialog(activity, Theme_Translucent_NoTitleBar)
   private val closeBtn: ImageView
   private val amount: EditText
   private val wallet: EditText
+  private val pin: EditText
   private val wdBtn: Button
   private val wdAllBtn: Button
 
@@ -26,6 +26,7 @@ class WithdrawDialog(private val activity: Activity, private val token: String) 
     val view = activity.layoutInflater.inflate(R.layout.dialog_withdraw, null)
     amount = view.findViewById(R.id.txtWithdrawAmount)
     wallet = view.findViewById(R.id.txtWallet)
+    pin = view.findViewById(R.id.txtPin)
     closeBtn = view.findViewById(R.id.close)
     wdAllBtn = view.findViewById(R.id.btnWithdrawAll)
     wdBtn = view.findViewById(R.id.btnWithdraw)
@@ -33,13 +34,19 @@ class WithdrawDialog(private val activity: Activity, private val token: String) 
     closeBtn.setOnClickListener { dialog.dismiss() }
     wdAllBtn.setOnClickListener { withdraw(0) }
     wdBtn.setOnClickListener {
-      if (amount.text.toString().isNotBlank() && wallet.text.toString().isNotBlank()) {
-        try {
-          val s = Helper.fromDogeString(amount.text.toString())
-          if (s > 0) withdraw(s)
-        } catch (e: Exception) {
+      if (amount.text.toString().isNotBlank() && wallet.text.toString().isNotBlank() && pin.text.isNotBlank()) {
+        if(pin.text.toString() == mPIN) {
+          try {
+            val s = Helper.fromDogeString(amount.text.toString())
+            if (s > 0) withdraw(s)
+          } catch (e: Exception) {
+            Toast.makeText(
+              activity, "Wallet/PIN/Doge Amount amount cannot be empty", Toast.LENGTH_SHORT
+            ).show()
+          }
+        }else{
           Toast.makeText(
-            activity, "Wallet and/or Doge Amount amount cannot be empty", Toast.LENGTH_SHORT
+            activity, "Pin is not match", Toast.LENGTH_SHORT
           ).show()
         }
       }
@@ -51,6 +58,7 @@ class WithdrawDialog(private val activity: Activity, private val token: String) 
   private fun toggleInput(v: Boolean) {
     closeBtn.isEnabled = v
     amount.isEnabled = v
+    pin.isEnabled = v
     wallet.isEnabled = v
     wdBtn.isEnabled = v
     wdAllBtn.isEnabled = v
