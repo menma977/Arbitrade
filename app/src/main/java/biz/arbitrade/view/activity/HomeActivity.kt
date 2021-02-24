@@ -1,10 +1,9 @@
 package biz.arbitrade.view.activity
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -40,6 +39,7 @@ class HomeActivity : AppCompatActivity() {
 
     user = User(this)
     bets = Bet(this)
+    Log.d("pusher", "onCreate TOKEN : ${user.getString("token")}")
     homeFragment = HomeFragment()
     settingFragment = SettingFragment()
     networkFragment = NetworkFragment()
@@ -56,11 +56,6 @@ class HomeActivity : AppCompatActivity() {
     intentPersonalReceiver = Intent(applicationContext, PersonalReceiver::class.java)
     intentDogeRefresher = Intent(applicationContext, DogeRefresher::class.java)
     intentMtReceiver = Intent(applicationContext, PusherEvent::class.java)
-    if (applicationContext != null) {
-      startService(intentPersonalReceiver)
-      startService(intentDogeRefresher)
-      startService(intentMtReceiver)
-    }
   }
 
   private fun checkNotification() {
@@ -93,7 +88,10 @@ class HomeActivity : AppCompatActivity() {
 
   override fun onStart() {
     super.onStart()
-    startService(intentPersonalReceiver)
+    intentPersonalReceiver.putExtra("token", user.getString("token"))
+    intentPersonalReceiver.putExtra("username", user.getString("username"))
+    bindService(intentPersonalReceiver, connection, Context.BIND_AUTO_CREATE)
+    //startService(intentPersonalReceiver)
     startService(intentDogeRefresher)
     startService(intentMtReceiver)
     LocalBroadcastManager.getInstance(this)
@@ -103,6 +101,18 @@ class HomeActivity : AppCompatActivity() {
     if (user.getBoolean("logout"))
       Helper.logoutAll(this@HomeActivity)
   }
+
+  private val connection = object : ServiceConnection {
+
+    override fun onServiceConnected(className: ComponentName, service: IBinder) {
+      Log.d("Login","private channel connected")
+    }
+
+    override fun onServiceDisconnected(arg0: ComponentName) {
+      Log.d("Login","private channel disconnected")
+    }
+  }
+
 
   override fun onPause() {
     super.onPause()

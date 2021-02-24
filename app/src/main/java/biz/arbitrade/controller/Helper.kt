@@ -5,6 +5,7 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import biz.arbitrade.MainActivity
+import biz.arbitrade.controller.background.PersonalReceiver
 import biz.arbitrade.model.Bet
 import biz.arbitrade.model.User
 import java.math.BigDecimal
@@ -77,6 +78,8 @@ object Helper {
       User(activity).clear()
       Bet(activity).clear()
       val mIntent = Intent(activity, MainActivity::class.java)
+      val sIntent = Intent(activity.applicationContext, PersonalReceiver::class.java)
+      activity.stopService(sIntent)
       activity.startActivity(mIntent)
       activity.finishAffinity()
     }

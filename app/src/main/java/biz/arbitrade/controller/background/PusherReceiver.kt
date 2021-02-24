@@ -17,6 +17,8 @@ import com.pusher.client.connection.ConnectionStateChange
 import com.pusher.client.util.HttpAuthorizer
 
 class PusherReceiver : Service() {
+  private lateinit var pusher: Pusher
+
   override fun onBind(intent: Intent): IBinder {
     TODO("Return the communication channel to the service.")
   }
@@ -30,8 +32,8 @@ class PusherReceiver : Service() {
     header["Content-Type"] = "application/x-www-form-urlencoded"
     val authorize = HttpAuthorizer(Url.Pusher.auth())
     authorize.setHeaders(header)
-    val options = PusherOptions().setHost(Url.Pusher.url).setWsPort(Url.Pusher.port).setWssPort(Url.Pusher.port).setUseTLS(Url.Pusher.secured).setAuthorizer(authorize)
-    val pusher = Pusher("arbi.biz.key", options)
+    val options = PusherOptions().setHost(Url.Pusher.url).setWsPort(Url.Pusher.port).setWssPort(Url.Pusher.port).setUseTLS(Url.Pusher.secured)//.setAuthorizer(authorize)
+    pusher = Pusher("arbi.biz.key", options)
     val announcementChannel = pusher.subscribe("arbi.biz.announcement")
     val botChannel = pusher.subscribe("arbi.biz.bot")
     val maintenanceChannel = pusher.subscribe("arbi.biz.maintenance")
@@ -51,5 +53,10 @@ class PusherReceiver : Service() {
         Log.e("pusher", "PersonalReceiver connection fail: $message ; $e code $code")
       }
     })
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    pusher.disconnect()
   }
 }
