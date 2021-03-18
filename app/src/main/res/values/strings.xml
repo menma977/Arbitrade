@@ -12,6 +12,7 @@
   <string name="trade_two">BOT Two</string>
   <string name="proceed">Continue</string>
   <string name="stop">Stop</string>
+  <string name="pause">Pause</string>
   <string name="change">Change</string>
   <string name="new_name">New Name</string>
   <string name="new_password">New Password</string>
