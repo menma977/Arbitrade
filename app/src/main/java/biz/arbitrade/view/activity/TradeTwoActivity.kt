@@ -87,7 +87,7 @@ class TradeTwoActivity : AppCompatActivity() {
     layoutMain.invalidate()
     layoutMain.requestLayout()
 
-    spinner.visibility = View.VISIBLE
+    //spinner.visibility = View.VISIBLE
     status.visibility = View.GONE
 
     startingBalance.text = Helper.toDogeString(user.getLong("balance"))
@@ -207,7 +207,7 @@ class TradeTwoActivity : AppCompatActivity() {
     }
     Thread.sleep(2500)
     runOnUiThread {
-      Toast.makeText(this, "DONE", Toast.LENGTH_SHORT).show()
+      Toast.makeText(this, "Done Trading", Toast.LENGTH_SHORT).show()
     }
 
     val store =
@@ -222,14 +222,19 @@ class TradeTwoActivity : AppCompatActivity() {
       withdraw(profit)
       bets.setBoolean("isWithdrawn", true)
       runOnUiThread {
-        Toast.makeText(this@TradeTwoActivity, store.optString("data"), Toast.LENGTH_SHORT).show()
+        val msg = store.optString("data") ?: store.optString("message")
+        if (msg.isNotBlank())
+          Toast.makeText(this@TradeTwoActivity, msg, Toast.LENGTH_SHORT).show()
       }
     } else {
       if (store.optString("data") == "Unauthenticated.") {
         Helper.logoutAll(this)
       } else {
         runOnUiThread {
-          Toast.makeText(this@TradeTwoActivity, store.optString("data"), Toast.LENGTH_SHORT).show()
+          val msg = store.optString("data") ?: store.optString("message")
+          if (msg.isNotBlank())
+            Toast.makeText(this@TradeTwoActivity, store.optString("data"), Toast.LENGTH_SHORT)
+              .show()
         }
       }
     }
@@ -237,7 +242,7 @@ class TradeTwoActivity : AppCompatActivity() {
 
 
     runOnUiThread {
-      spinner.visibility = View.GONE
+      //spinner.visibility = View.GONE
       status.visibility = View.VISIBLE
       statusChange(
         if (profit > 0) R.string.win else R.string.lose,
@@ -286,75 +291,87 @@ class TradeTwoActivity : AppCompatActivity() {
           this.cancel()
           return@scheduleAtFixedRate
         }
-
-        val rawResponse = controller.bet(bet, betLow, betHigh, user.getString("cookie"))
-        if (rawResponse.getInt("code") < 400) {
-          val response = rawResponse.getJSONObject("data")
-          bets.setLong("last_bet", System.currentTimeMillis())
-          val curBalance = user.getLong("balance") + (response.getLong("PayOut") - bet)
-          user.setLong("balance", curBalance)
-          user.setLong("profit", curBalance - startingBalanceValue)
-          val isDone =
-            curBalance <= lose || curBalance >= target // || ++betCounter >= maxBetCount
-          val r =
-            controller.store(
-              user.getString("token"),
-              bet,
-              target,
-              betLow,
-              betHigh,
-              isDone,
-              bet - response.getLong("PayOut"),
-              response
-            )
-          if (r.optString("data") == "Unauthenticated.") {
-            runOnUiThread { Helper.logoutAll(this@TradeTwoActivity) }
-          }
-
-          runOnUiThread {
-            remainingBalance.text = Helper.toDogeString(curBalance)
-            betHistory.add(
-              BetHistory(bet, response.getInt("PayOut") - bet, System.currentTimeMillis())
-            )
-            series.addPoint(
-              ValueLinePoint(counter++.toString(), (curBalance / 10.0.pow(8)).toFloat())
-            )
-            if (series.series.size > chartFreq) series.series.removeAt(0)
-            chart.addSeries(series)
-          }
-
-          bet = controller.martingale(bet, response.getInt("PayOut") - bet)
-          user.setLong("profit", controller.getTotalProfit())
-
-          if (isDone || !timerRunning) {
-            runOnUiThread {
-              if (lnrLayoutBtnTrade.visibility == View.GONE) {
-                lnrLayoutBtnTrade.visibility = View.VISIBLE
-                lnrLayoutMain.invalidate()
-                lnrLayoutMain.requestLayout()
-              }
-              if (controller.getTotalProfit() > 0) {
-                statusChange(R.string.win, R.color.Info)
-                btnContinue.isEnabled = true
-                btnStop.isEnabled = true
-              } else {
-                statusChange(R.string.lose, R.color.Danger)
-                btnContinue.isEnabled = false
-                btnStop.isEnabled = false
-              }
+        try {
+          val rawResponse = controller.bet(bet, betLow, betHigh, user.getString("cookie"))
+          if (rawResponse.getInt("code") < 400) {
+            val response = rawResponse.getJSONObject("data")
+            bets.setLong("last_bet", System.currentTimeMillis())
+            val curBalance = user.getLong("balance") + (response.getLong("PayOut") - bet)
+            user.setLong("balance", curBalance)
+            user.setLong("profit", curBalance - startingBalanceValue)
+            val isDone =
+              curBalance <= lose || curBalance >= target // || ++betCounter >= maxBetCount
+            val r =
+              controller.store(
+                user.getString("token"),
+                bet,
+                target,
+                betLow,
+                betHigh,
+                isDone,
+                bet - response.getLong("PayOut"),
+                response
+              )
+            if (r.optString("data") == "Unauthenticated.") {
+              runOnUiThread { Helper.logoutAll(this@TradeTwoActivity) }
             }
-            this.cancel()
+
+            runOnUiThread {
+              remainingBalance.text = Helper.toDogeString(curBalance)
+              betHistory.add(
+                BetHistory(bet, response.getInt("PayOut") - bet, System.currentTimeMillis())
+              )
+              series.addPoint(
+                ValueLinePoint(counter++.toString(), (curBalance / 10.0.pow(8)).toFloat())
+              )
+              if (series.series.size > chartFreq) series.series.removeAt(0)
+              chart.addSeries(series)
+            }
+
+            bet = controller.martingale(bet, response.getInt("PayOut") - bet)
+            user.setLong("profit", controller.getTotalProfit())
+
+            if (isDone || !timerRunning) {
+              runOnUiThread {
+                if (controller.getTotalProfit() > 0) {
+                  statusChange(R.string.win, R.color.Info)
+                  btnContinue.isEnabled = true
+                  btnStop.isEnabled = true
+                } else {
+                  statusChange(R.string.lose, R.color.Danger)
+                  btnContinue.isEnabled = false
+                  btnStop.isEnabled = false
+                }
+              }
+              this.cancel()
+            }
+          } else {
+            if (!timerRunning) {
+              runOnUiThread {
+                if (controller.getTotalProfit() > 0) {
+                  statusChange(R.string.win, R.color.Info)
+                  btnContinue.isEnabled = true
+                  btnStop.isEnabled = true
+                }
+                this.cancel()
+              }
+            } else {
+              runOnUiThread {
+                Toast.makeText(
+                  applicationContext, "failed, Retrying wait 1 minute . . .", Toast.LENGTH_LONG
+                )
+                  .show()
+                Log.e("TradeTwo.DogeRequest", rawResponse.getString("data")) // TODO: make sure!
+              }
+              Thread.sleep(5 * 1000)
+            }
           }
-        } else {
-          betDelay = 10000
-          betPeriod = 10000
+        } catch (e: Exception) {
           runOnUiThread {
-            Toast.makeText(
-              applicationContext, "failed, Retrying wait 1 minute . . .", Toast.LENGTH_LONG
-            )
-              .show()
-            Log.e("TradeTwo.DogeRequest", rawResponse.getString("data")) // TODO: make sure!
-            // this.cancel()
+            timerRunning = false
+            btnContinue.isEnabled = true
+            btnStop.isEnabled = true
+            Toast.makeText(applicationContext, "Something happened! pausing...", Toast.LENGTH_SHORT)
           }
         }
 
