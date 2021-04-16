@@ -39,6 +39,9 @@ class LoginActivity : AppCompatActivity() {
     textPassword = findViewById(R.id.editTextPassword)
     textForgetPassword = findViewById(R.id.textViewForgotPassword)
 
+//    textUsername.setText("boboom")
+//    textPassword.setText("080602")
+
     btnLogin.setOnClickListener {
       if (controller.validate(textUsername, textPassword).isNotBlank()) {
         Toast.makeText(

@@ -31,7 +31,7 @@ class PersonalReceiver : Service() {
     token = intent.getStringExtra("token") ?: ""
     username = intent.getStringExtra("username") ?: ""
     val header = HashMap<String, String>()
-    header["Authorization"] = "Bearer $token}"
+    header["Authorization"] = "Bearer $token"
     header["X-Requested-With"] = "XMLHttpRequest"
     header["Accept"] = "application/json"
     val authorize = HttpAuthorizer(Url.Pusher.auth())
